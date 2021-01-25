@@ -1,8 +1,9 @@
 import React from "react";
 import { Row, Col, Table } from "reactstrap";
+import NewCoffeeForm from "./NewCoffeeForm";
 
 const CoffeesView = (props) => {
-  const { coffees, deleteCoffee } = props;
+  const { coffees, deleteCoffee, updateCoffeeArray } = props;
 
   const handleClick = (index) => {
     deleteCoffee(index);
@@ -35,6 +36,7 @@ const CoffeesView = (props) => {
           </Table>
         </Col>
       </Row>
+      <NewCoffeeForm updateCoffeeArray={updateCoffeeArray} />
     </div>
   );
 };
