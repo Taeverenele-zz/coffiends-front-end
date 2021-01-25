@@ -1,0 +1,204 @@
+{
+    "data": [
+        {
+            "cafe_id": 1,
+            "name": "Brew Cafe & Wine Bar",
+            "address": "Lower, Burnett Ln, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4692878, 153.0253295 ]
+        },
+        {
+            "cafe_id": 2,
+            "name": "Cleberson’s Coffee . Cafe . Brisbane",
+            "address": "Shop 3, Stamford plaza hotel, 39 Edward St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [ -27.4713948, 153.0302251]
+        },
+        {
+            "cafe_id": 3,
+            "name": "3 Dragonflies Cafe",
+            "address": "214 Adelaide St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.467019, 153.0265688]
+        },
+        {
+            "cafe_id": 4,
+            "name": "Cafe Mondial",
+            "address": "167 Albert St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4704921, 153.0262486]
+        },
+        {
+            "cafe_id": 5,
+            "name": "Coffee Booth",
+            "address": "150 Edward St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4696143, 153.0280019]
+        },
+        {
+            "cafe_id": 6,
+            "name": "Anytime Coffee",
+            "address": "160 Mary St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4707667, 153.0284625]
+        },
+        {
+            "cafe_id": 7,
+            "name": "Mallee Specialty Coffee",
+            "address": "Shop 11, Elizabeth Arcade, 97 Elizabeth St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.471151, 153.0255569]
+        },
+        {
+            "cafe_id": 8,
+            "name": "Hard Coffee",
+            "address": "261 Queen St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4678514, 153.0279357]
+        },
+        {
+            "cafe_id": 9,
+            "name": "Wicked Corner Cafe",
+            "address": "2/166 Wickham Terrace, Spring Hill",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4651175, 153.0247256]
+        },
+        {
+            "cafe_id": 10,
+            "name": "Wake Up Coffee Brisbane",
+            "address": "Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4705563, 153.0250769]
+        },
+        {
+            "cafe_id": 11,
+            "name": "Henry's Coffee Bar",
+            "address": "157 Ann St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4674857, 153.0247736]
+        },
+        {
+            "cafe_id": 12,
+            "name": "Cafe Pronto",
+            "address": "160 Ann St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4674273, 153.0244211]
+        },
+        {
+            "cafe_id": 13,
+            "name": "Raw on Ann",
+            "address": "333 Ann St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4649035, 153.0281946]
+        },
+        {
+            "cafe_id": 14,
+            "name": "Coffee Mill",
+            "address": "1/225 Wickham Terrace, Spring Hill",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4654762, 153.0232717]
+        },
+        {
+            "cafe_id": 15,
+            "name": "The White Cat Coffee",
+            "address": "198 Adelaide St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4670389, 153.0264034]
+        },
+        {
+            "cafe_id": 16,
+            "name": "The Coffee Club Café - Brisbane Supreme Courts",
+            "address": "415 George St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4677314, 153.0213165]
+        },
+        {
+            "cafe_id": 17,
+            "name": "Bean cafe",
+            "address": "Laneway Basement, 181 George St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4713612, 153.0242376]
+        },
+        {
+            "cafe_id": 18,
+            "name": "Ricochet Espresso",
+            "address": "276 Edward St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4674309, 153.0259044]
+        },
+        {
+            "cafe_id": 19,
+            "name": "Caffeine Kitchen",
+            "address": "400 Queen St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4658384, 153.0299209]
+        },
+        {
+            "cafe_id": 20,
+            "name": "Coffee Anthology",
+            "address": "126 Margaret St, Brisbane City",
+            "opening_hours": {
+                "open": "0500",
+                "close": "1700"
+            },
+            "location": [-27.4729354, 153.0276392]
+        }
+    ]
+}

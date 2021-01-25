@@ -2,11 +2,19 @@ import React, { useState, useEffect } from "react";
 import CoffeesView from "./components/CoffeesView";
 import NewCoffeeForm from "./components/NewCoffeeForm";
 import axios from "axios";
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import HomeView from "./components/HomeView"
+import MapView from "./components/MapView"
 
 const App = () => {
   const [coffees, setCoffees] = useState([]);
   const [reload, setReload] = useState(true);
+<<<<<<< HEAD
   const [currentId, setCurrentId] = useState(null);
+=======
+  const [userCoffee, setUserCoffee] = useState("")
+  const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838])
+>>>>>>> 10d69e046daf1630f5efd8998dfa142e771edf84
 
   const updateCoffeeArray = (eachEntry) => {
     setCoffees([...coffees, eachEntry]);
@@ -29,17 +37,40 @@ const App = () => {
         })
         .catch((error) => console.log(error));
     }
+    // navigator.geolocation.getCurrentPosition(
+    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
+    //   error => console.log(error.message)
+    // )
   }, [reload]);
 
   return (
     <div className="container mt-4">
-      <h1>App</h1>
-      <CoffeesView
-        coffees={coffees}
-        setReload={setReload}
-        deleteCoffee={deleteCoffee}
-      />
-      <NewCoffeeForm updateCoffeeArray={updateCoffeeArray} />
+      <BrowserRouter>
+        <header>
+          <nav>
+            <span><h3>COFFIENDS</h3></span>
+            <Link to="/">HOME</Link> |
+            <Link to="/coffees"> COFFEES</Link>
+          </nav>
+        </header>
+        <Switch>
+          <Route exact path="/" render={props =>
+            <HomeView {...props} coffees={coffees} setUserCoffee={setUserCoffee} />} 
+          />
+          <Route exact path="/coffees" render={props =>
+            <CoffeesView {...props} coffees={coffees} setReload={setReload} deleteCoffee={deleteCoffee} updateCoffeeArray={updateCoffeeArray} />}
+          />
+          <Route exact path="/map" render={props =>
+            <MapView {...props} userCoffee={userCoffee} userLocation={userLocation} />}
+          />
+          {/* <Route exact path=""
+            render={props =>
+            <NewCoffeeForm {...props}
+              updateCoffeeArray={updateCoffeeArray}
+            />}
+          /> */}
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 };
