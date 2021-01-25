@@ -6,6 +6,7 @@ import axios from "axios";
 const App = () => {
   const [coffees, setCoffees] = useState([]);
   const [reload, setReload] = useState(true);
+  const [currentId, setCurrentId] = useState(null);
 
   const updateCoffeeArray = (eachEntry) => {
     setCoffees([...coffees, eachEntry]);
