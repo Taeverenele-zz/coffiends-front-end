@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Row, Col, Table } from "reactstrap";
 
 const CoffeesView = (props) => {
@@ -6,7 +6,8 @@ const CoffeesView = (props) => {
 
   const handleClick = (index) => {
     deleteCoffee(index);
-    props.history.push("/coffees");
+    console.log(props);
+    props.setReload(true);
   };
 
   return (

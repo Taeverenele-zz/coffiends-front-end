@@ -5,31 +5,40 @@ import axios from "axios";
 
 const App = () => {
   const [coffees, setCoffees] = useState([]);
+  const [reload, setReload] = useState(true);
+
   const updateCoffeeArray = (eachEntry) => {
     setCoffees([...coffees, eachEntry]);
   };
-  // const deleteCoffee = (id) => {
-  //   axios.get('ttp://localhost:5000/coffees', coffees)
-  //   .then(())
-  //   let newCoffees = [...coffees];
-  //   newCoffees = newCoffees.filter((coffee) => coffee._id != id);
-  //   setCoffees(newCoffees);
-  // };
+
+  const deleteCoffee = (id) => {
+    axios
+      .delete(`http://localhost:5000/coffees/${id}`, coffees)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+  };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/coffees", coffees)
-      .then((res) => setCoffees(res.data))
-      .catch((error) => console.log(error));
-  }, []);
+    if (reload == true) {
+      axios
+        .get("http://localhost:5000/coffees/", coffees)
+        .then((res) => {
+          setCoffees(res.data);
+          setReload(false);
+        })
+        .catch((error) => console.log(error));
+    }
+  }, [reload]);
+
   return (
     <div className="container mt-4">
       <h1>App</h1>
-      <CoffeesView coffees={coffees} />
-      <NewCoffeeForm
-        updateCoffeeArray={updateCoffeeArray}
-        // deleteCoffee={deleteCoffee}
+      <CoffeesView
+        coffees={coffees}
+        setReload={setReload}
+        deleteCoffee={deleteCoffee}
       />
+      <NewCoffeeForm updateCoffeeArray={updateCoffeeArray} />
     </div>
   );
 };
