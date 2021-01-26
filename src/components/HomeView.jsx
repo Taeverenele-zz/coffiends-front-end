@@ -13,7 +13,7 @@ const HomeView = (props) => {
             <h2>Search Cafes by Coffee</h2>
             <ul>
                 {coffees.map((coffee) => (
-                    <li key={coffee._id} onClick={() => addUserCoffee(coffee.name, 3.5)}>{coffee.name} - <Link to="/map">SEARCH</Link></li>
+                    <li key={coffee._id} onClick={() => addUserCoffee(coffee.name, 3.50)}>{coffee.name} - <Link to="/map">SEARCH</Link></li>
                 ))}
             </ul>
         </div>

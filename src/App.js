@@ -34,7 +34,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    if (reload == true) {
+    if (reload === true) {
       axios
         .get("http://localhost:5000/coffees/", coffees)
         .then((res) => {
