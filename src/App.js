@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import CoffeesView from "./components/CoffeesView";
 import CafesView from "./components/CafesView";
-// import NewCoffeeForm from "./components/NewCoffeeForm";
 import axios from "axios";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import HomeView from "./components/HomeView";
 import MapView from "./components/MapView";
+import OrderView from "./components/OrderView";
 
 const App = () => {
   const [coffees, setCoffees] = useState([]);
@@ -14,8 +14,12 @@ const App = () => {
 
   // const [currentId, setCurrentId] = useState(null);
 
-  const [userCoffee, setUserCoffee] = useState("");
+  const [coffee, setCoffee] = useState({
+    type: "",
+    price: 0
+  });
   const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
+  const [cafe, setCafe] = useState("");
 
   //COFFEES
   const updateCoffeeArray = (eachEntry) => {
@@ -84,7 +88,7 @@ const App = () => {
               <HomeView
                 {...props}
                 coffees={coffees}
-                setUserCoffee={setUserCoffee}
+                setCoffee={setCoffee}
               />
             )}
           />
@@ -120,17 +124,23 @@ const App = () => {
             render={(props) => (
               <MapView
                 {...props}
-                userCoffee={userCoffee}
+                coffee={coffee}
                 userLocation={userLocation}
+                setCafe={setCafe}
               />
             )}
           />
-          {/* <Route exact path=""
-            render={props =>
-            <NewCoffeeForm {...props}
-              updateCoffeeArray={updateCoffeeArray}
-            />}
-          /> */}
+          <Route
+            exact
+            path="/order"
+            render={(props) => (
+              <OrderView
+                {...props}
+                coffee={coffee}
+                cafe={cafe}
+              />
+            )}
+          />
         </Switch>
       </BrowserRouter>
     </div>
