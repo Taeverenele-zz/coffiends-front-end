@@ -11,13 +11,13 @@ const App = () => {
   const updateCoffeeArray = (eachEntry) => {
     setCoffees([...coffees, eachEntry]);
   };
-  const deleteCoffee = (id) => {
-    axios.get('ttp://localhost:5000/coffees', coffees)
-    .then(())
-    let newCoffees = [...coffees];
-    newCoffees = newCoffees.filter((coffee) => coffee._id != id);
-    setCoffees(newCoffees);
-  };
+  // const deleteCoffee = (id) => {
+  //   axios.get('ttp://localhost:5000/coffees', coffees)
+  //   .then(())
+  //   let newCoffees = [...coffees];
+  //   newCoffees = newCoffees.filter((coffee) => coffee._id != id);
+  //   setCoffees(newCoffees);
+  // };
 
   useEffect(() => {
     axios
