@@ -2,19 +2,22 @@ import React, { useState, useEffect } from "react";
 import CoffeesView from "./components/CoffeesView";
 import NewCoffeeForm from "./components/NewCoffeeForm";
 import axios from "axios";
+import Home from "./components/Home"
+
+
 
 const App = () => {
   const [coffees, setCoffees] = useState([]);
   const updateCoffeeArray = (eachEntry) => {
     setCoffees([...coffees, eachEntry]);
   };
-  // const deleteCoffee = (id) => {
-  //   axios.get('ttp://localhost:5000/coffees', coffees)
-  //   .then(())
-  //   let newCoffees = [...coffees];
-  //   newCoffees = newCoffees.filter((coffee) => coffee._id != id);
-  //   setCoffees(newCoffees);
-  // };
+  const deleteCoffee = (id) => {
+    axios.get('ttp://localhost:5000/coffees', coffees)
+    .then(())
+    let newCoffees = [...coffees];
+    newCoffees = newCoffees.filter((coffee) => coffee._id != id);
+    setCoffees(newCoffees);
+  };
 
   useEffect(() => {
     axios
