@@ -1,15 +1,15 @@
-import "../App.css"
-import React from "react"
-import { Link } from "react-router-dom"
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
-import * as cafeData from "../data/cafes.json"
+import "../App.css";
+import React from "react";
+import { Link } from "react-router-dom";
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import * as cafeData from "../data/cafes.json";
 
 function MapView(props) {
-    const { coffee, userLocation, setCafe } = props
+    const { coffee, userLocation, setCafe } = props;
 
     function handleClick(cafe) {
-        setCafe(cafe)
-    }
+        setCafe(cafe);
+    };
 
     return (
         <MapContainer
