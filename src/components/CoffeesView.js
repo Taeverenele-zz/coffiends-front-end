@@ -1,12 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Row, Col, Table } from "reactstrap";
+import NewCoffeeForm from "./NewCoffeeForm";
 
 const CoffeesView = (props) => {
-  const { coffees, deleteCoffee } = props;
+  const { coffees, deleteCoffee, updateCoffeeArray } = props;
 
   const handleClick = (index) => {
     deleteCoffee(index);
-    props.history.push("/coffees");
+    console.log(props);
+    props.setReload(true);
   };
 
   return (
@@ -34,6 +36,7 @@ const CoffeesView = (props) => {
           </Table>
         </Col>
       </Row>
+      <NewCoffeeForm updateCoffeeArray={updateCoffeeArray} />
     </div>
   );
 };
