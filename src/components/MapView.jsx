@@ -5,14 +5,11 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet"
 import * as cafeData from "../data/cafes.json"
 
 function MapView(props) {
-    const { userCoffee, userLocation } = props
-    const coffee = {
-        type: userCoffee,
-        price: 3.5
-    }
+    const { coffee, userLocation, setCafe } = props
 
-    console.log(userLocation)
-    console.log(userCoffee)
+    function handleClick(cafe) {
+        setCafe(cafe)
+    }
 
     return (
         <MapContainer
@@ -34,7 +31,7 @@ function MapView(props) {
                             <p>{cafe.address}</p>
                             <p>{coffee.type}</p>
                             <p><b>${coffee.price}</b></p>
-                            <Link to="/">BUY</Link>
+                            <Link to="/order" onClick={() => handleClick(cafe.name)}>BUY</Link>
                         </Popup>
                     </Marker>
                 ))}
