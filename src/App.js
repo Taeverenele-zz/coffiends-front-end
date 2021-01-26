@@ -12,8 +12,6 @@ const App = () => {
   const [cafes, setCafes] = useState([]);
   const [reload, setReload] = useState(true);
 
-  // const [currentId, setCurrentId] = useState(null);
-
   const [userCoffee, setUserCoffee] = useState("");
   const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
 
