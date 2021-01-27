@@ -62,13 +62,20 @@ const App = () => {
   }, [reload, cafes, coffees]);
 
   // CAFES
-  const updateCafeArray = (eachEntry) => {
-    setCafes([...cafes, eachEntry]);
+  const addCafe = (newCafe) => {
+    setCafes([...cafes, newCafe]);
   };
 
   const deleteCafe = (id) => {
     axios
       .delete(`http://localhost:5000/cafes/${id}`, cafes)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+  };
+
+  const updateCafe = (id) => {
+    axios
+      .patch(`http://localhost:5000/cafes/${id}`, cafes)
       .then((res) => console.log(res))
       .catch((error) => console.log(error));
   };
@@ -115,7 +122,8 @@ const App = () => {
                 cafes={cafes}
                 setReload={setReload}
                 deleteCafe={deleteCafe}
-                updateCafeArray={updateCafeArray}
+                addCafe={addCafe}
+                updateCafe={updateCafe}
               />
             )}
           />

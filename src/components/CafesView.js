@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { Row, Col, Table } from "reactstrap";
 import NewCafeForm from "./NewCafeForm";
+import EditCafeForm from "./EditCafeForm";
 
 const CafeView = (props) => {
-  const { cafes, deleteCafe, updateCafeArray } = props;
-  const [currentId, setCurrentId] = useState(null);
+  const { cafes, deleteCafe, addCafe, updateCafe } = props;
+  const [currentCafe, setCurrentCafe] = useState(null);
 
-  // console.log(currentId);
   const handleClickDelete = (index) => {
     deleteCafe(index);
     props.setReload(true);
   };
-  const handleClickEdit = (index) => {
-    deleteCafe(index);
+  const handleClickEdit = (cafe) => {
+    setCurrentCafe(cafe);
+    updateCafe(cafe._id);
   };
 
   return (
@@ -35,9 +36,7 @@ const CafeView = (props) => {
                     <button onClick={() => handleClickDelete(cafe._id)}>
                       x
                     </button>
-                    <button onClick={() => handleClickEdit(cafe._id)}>
-                      edit
-                    </button>
+                    <button onClick={() => handleClickEdit(cafe)}>edit</button>
                   </td>
                 </tr>
               ))}
@@ -45,11 +44,8 @@ const CafeView = (props) => {
           </Table>
         </Col>
       </Row>
-      <NewCafeForm
-        updateCafeArray={updateCafeArray}
-        setCurrentId={setCurrentId}
-        currentId={currentId}
-      />
+      <NewCafeForm addCafe={addCafe} currentCafe={currentCafe} />
+      <EditCafeForm currentCafe={currentCafe} />
     </div>
   );
 };
