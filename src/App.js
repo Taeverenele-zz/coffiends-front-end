@@ -73,8 +73,6 @@ const App = () => {
       .catch((error) => console.log(error));
   };
 
-  const updateCafeDb = (id) => {};
-
   return (
     <div className="container mt-4">
       <BrowserRouter>
@@ -119,7 +117,6 @@ const App = () => {
                 setReload={setReload}
                 deleteCafe={deleteCafe}
                 addCafe={addCafe}
-                updateCafeDb={() => updateCafeDb(cafe._id)}
               />
             )}
           />

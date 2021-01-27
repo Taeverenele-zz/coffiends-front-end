@@ -12,9 +12,9 @@ const NewCafeForm = (props) => {
   const handleFinalSubmit = (e) => {
     e.preventDefault();
     if (cafeData.name && cafeData.address) {
-      addCafe(cafeData);
+      console.log(cafeData);
       axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
-        console.log(res.data);
+        addCafe(res.data);
       });
       setCafeData(initialState);
     } else {
@@ -51,7 +51,7 @@ const NewCafeForm = (props) => {
             <FormGroup>
               <Label for="opening">Opening time:</Label>
               <Input
-                name="opening"
+                name="operating_hours[0]"
                 value={cafeData.operating_hours[0]}
                 onChange={handleInputChange}
               ></Input>
@@ -59,7 +59,7 @@ const NewCafeForm = (props) => {
             <FormGroup>
               <Label for="closing">Closing time:</Label>
               <Input
-                name="closing"
+                name="operating_hours[1]"
                 value={cafeData.operating_hours[1]}
                 onChange={handleInputChange}
               ></Input>
@@ -67,7 +67,7 @@ const NewCafeForm = (props) => {
             <FormGroup>
               <Label for="latitude">Latitude:</Label>
               <Input
-                name="latitude"
+                name="location[0]"
                 value={cafeData.location[0]}
                 onChange={handleInputChange}
               ></Input>
@@ -75,7 +75,7 @@ const NewCafeForm = (props) => {
             <FormGroup>
               <Label for="longitude">Longitude:</Label>
               <Input
-                name="longitude"
+                name="location[1]"
                 value={cafeData.location[1]}
                 onChange={handleInputChange}
               ></Input>
