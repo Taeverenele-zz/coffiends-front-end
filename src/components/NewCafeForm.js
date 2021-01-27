@@ -3,13 +3,7 @@ import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 const NewCafeForm = (props) => {
-  const { addCafe, currentCafe } = props;
-  const initialState = {
-    name: "",
-    address: "",
-  };
-  const [cafeData, setCafeData] = useState(initialState);
-  const { name, address } = cafeData;
+  const { addCafe, setCafeData, cafeData, initialState } = props;
 
   const handleInputChange = (e) => {
     setCafeData({ ...cafeData, [e.target.name]: e.target.value });
@@ -17,7 +11,7 @@ const NewCafeForm = (props) => {
 
   const handleFinalSubmit = (e) => {
     e.preventDefault();
-    if (name && address) {
+    if (cafeData.name && cafeData.address) {
       addCafe(cafeData);
       axios
         .post("http://localhost:5000/cafes", cafeData)
@@ -43,7 +37,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="name"
                 placeholder="cafe name"
-                value={name}
+                value={cafeData.name}
                 onChange={handleInputChange}
               ></Input>
             </FormGroup>
@@ -52,7 +46,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="address"
                 placeholder="address"
-                value={address}
+                value={cafeData.address}
                 onChange={handleInputChange}
               ></Input>
             </FormGroup>

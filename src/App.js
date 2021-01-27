@@ -73,7 +73,7 @@ const App = () => {
       .catch((error) => console.log(error));
   };
 
-  const updateCafe = (id) => {
+  const updateCafeDb = (id) => {
     axios
       .patch(`http://localhost:5000/cafes/${id}`, cafes)
       .then((res) => console.log(res))
@@ -120,10 +120,11 @@ const App = () => {
               <CafesView
                 {...props}
                 cafes={cafes}
+                setCafes={setCafes}
                 setReload={setReload}
                 deleteCafe={deleteCafe}
                 addCafe={addCafe}
-                updateCafe={updateCafe}
+                updateCafeDb={() => updateCafeDb(cafe._id)}
               />
             )}
           />
@@ -146,19 +147,11 @@ const App = () => {
               <OrderView {...props} coffee={coffee} cafe={cafe} />
             )}
           />
-          <Route
-            exact
-            path="/login"
-            render={() => (
-              <LoginView></LoginView>
-            )}
-          />
+          <Route exact path="/login" render={() => <LoginView></LoginView>} />
           <Route
             exact
             path="/register"
-            render={() => (
-              <RegisterView></RegisterView>
-            )}
+            render={() => <RegisterView></RegisterView>}
           />
         </Switch>
       </BrowserRouter>

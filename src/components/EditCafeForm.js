@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 
 const EditCafeForm = (props) => {
-  const { currentCafe, updateUser } = props;
+  const { currentCafe, updateCafe, updateCafeDb, setEditing } = props;
   const [cafe, setCafe] = useState(currentCafe);
+  const { name, address } = cafe;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -11,8 +12,14 @@ const EditCafeForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (cafe.name && cafe.address) updateUser(cafe);
+    if (cafe.name && cafe.address) updateCafe(cafe);
+    updateCafeDb(cafe._id);
+    setEditing(false);
   };
+
+  useEffect(() => {
+    setCafe(currentCafe);
+  }, [props]);
 
   return (
     <div>
@@ -23,13 +30,13 @@ const EditCafeForm = (props) => {
       </Row>
       <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }}>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label for="name">Name:</Label>
               <Input
                 name="name"
                 placeholder="cafe name"
-                value={"cafe.name"}
+                value={name}
                 onChange={handleChange}
               ></Input>
             </FormGroup>
@@ -38,12 +45,12 @@ const EditCafeForm = (props) => {
               <Input
                 name="address"
                 placeholder="address"
-                value={"cafe.address"}
+                value={address}
                 onChange={handleChange}
               ></Input>
             </FormGroup>
-            <Button onClick={handleSubmit}>Submit</Button>
-            <Button onClick={() => props.setEditing(false)}>Cancel</Button>
+            <Button>Submit</Button>
+            <Button onClick={() => setEditing(false)}>Cancel</Button>
           </Form>
         </Col>
       </Row>

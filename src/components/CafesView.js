@@ -4,16 +4,36 @@ import NewCafeForm from "./NewCafeForm";
 import EditCafeForm from "./EditCafeForm";
 
 const CafeView = (props) => {
-  const { cafes, deleteCafe, addCafe, updateCafe } = props;
+  const {
+    cafes,
+    setReload,
+    setCafes,
+    deleteCafe,
+    addCafe,
+    updateCafeDb,
+  } = props;
   const [currentCafe, setCurrentCafe] = useState(null);
+  const initialState = {
+    name: "",
+    address: "",
+  };
+  const [cafeData, setCafeData] = useState(initialState);
+  const [editing, setEditing] = useState(false);
 
   const handleClickDelete = (index) => {
     deleteCafe(index);
-    props.setReload(true);
+    setReload(true);
   };
-  const handleClickEdit = (cafe) => {
+
+  const editCafe = (cafe) => {
+    setEditing(true);
     setCurrentCafe(cafe);
-    updateCafe(cafe._id);
+  };
+
+  const updateCafe = (newCafe) => {
+    setCafes(
+      cafes.map((cafe) => (cafe._id == currentCafe._id ? newCafe : cafe))
+    );
   };
 
   return (
@@ -36,7 +56,7 @@ const CafeView = (props) => {
                     <button onClick={() => handleClickDelete(cafe._id)}>
                       x
                     </button>
-                    <button onClick={() => handleClickEdit(cafe)}>edit</button>
+                    <button onClick={() => editCafe(cafe)}>edit</button>
                   </td>
                 </tr>
               ))}
@@ -44,8 +64,22 @@ const CafeView = (props) => {
           </Table>
         </Col>
       </Row>
-      <NewCafeForm addCafe={addCafe} currentCafe={currentCafe} />
-      <EditCafeForm currentCafe={currentCafe} />
+      {editing ? (
+        <EditCafeForm
+          currentCafe={currentCafe}
+          editCafe={editCafe}
+          updateCafe={updateCafe}
+          updateCafeDb={updateCafeDb}
+          setEditing={setEditing}
+        />
+      ) : (
+        <NewCafeForm
+          addCafe={addCafe}
+          initialState={initialState}
+          cafeData={cafeData}
+          setCafeData={setCafeData}
+        />
+      )}
     </div>
   );
 };
