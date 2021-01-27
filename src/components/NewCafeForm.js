@@ -9,13 +9,17 @@ const NewCafeForm = (props) => {
     setCafeData({ ...cafeData, [e.target.name]: e.target.value });
   };
 
+  const handleOpeningChange = (e) => {
+    setCafeData({ ...cafeData, [e.target.name]: e.target.value });
+  };
+
   const handleFinalSubmit = (e) => {
     e.preventDefault();
     if (cafeData.name && cafeData.address) {
-      addCafe(cafeData);
-      axios
-        .post("http://localhost:5000/cafes", cafeData)
-        .then((res) => console.log(res.data));
+      console.log(cafeData);
+      axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
+        addCafe(res.data);
+      });
       setCafeData(initialState);
     } else {
       alert("Cannot leave fields empty!");
@@ -36,7 +40,6 @@ const NewCafeForm = (props) => {
               <Label for="name">Name:</Label>
               <Input
                 name="name"
-                placeholder="cafe name"
                 value={cafeData.name}
                 onChange={handleInputChange}
               ></Input>
@@ -45,9 +48,68 @@ const NewCafeForm = (props) => {
               <Label for="address">Address:</Label>
               <Input
                 name="address"
-                placeholder="address"
                 value={cafeData.address}
                 onChange={handleInputChange}
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="opening">Opening time:</Label>
+              <Input
+                name="operating_hours[0]"
+                value={cafeData.operating_hours[0] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "operating_hours",
+                      value: [e.target.value, cafeData.operating_hours[1]],
+                    },
+                  })
+                }
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="closing">Closing time:</Label>
+              <Input
+                name="operating_hours[1]"
+                value={cafeData.operating_hours[1] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "operating_hours",
+                      value: [cafeData.operating_hours[0], e.target.value],
+                    },
+                  })
+                }
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="latitude">Latitude:</Label>
+              <Input
+                name="location[0]"
+                value={cafeData.location[0] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "location",
+                      value: [e.target.value, cafeData.location[1]],
+                    },
+                  })
+                }
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="longitude">Longitude:</Label>
+              <Input
+                name="location[1]"
+                value={cafeData.location[1] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "location",
+                      value: [cafeData.location[0], e.target.value],
+                    },
+                  })
+                }
               ></Input>
             </FormGroup>
             <Button>Submit</Button>

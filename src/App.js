@@ -73,13 +73,6 @@ const App = () => {
       .catch((error) => console.log(error));
   };
 
-  const updateCafeDb = (id) => {
-    axios
-      .patch(`http://localhost:5000/cafes/${id}`, cafes)
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
-  };
-
   return (
     <div className="container mt-4">
       <BrowserRouter>
@@ -124,7 +117,6 @@ const App = () => {
                 setReload={setReload}
                 deleteCafe={deleteCafe}
                 addCafe={addCafe}
-                updateCafeDb={() => updateCafeDb(cafe._id)}
               />
             )}
           />

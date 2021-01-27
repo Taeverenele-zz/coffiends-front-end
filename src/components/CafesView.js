@@ -16,6 +16,8 @@ const CafeView = (props) => {
   const initialState = {
     name: "",
     address: "",
+    operating_hours: [],
+    location: [],
   };
   const [cafeData, setCafeData] = useState(initialState);
   const [editing, setEditing] = useState(false);
@@ -39,12 +41,16 @@ const CafeView = (props) => {
   return (
     <div className="mt-4">
       <Row>
-        <Col sm="12" md={{ size: 6, offset: 3 }}>
+        <Col>
           <Table hover>
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Description</th>
+                <th>Address</th>
+                <th>Opening time</th>
+                <th>Closing time</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
               </tr>
             </thead>
             <tbody>
@@ -52,6 +58,10 @@ const CafeView = (props) => {
                 <tr key={index}>
                   <td>{cafe.name}</td>
                   <td>{cafe.address}</td>
+                  <td>{cafe.operating_hours[0]}</td>
+                  <td>{cafe.operating_hours[1]}</td>
+                  <td>{cafe.location[0]}</td>
+                  <td>{cafe.location[1]}</td>
                   <td>
                     <button onClick={() => handleClickDelete(cafe._id)}>
                       x
@@ -71,6 +81,7 @@ const CafeView = (props) => {
           updateCafe={updateCafe}
           updateCafeDb={updateCafeDb}
           setEditing={setEditing}
+          cafes={cafes}
         />
       ) : (
         <NewCafeForm
