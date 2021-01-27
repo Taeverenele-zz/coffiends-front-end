@@ -9,6 +9,10 @@ const NewCafeForm = (props) => {
     setCafeData({ ...cafeData, [e.target.name]: e.target.value });
   };
 
+  const handleOpeningChange = (e) => {
+    setCafeData({ ...cafeData, [e.target.name]: e.target.value });
+  };
+
   const handleFinalSubmit = (e) => {
     e.preventDefault();
     if (cafeData.name && cafeData.address) {
@@ -52,32 +56,60 @@ const NewCafeForm = (props) => {
               <Label for="opening">Opening time:</Label>
               <Input
                 name="operating_hours[0]"
-                value={cafeData.operating_hours[0]}
-                onChange={handleInputChange}
+                value={cafeData.operating_hours[0] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "operating_hours",
+                      value: [e.target.value, cafeData.operating_hours[1]],
+                    },
+                  })
+                }
               ></Input>
             </FormGroup>
             <FormGroup>
               <Label for="closing">Closing time:</Label>
               <Input
                 name="operating_hours[1]"
-                value={cafeData.operating_hours[1]}
-                onChange={handleInputChange}
+                value={cafeData.operating_hours[1] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "operating_hours",
+                      value: [cafeData.operating_hours[0], e.target.value],
+                    },
+                  })
+                }
               ></Input>
             </FormGroup>
             <FormGroup>
               <Label for="latitude">Latitude:</Label>
               <Input
                 name="location[0]"
-                value={cafeData.location[0]}
-                onChange={handleInputChange}
+                value={cafeData.location[0] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "location",
+                      value: [e.target.value, cafeData.location[1]],
+                    },
+                  })
+                }
               ></Input>
             </FormGroup>
             <FormGroup>
               <Label for="longitude">Longitude:</Label>
               <Input
                 name="location[1]"
-                value={cafeData.location[1]}
-                onChange={handleInputChange}
+                value={cafeData.location[1] || ""}
+                onChange={(e) =>
+                  handleInputChange({
+                    target: {
+                      name: "location",
+                      value: [cafeData.location[0], e.target.value],
+                    },
+                  })
+                }
               ></Input>
             </FormGroup>
             <Button>Submit</Button>
