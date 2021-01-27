@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
@@ -9,13 +9,9 @@ const NewCafeForm = (props) => {
     setCafeData({ ...cafeData, [e.target.name]: e.target.value });
   };
 
-  const handleOpeningChange = (e) => {
-    setCafeData({ ...cafeData, [e.target.name]: e.target.value });
-  };
-
   const handleFinalSubmit = (e) => {
     e.preventDefault();
-    if (cafeData.name && cafeData.address) {
+    if (cafeData.cafe_name && cafeData.address) {
       console.log(cafeData);
       axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
         addCafe(res.data);
@@ -37,10 +33,10 @@ const NewCafeForm = (props) => {
         <Col sm="12" md={{ size: 6, offset: 3 }}>
           <Form onSubmit={handleFinalSubmit}>
             <FormGroup>
-              <Label for="name">Name:</Label>
+              <Label for="cafe_name">Cafe name:</Label>
               <Input
-                name="name"
-                value={cafeData.name}
+                name="cafe_name"
+                value={cafeData.cafe_name}
                 onChange={handleInputChange}
               ></Input>
             </FormGroup>

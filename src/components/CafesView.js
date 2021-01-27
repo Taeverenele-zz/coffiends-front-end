@@ -14,7 +14,7 @@ const CafeView = (props) => {
   } = props;
   const [currentCafe, setCurrentCafe] = useState(null);
   const initialState = {
-    name: "",
+    cafe_name: "",
     address: "",
     operating_hours: [],
     location: [],
@@ -45,7 +45,7 @@ const CafeView = (props) => {
           <Table hover>
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Cafe Name</th>
                 <th>Address</th>
                 <th>Opening time</th>
                 <th>Closing time</th>
@@ -56,7 +56,7 @@ const CafeView = (props) => {
             <tbody>
               {cafes.map((cafe, index) => (
                 <tr key={index}>
-                  <td>{cafe.name}</td>
+                  <td>{cafe.cafe_name}</td>
                   <td>{cafe.address}</td>
                   <td>{cafe.operating_hours[0]}</td>
                   <td>{cafe.operating_hours[1]}</td>
