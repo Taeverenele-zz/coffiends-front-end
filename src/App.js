@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CoffeesView from "./components/CoffeesView";
 import CafesView from "./components/CafesView";
 import axios from "axios";
+import Home from "./components/Home"
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import HomeView from "./components/HomeView";
 import MapView from "./components/MapView";
