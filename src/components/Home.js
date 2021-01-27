@@ -17,15 +17,15 @@ const Home = (props) => {
 
         <Row className="align-items-center">
 
-            <Col sm={{ size: 4 }}>
+            <Col sm={{ size: 4 }} xs={{size: 4}}>
                 <a href="/"><img src={logo} alt="Logo" style={{height: "125px"}}></img></a>
             </Col>
 
-            <Col sm={{ size: 4}} className="justify-content-center text-center">
+            <Col sm={{ size: 4}} xs={{size: 4}} className="justify-content-center text-center">
                 <input type="search" id="" name="" placeholder="Search Coffee?"></input>
             </Col>
 
-            <Col sm={{ size: 4}} style={{textAlign: "end"}}>
+            <Col sm={{ size: 4}} xs={{size: 3}} style={{textAlign: "end"}}>
             <Button color="primary" size="sm" style={{margin: "10px"}}>Log In</Button>
             <Button color="primary" size="sm">Register</Button>
             </Col>
