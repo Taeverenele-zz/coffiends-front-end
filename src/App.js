@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CoffeesView from "./components/CoffeesView";
 import CafesView from "./components/CafesView";
 import axios from "axios";
+import Home from "./components/Home"
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import HomeView from "./components/HomeView";
 import MapView from "./components/MapView";
@@ -12,8 +13,11 @@ const App = () => {
   const [cafes, setCafes] = useState([]);
   const [reload, setReload] = useState(true);
 
+<<<<<<< HEAD
   const [userCoffee, setUserCoffee] = useState("");
 
+=======
+>>>>>>> 1ca201bc978a46d305164be88fec00fa5274e59b
   // const [currentId, setCurrentId] = useState(null);
 
   const [coffee, setCoffee] = useState({
