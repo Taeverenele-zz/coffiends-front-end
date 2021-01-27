@@ -16,6 +16,8 @@ const CafeView = (props) => {
   const initialState = {
     name: "",
     address: "",
+    operating_hours: [],
+    location: [],
   };
   const [cafeData, setCafeData] = useState(initialState);
   const [editing, setEditing] = useState(false);

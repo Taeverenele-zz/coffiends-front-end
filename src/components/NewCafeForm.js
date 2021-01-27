@@ -36,7 +36,6 @@ const NewCafeForm = (props) => {
               <Label for="name">Name:</Label>
               <Input
                 name="name"
-                placeholder="cafe name"
                 value={cafeData.name}
                 onChange={handleInputChange}
               ></Input>
@@ -45,8 +44,39 @@ const NewCafeForm = (props) => {
               <Label for="address">Address:</Label>
               <Input
                 name="address"
-                placeholder="address"
                 value={cafeData.address}
+                onChange={handleInputChange}
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="opening">Opening time:</Label>
+              <Input
+                name="opening"
+                value={cafeData.operating_hours[0]}
+                onChange={handleInputChange}
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="closing">Closing time:</Label>
+              <Input
+                name="closing"
+                value={cafeData.operating_hours[1]}
+                onChange={handleInputChange}
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="latitude">Latitude:</Label>
+              <Input
+                name="latitude"
+                value={cafeData.location[0]}
+                onChange={handleInputChange}
+              ></Input>
+            </FormGroup>
+            <FormGroup>
+              <Label for="longitude">Longitude:</Label>
+              <Input
+                name="longitude"
+                value={cafeData.location[1]}
                 onChange={handleInputChange}
               ></Input>
             </FormGroup>
