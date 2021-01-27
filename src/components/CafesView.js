@@ -71,6 +71,7 @@ const CafeView = (props) => {
           updateCafe={updateCafe}
           updateCafeDb={updateCafeDb}
           setEditing={setEditing}
+          cafes={cafes}
         />
       ) : (
         <NewCafeForm

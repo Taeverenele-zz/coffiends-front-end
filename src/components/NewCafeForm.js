@@ -13,9 +13,9 @@ const NewCafeForm = (props) => {
     e.preventDefault();
     if (cafeData.name && cafeData.address) {
       addCafe(cafeData);
-      axios
-        .post("http://localhost:5000/cafes", cafeData)
-        .then((res) => console.log(res.data));
+      axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
+        console.log(res.data);
+      });
       setCafeData(initialState);
     } else {
       alert("Cannot leave fields empty!");

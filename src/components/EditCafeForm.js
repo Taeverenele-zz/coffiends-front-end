@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import axios from "axios";
 
 const EditCafeForm = (props) => {
-  const { currentCafe, updateCafe, updateCafeDb, setEditing } = props;
+  const { currentCafe, updateCafe, updateCafeDb, setEditing, cafes } = props;
   const [cafe, setCafe] = useState(currentCafe);
+  const [showValidation, setShowValidation] = useState(false);
   const { name, address } = cafe;
 
   const handleChange = (e) => {
@@ -12,8 +14,14 @@ const EditCafeForm = (props) => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (cafe.name && cafe.address) updateCafe(cafe);
-    updateCafeDb(cafe._id);
+    if (!cafe.name || !cafe.address) {
+      setShowValidation(true);
+      return;
+    }
+    axios
+      .put(`http://localhost:5000/cafes/${cafe._id}`, cafe)
+      .then((res) => updateCafe(res.data))
+      .catch((error) => console.log(error));
     setEditing(false);
   };
 
@@ -39,6 +47,7 @@ const EditCafeForm = (props) => {
                 value={name}
                 onChange={handleChange}
               ></Input>
+              {!cafe.name && showValidation && <p>* Name is required</p>}
             </FormGroup>
             <FormGroup>
               <Label for="address">Address:</Label>
