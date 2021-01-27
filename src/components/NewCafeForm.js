@@ -3,25 +3,29 @@ import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 const NewCafeForm = (props) => {
-  const { updateCafeArray } = props;
+  const { addCafe, currentCafe } = props;
   const initialState = {
     name: "",
     address: "",
   };
-  const [eachEntry, setEachEntry] = useState(initialState);
-  const { name, address } = eachEntry;
+  const [cafeData, setCafeData] = useState(initialState);
+  const { name, address } = cafeData;
 
   const handleInputChange = (e) => {
-    setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+    setCafeData({ ...cafeData, [e.target.name]: e.target.value });
   };
 
   const handleFinalSubmit = (e) => {
     e.preventDefault();
-    updateCafeArray(eachEntry);
-    axios
-      .post("http://localhost:5000/cafes", eachEntry)
-      .then((res) => console.log(res.data));
-    setEachEntry(initialState);
+    if (name && address) {
+      addCafe(cafeData);
+      axios
+        .post("http://localhost:5000/cafes", cafeData)
+        .then((res) => console.log(res.data));
+      setCafeData(initialState);
+    } else {
+      alert("Cannot leave fields empty!");
+    }
   };
 
   return (
