@@ -20,3 +20,17 @@
   .underline-text{
     text-decoration: underline;
   }
+
+  .Order-Panel {
+    height: 100vh;
+    width: 40vh;
+    border: 3px black solid;
+    position: fixed;
+    z-index: 2000;
+    background-color: White; 
+    right: 0px
+  }
+
+  .Order-Panel-margin {
+    margin: 15px;
+  }
