@@ -12,16 +12,14 @@ const App = () => {
   const [cafes, setCafes] = useState([]);
   const [reload, setReload] = useState(true);
 
-<<<<<<< HEAD
   const [userCoffee, setUserCoffee] = useState("");
-=======
+
   // const [currentId, setCurrentId] = useState(null);
 
   const [coffee, setCoffee] = useState({
     type: "",
-    price: 0
+    price: 0,
   });
->>>>>>> 7944ed4e221c9c4696f1daa27ff5652a1f2debb8
   const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
   const [cafe, setCafe] = useState("");
 
@@ -89,11 +87,7 @@ const App = () => {
             exact
             path="/"
             render={(props) => (
-              <HomeView
-                {...props}
-                coffees={coffees}
-                setCoffee={setCoffee}
-              />
+              <HomeView {...props} coffees={coffees} setCoffee={setCoffee} />
             )}
           />
           <Route
@@ -138,11 +132,7 @@ const App = () => {
             exact
             path="/order"
             render={(props) => (
-              <OrderView
-                {...props}
-                coffee={coffee}
-                cafe={cafe}
-              />
+              <OrderView {...props} coffee={coffee} cafe={cafe} />
             )}
           />
         </Switch>

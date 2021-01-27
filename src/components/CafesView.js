@@ -5,8 +5,8 @@ import NewCafeForm from "./NewCafeForm";
 const CafeView = (props) => {
   const { cafes, deleteCafe, updateCafeArray } = props;
   const [currentId, setCurrentId] = useState(null);
-  const [formData, setFormData] = useState();
-  console.log(currentId);
+
+  // console.log(currentId);
   const handleClickDelete = (index) => {
     deleteCafe(index);
     props.setReload(true);

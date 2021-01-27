@@ -3,7 +3,7 @@ import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 const NewCafeForm = (props) => {
-  const { updateCafeArray, currentId, setCurrentId } = props;
+  const { updateCafeArray } = props;
   const initialState = {
     name: "",
     address: "",
