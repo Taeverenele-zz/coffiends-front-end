@@ -27,9 +27,9 @@ const NewCafeForm = (props) => {
     axios.post("http://localhost:5000/users", userData).then((res) => {
       const cafeOwner = res.data._id;
       axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
-        console.log(cafeOwner);
-        cafeData.owner = cafeOwner;
-        addCafe(cafeData);
+        res.data.owner = cafeOwner;
+        addCafe(res.data);
+        axios.put(`http://localhost:5000/cafes/${res.data._id}`, res.data);
       });
     });
     setCafeData(initialState);
