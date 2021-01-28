@@ -4,14 +4,7 @@ import NewCafeForm from "./NewCafeForm";
 import EditCafeForm from "./EditCafeForm";
 
 const CafeView = (props) => {
-  const {
-    cafes,
-    setReload,
-    setCafes,
-    deleteCafe,
-    addCafe,
-    updateCafeDb,
-  } = props;
+  const { cafes, setReload, setCafes, deleteCafe, addCafe } = props;
   const [currentCafe, setCurrentCafe] = useState(null);
   const initialState = {
     cafe_name: "",
@@ -20,6 +13,7 @@ const CafeView = (props) => {
     location: [],
   };
   const [cafeData, setCafeData] = useState(initialState);
+
   const [editing, setEditing] = useState(false);
 
   const handleClickDelete = (index) => {
@@ -79,7 +73,6 @@ const CafeView = (props) => {
           currentCafe={currentCafe}
           editCafe={editCafe}
           updateCafe={updateCafe}
-          updateCafeDb={updateCafeDb}
           setEditing={setEditing}
           cafes={cafes}
         />
