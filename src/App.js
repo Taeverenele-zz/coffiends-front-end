@@ -1,30 +1,21 @@
 import React, { useState, useEffect } from "react";
-import CoffeesView from "./components/CoffeesView";
-import CafesView from "./components/CafesView";
-import axios from "axios";
-import Home from "./components/Home";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import axios from "axios";
+import AdminDashBoardView from "./components/AdminDashboardView";
+import CafesView from "./components/CafesView";
+import CoffeesView from "./components/CoffeesView";
 import HomeView from "./components/HomeView";
+import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
 import OrderView from "./components/OrderView";
-import LoginView from "./components/LoginView";
 import RegisterView from "./components/RegisterView";
-import AdminDashBoardView from "./components/AdminDashboardView";
 
 const App = () => {
+  const [reload, setReload] = useState(true);
   const [coffees, setCoffees] = useState([]);
   const [cafes, setCafes] = useState([]);
-  const [reload, setReload] = useState(true);
-
-  const [userCoffee, setUserCoffee] = useState("");
-
-  const [coffee, setCoffee] = useState({
-    id: "",
-    name: "",
-    price: 0,
-  });
-
-  const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
+  const [userLocation, setUserLocation] = useState([]);
+  const [coffee, setCoffee] = useState({ id: "", name: "", price: 0 });
   const [cafe, setCafe] = useState("");
 
   //COFFEES
@@ -59,7 +50,8 @@ const App = () => {
     // navigator.geolocation.getCurrentPosition(
     //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
     //   error => console.log(error.message)
-    // )
+    // );
+    setUserLocation([-27.468298, 153.0247838]); // uncomment code above & comment this out for dynamic location
   }, [reload, cafes, coffees]);
 
   // CAFES
@@ -69,11 +61,13 @@ const App = () => {
       <BrowserRouter>
         <header>
           <nav>
-            <span>
-              <h3>COFFIENDS</h3>
-            </span>
-            <Link to="/">HOME</Link> |<Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/cafes"> CAFES</Link>
+            <Link to="/">
+              <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
+            </Link>{" "}
+            | <Link to="/login"> LOGIN</Link> |{" "}
+            <Link to="/register">REGISTER</Link> |{" "}
+            <Link to="/admin"> ADMIN</Link> | <Link to="/cafes"> CAFES</Link> |{" "}
+            <Link to="/coffees"> COFFEES</Link>
           </nav>
         </header>
         <Switch>
@@ -116,7 +110,9 @@ const App = () => {
               <MapView
                 {...props}
                 coffee={coffee}
+                setCoffee={setCoffee}
                 userLocation={userLocation}
+                cafe={cafe}
                 setCafe={setCafe}
               />
             )}
@@ -128,17 +124,9 @@ const App = () => {
               <OrderView {...props} coffee={coffee} cafe={cafe} />
             )}
           />
-          <Route exact path="/login" render={() => <LoginView></LoginView>} />
-          <Route
-            exact
-            path="/register"
-            render={() => <RegisterView></RegisterView>}
-          />
-          <Route
-            exact
-            path="/admin"
-            render={() => <AdminDashBoardView></AdminDashBoardView>}
-          />
+          <Route exact path="/login" render={() => <LoginView />} />
+          <Route exact path="/register" render={() => <RegisterView />} />
+          <Route exact path="/admin" render={() => <AdminDashBoardView />} />
         </Switch>
       </BrowserRouter>
     </div>
