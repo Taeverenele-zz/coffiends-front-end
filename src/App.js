@@ -9,6 +9,7 @@ import MapView from "./components/MapView";
 import OrderView from "./components/OrderView";
 import LoginView from "./components/LoginView";
 import RegisterView from "./components/RegisterView";
+import AdminDashBoardView from "./components/AdminDashboardView"
 
 const App = () => {
   const [coffees, setCoffees] = useState([]);
@@ -139,11 +140,18 @@ const App = () => {
               <OrderView {...props} coffee={coffee} cafe={cafe} />
             )}
           />
-          <Route exact path="/login" render={() => <LoginView></LoginView>} />
+          <Route exact
+           path="/login"
+            render={() => <LoginView></LoginView>} />
           <Route
             exact
             path="/register"
             render={() => <RegisterView></RegisterView>}
+          />
+          <Route
+            exact
+            path="/admin"
+            render={() => <AdminDashBoardView></AdminDashBoardView>}
           />
         </Switch>
       </BrowserRouter>

@@ -34,3 +34,17 @@
   .Order-Panel-margin {
     margin: 15px;
   }
+
+  .Admin-Dashboard-Center {
+    text-align: -moz-center;
+    text-align: -webkit-center;
+    /* text-align-last: end; */
+  }
+
+  .Admin-Button-Margin {
+    margin: 10px;
+  }
+
+  .Remove-Dot {
+    list-style-type: none;
+  }
