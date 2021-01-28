@@ -1,14 +1,19 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-const OrderView = (props) => {
-    const { coffee, cafe } = props
 
+const OrderView = (props) => {
+
+    const { coffee, cafe, setShow} = props
     const [ orderPrice, setOrderPrice ] = useState(coffee.price)
     const [ size, setSize ] = useState("Regular")
     const [ milk, setMilk ] = useState("")
     const [ sugar, setSugar ] = useState(0)
     const [ pickupTime, setPickupTime ] = useState(Date.now())
+
+  
+
+    
 
     const handleSize = (event) => {
         setSize(event.target.value)
@@ -47,7 +52,7 @@ const OrderView = (props) => {
 
     return (
         <>
-            <p><Link to="/map">I don't want that! Take me back!</Link></p>
+            <button onClick={() => setShow(false)} className="Order-Panel-margin">Cancel </button>
             <h3>Order for: {cafe}</h3>
             <h4>{coffee.type}</h4>
             <form onSubmit={handleSubmit}>
