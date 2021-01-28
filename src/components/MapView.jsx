@@ -1,17 +1,34 @@
 import "../App.css";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import * as cafeData from "../data/cafes.json";
-import { useState } from 'react';
-import {Motion, spring} from "react-motion"
-import {Container, Row} from 'reactstrap'
+import {Motion, spring} from "react-motion";
+import {Container, Row} from "reactstrap";
+import axios from "axios";
 
 function MapView(props) {
     const { coffee, userLocation, setCafe } = props;
     const [show, setShow] = useState(false)
     const [dropdownOpen, setOpen] = useState(false);
     const toggle = () => setOpen(!dropdownOpen);
+
+    const [cafeData, setCafeData] = useState([])
+
+    useEffect(() => {
+        const time = new Date
+        const postBody = {
+            location: userLocation,
+            time: (String(time.getHours()) + String(time.getMinutes())),
+            coffee: coffee.id
+        }
+        console.log(postBody)
+        axios
+        .post("http://localhost:5000/map/", postBody)
+        .then((res) => {
+            setCafeData(res.data);
+        })
+        .catch((error) => console.log(error.message));
+      }, []);
 
     function handleClick(cafe) {
         setCafe(cafe);
@@ -105,16 +122,16 @@ function MapView(props) {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 
             />
-                {cafeData.data.map((cafe) => (
+                {cafeData.map((cafe) => (
                     <Marker
-                        key={cafe.cafe_id}
+                        key={cafe._id}
                         position={[cafe.location[0], cafe.location[1]]}
                     >
                         <Popup>
-                            <h2>{cafe.name}</h2>
+                            <h2>{cafe.cafe_name}</h2>
                             <p>{cafe.address}</p>
-                            <p>{coffee.type}</p>
-                            <p><b>${coffee.price}</b></p>
+                            <p>{coffee.name}</p>
+                            <p><b>${cafe.menu[0].price}</b></p>
                             <Link onClick={() => setShow(true)}>BUY</Link>
                             {/* to="/order" onClick={() => handleClick(cafe.name)} */}
                         </Popup>
