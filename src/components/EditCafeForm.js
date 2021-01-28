@@ -3,7 +3,7 @@ import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 const EditCafeForm = (props) => {
-  const { currentCafe, updateCafe, updateCafeDb, setEditing, cafes } = props;
+  const { currentCafe, updateCafe, setEditing } = props;
   const [cafe, setCafe] = useState(currentCafe);
   const [showValidation, setShowValidation] = useState(false);
   const { name, address } = cafe;
