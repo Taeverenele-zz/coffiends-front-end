@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Row, Col, Table } from "reactstrap";
 import NewCafeForm from "./NewCafeForm";
-import EditCafeForm from "./EditCafeForm";
+import axios from "axios";
 
 const CafeView = (props) => {
-  const { cafes, setReload, setCafes, deleteCafe, addCafe } = props;
-  const [currentCafe, setCurrentCafe] = useState(null);
+  const { cafes, setReload, setCafes } = props;
   const initialState = {
     cafe_name: "",
     address: "",
@@ -23,13 +22,17 @@ const CafeView = (props) => {
 
   const editCafe = (cafe) => {
     setEditing(true);
-    setCurrentCafe(cafe);
+    setCafeData(cafe);
+  };
+  const addCafe = (newCafe) => {
+    setCafes([...cafes, newCafe]);
   };
 
-  const updateCafe = (newCafe) => {
-    setCafes(
-      cafes.map((cafe) => (cafe._id == currentCafe._id ? newCafe : cafe))
-    );
+  const deleteCafe = (id) => {
+    axios
+      .delete(`http://localhost:5000/cafes/${id}`, cafes)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -68,22 +71,16 @@ const CafeView = (props) => {
           </Table>
         </Col>
       </Row>
-      {editing ? (
-        <EditCafeForm
-          currentCafe={currentCafe}
-          editCafe={editCafe}
-          updateCafe={updateCafe}
-          setEditing={setEditing}
-          cafes={cafes}
-        />
-      ) : (
-        <NewCafeForm
-          addCafe={addCafe}
-          initialState={initialState}
-          cafeData={cafeData}
-          setCafeData={setCafeData}
-        />
-      )}
+      <NewCafeForm
+        addCafe={addCafe}
+        initialState={initialState}
+        cafeData={cafeData}
+        editing={editing}
+        setEditing={setEditing}
+        setCafeData={setCafeData}
+        cafes={cafes}
+        setCafes={setCafes}
+      />
     </div>
   );
 };

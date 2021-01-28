@@ -9,7 +9,7 @@ import MapView from "./components/MapView";
 import OrderView from "./components/OrderView";
 import LoginView from "./components/LoginView";
 import RegisterView from "./components/RegisterView";
-import AdminDashBoardView from "./components/AdminDashboardView"
+import AdminDashBoardView from "./components/AdminDashboardView";
 
 const App = () => {
   const [coffees, setCoffees] = useState([]);
@@ -21,7 +21,7 @@ const App = () => {
   const [coffee, setCoffee] = useState({
     id: "",
     name: "",
-    price: 0
+    price: 0,
   });
 
   const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
@@ -63,16 +63,6 @@ const App = () => {
   }, [reload, cafes, coffees]);
 
   // CAFES
-  const addCafe = (newCafe) => {
-    setCafes([...cafes, newCafe]);
-  };
-
-  const deleteCafe = (id) => {
-    axios
-      .delete(`http://localhost:5000/cafes/${id}`, cafes)
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
-  };
 
   return (
     <div className="container mt-4">
@@ -116,8 +106,6 @@ const App = () => {
                 cafes={cafes}
                 setCafes={setCafes}
                 setReload={setReload}
-                deleteCafe={deleteCafe}
-                addCafe={addCafe}
               />
             )}
           />
@@ -140,9 +128,7 @@ const App = () => {
               <OrderView {...props} coffee={coffee} cafe={cafe} />
             )}
           />
-          <Route exact
-           path="/login"
-            render={() => <LoginView></LoginView>} />
+          <Route exact path="/login" render={() => <LoginView></LoginView>} />
           <Route
             exact
             path="/register"

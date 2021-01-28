@@ -1,29 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
+const initialUserState = {
+  user_name: "",
+  email: "",
+  password: "",
+  role: "",
+  phone: "",
+};
+
 const NewCafeForm = (props) => {
-  const { addCafe, setCafeData, cafeData, initialState } = props;
+  const {
+    addCafe,
+    setCafeData,
+    cafeData,
+    initialState,
+    editing,
+    setEditing,
+    cafes,
+    setCafes,
+  } = props;
 
-  const initialUserState = {
-    user_name: "",
-    email: "",
-    password: "",
-    role: "",
-    phone: "",
-  };
   const [userData, setUserData] = useState(initialUserState);
+  useEffect(() => {
+    if (editing) {
+      axios.get(`http://localhost:5000/users/${cafeData.owner}`).then((res) => {
+        console.log("test");
+        setUserData(res.data);
+      });
+    }
+  }, [cafeData.owner, editing]);
 
-  const handleInputChange = (e) => {
+  const updateCafe = (newCafe) => {
+    setCafes(cafes.map((cafe) => (cafe._id == cafeData._id ? newCafe : cafe)));
+  };
+
+  const handleCafeInputChange = (e) => {
     setCafeData({ ...cafeData, [e.target.name]: e.target.value });
+  };
+
+  const handleUserInputChange = (e) => {
     setUserData({ ...userData, [e.target.name]: e.target.value });
   };
 
-  const handleFinalSubmit = (e) => {
-    e.preventDefault();
-    // console.log(userData);
-    // if (cafeData.cafe_name && cafeData.address) { // add validation that all fields must be entered
-    // console.log(cafeData);
+  const updateExistingCafe = () => {
+    axios
+      .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
+      .then((res) => updateCafe(res.data))
+      .catch((error) => console.log(error));
+    setEditing(false);
+  };
+
+  const updateExistingUser = () => {
+    console.log(userData);
+    axios
+      .patch(`http://localhost:5000/users/${userData._id}`, userData)
+      .then((res) => console.log(res.data));
+  };
+
+  const saveNewCafe = () => {
     axios.post("http://localhost:5000/users", userData).then((res) => {
       const cafeOwner = res.data._id;
       axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
@@ -32,18 +68,35 @@ const NewCafeForm = (props) => {
         axios.put(`http://localhost:5000/cafes/${res.data._id}`, res.data);
       });
     });
+  };
+  const cancelEditing = () => {
+    setEditing(false);
     setCafeData(initialState);
     setUserData(initialUserState);
-    // } else {
-    //   alert("Cannot leave fields empty!");
-    // }
+  };
+
+  const handleFinalSubmit = (e) => {
+    e.preventDefault();
+    // console.log(userData);
+    // if (cafeData.cafe_name && cafeData.address) { // add validation that all fields must be entered
+    // console.log(cafeData);
+    if (editing) {
+      // Save updated cafe here
+      updateExistingUser();
+      updateExistingCafe();
+    } else {
+      saveNewCafe();
+    }
+
+    setCafeData(initialState);
+    setUserData(initialUserState);
   };
 
   return (
     <div>
       <Row>
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-          <h2>Add New Cafe</h2>
+          <h2>{editing ? "Edit" : "Add New"} Cafe</h2>
         </Col>
       </Row>
       <Row className="mt-4">
@@ -54,7 +107,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="cafe_name"
                 value={cafeData.cafe_name}
-                onChange={handleInputChange}
+                onChange={handleCafeInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -62,7 +115,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="user_name"
                 value={userData.user_name}
-                onChange={handleInputChange}
+                onChange={handleUserInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -70,7 +123,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="email"
                 value={userData.email}
-                onChange={handleInputChange}
+                onChange={handleUserInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -78,7 +131,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="password"
                 value={userData.password}
-                onChange={handleInputChange}
+                onChange={handleUserInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -86,7 +139,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="role"
                 value={userData.role}
-                onChange={handleInputChange}
+                onChange={handleUserInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -94,7 +147,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="phone"
                 value={userData.phone}
-                onChange={handleInputChange}
+                onChange={handleUserInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -102,7 +155,7 @@ const NewCafeForm = (props) => {
               <Input
                 name="address"
                 value={cafeData.address}
-                onChange={handleInputChange}
+                onChange={handleCafeInputChange}
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -111,7 +164,7 @@ const NewCafeForm = (props) => {
                 name="operating_hours[0]"
                 value={cafeData.operating_hours[0] || ""}
                 onChange={(e) =>
-                  handleInputChange({
+                  handleCafeInputChange({
                     target: {
                       name: "operating_hours",
                       value: [e.target.value, cafeData.operating_hours[1]],
@@ -126,7 +179,7 @@ const NewCafeForm = (props) => {
                 name="operating_hours[1]"
                 value={cafeData.operating_hours[1] || ""}
                 onChange={(e) =>
-                  handleInputChange({
+                  handleCafeInputChange({
                     target: {
                       name: "operating_hours",
                       value: [cafeData.operating_hours[0], e.target.value],
@@ -141,7 +194,7 @@ const NewCafeForm = (props) => {
                 name="location[0]"
                 value={cafeData.location[0] || ""}
                 onChange={(e) =>
-                  handleInputChange({
+                  handleCafeInputChange({
                     target: {
                       name: "location",
                       value: [e.target.value, cafeData.location[1]],
@@ -156,7 +209,7 @@ const NewCafeForm = (props) => {
                 name="location[1]"
                 value={cafeData.location[1] || ""}
                 onChange={(e) =>
-                  handleInputChange({
+                  handleCafeInputChange({
                     target: {
                       name: "location",
                       value: [cafeData.location[0], e.target.value],
@@ -166,6 +219,7 @@ const NewCafeForm = (props) => {
               ></Input>
             </FormGroup>
             <Button>Submit</Button>
+            <Button onClick={cancelEditing}>Cancel</Button>
           </Form>
         </Col>
       </Row>
