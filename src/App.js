@@ -18,8 +18,9 @@ const App = () => {
   const [userCoffee, setUserCoffee] = useState("");
 
   const [coffee, setCoffee] = useState({
-    type: "",
-    price: 0,
+    id: "",
+    name: "",
+    price: 0
   });
 
   const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
