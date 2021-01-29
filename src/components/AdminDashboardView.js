@@ -70,12 +70,23 @@ const AdminDashboardView = (props) => {
               <Link to="/coffees/new">Add Coffee</Link>
             </NavItem>
             <NavItem className="mr-3">
-              <Link to="/cafes/new">Log Out</Link>
+              <Link to="/">Log Out</Link>
             </NavItem>
           </Nav>
         </Navbar>
         <Switch>
-          <Route exact path="/cafes/new" render={(props) => <NewCafeForm />} />
+          <Route
+            exact
+            path="/cafes/new"
+            render={(props) => (
+              <NewCafeForm
+                {...props}
+                cafeData={cafeData}
+                setCafeData={setCafeData}
+                addCafe={addCafe}
+              />
+            )}
+          />
           <Route
             exact
             path="/coffees/new"
