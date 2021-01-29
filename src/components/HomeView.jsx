@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Card, Button, CardImg, CardTitle, CardText, CardDeck, CardSubtitle, CardBody } from 'reactstrap';
 import { Container, Row, Col } from 'reactstrap';
 import logo from '../assets/Logo.png';
-import coffee from '../assets/coffee.svg';
+import coffeeImg from '../assets/coffee.svg';
 
 const HomeView = (props) => {
   const { coffees, setCoffee } = props;
@@ -46,13 +46,24 @@ const HomeView = (props) => {
           </Row>   
       </Container>
 
-      <div>
-        {coffees.map((coffee) => (
-          <p key={coffee._id} onClick={() => addUserCoffee(coffee.name, coffee._id)}>{coffee.name} - <Link to="/map">SEARCH</Link></p>
-        ))}
-      </div>
+    <div>
+      <Container>
+        <Row className="justify-content-center">
+          {coffees.map((coffee) => (
+            <CardDeck style={{margin: "50px" }}>
+                <Card>
+                  <CardImg top width="100%" src={coffeeImg} alt="Card image cap" />
+                    <CardBody style={{width: "230px"}}  >
+                          <p  key={coffee._id} onClick={() => addUserCoffee(coffee.name, coffee._id)}>{coffee.name} - <Link to="/map"><Button color="primary" size="sm"> Search </Button></Link></p>
+                    </CardBody >
+                </Card>
+            </CardDeck>
+          ))}
+        </Row>
+      </Container>
+    </div>
 
-      <div>
+      {/* <div>
         <CardDeck style={{margin: "10px" }}>
           <Card>
             <CardImg top width="100%" src={coffee} alt="Card image cap" />
@@ -113,7 +124,7 @@ const HomeView = (props) => {
             </CardBody>
           </Card>
         </CardDeck>
-      </div>
+      </div> */}
 
     </div>
   );
