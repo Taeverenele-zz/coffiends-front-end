@@ -54,8 +54,6 @@ const App = () => {
     setUserLocation([-27.468298, 153.0247838]); // uncomment code above & comment this out for dynamic location
   }, [reload, cafes, coffees]);
 
-  // CAFES
-
   return (
     <div className="container mt-4">
       <BrowserRouter>
@@ -88,6 +86,21 @@ const App = () => {
                 setReload={setReload}
                 deleteCoffee={deleteCoffee}
                 updateCoffeeArray={updateCoffeeArray}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/admin"
+            render={(props) => (
+              <AdminDashBoardView
+                {...props}
+                cafes={cafes}
+                setCafes={setCafes}
+                reload={reload}
+                setReload={setReload}
+                coffees={coffees}
+                setCoffees={setCoffees}
               />
             )}
           />
