@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
+import axios from "axios";
 
 const OrderView = (props) => {
   const { coffee, cafe } = props;
@@ -7,8 +9,7 @@ const OrderView = (props) => {
   const [milk, setMilk] = useState("Regular Milk");
   const [sugar, setSugar] = useState(0);
   const [pickupTime, setPickupTime] = useState(Date.now());
-
-  console.log("load check");
+  const [ oderId, setOrderId ] = useState("");
 
   useEffect(() => {
     let time = new Date().getTime();
@@ -66,22 +67,46 @@ const OrderView = (props) => {
     }
     setPickupTime(`${hr}:${min}`);
   };
+  
+    const createOrder = () => {
+      const order = {
+        cafe: cafe._id,
+        user: "60134ade89bd83c271a7d14c",
+        coffee: coffee.name,
+        size: size,
+        milk: milk,
+        sugar: sugar,
+        pickup_time: pickupTime,
+        total: orderPrice
+      };
+  
+      axios
+        .post("http://localhost:5000/orders", order)
+        .then(res => {
+          console.log(res.data._id)
+          setOrderId(res.data._id)
+        })
+        .catch(error => console.log(error.message));
+    };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(
-      `
-        ${size} ${coffee.name}
-        ${milk}
-        ${sugar} Sugars
-        Pick up at ${pickupTime} from ${cafe.cafe_name}
-        ${cafe.address}
-      `
-    );
+    createOrder();
+    // alert(
+    //   `
+    //     YOUR ORDER HAS BEEN PLACED!
+    //     ${size} ${coffee.name}
+    //     ${milk}
+    //     ${sugar} Sugars
+    //     Pick up at ${pickupTime} from ${cafe.cafe_name}
+    //     ${cafe.address}
+    //   `
+    // );
   };
 
   return (
     <>
+      <button><Link to="/map">Cancel</Link></button>
       <h3>{cafe.cafe_name}</h3>
       <h4>{coffee.name}</h4>
       <form onSubmit={handleSubmit}>
@@ -131,8 +156,12 @@ const OrderView = (props) => {
             <option value="30">30 mins</option>
           </select>
         </div>
-        {/* <button>${orderPrice.toFixed(2)} - BUY NOW</button> */}
+        <button>${orderPrice.toFixed(2)} - BUY NOW</button>
       </form>
+      {oderId ? (
+        <Redirect to="/orders" />
+      ) : (<></>)
+      }
     </>
   );
 };

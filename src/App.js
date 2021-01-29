@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import axios from "axios";
 import AdminDashBoardView from "./components/AdminDashboardView";
+import AllOrdersView from "./components/AllOrdersView";
 import CafesView from "./components/CafesView";
 import CoffeesView from "./components/CoffeesView";
 import HomeView from "./components/HomeView";
@@ -61,11 +62,11 @@ const App = () => {
           <nav>
             <Link to="/">
               <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-            </Link>{" "}
-            | <Link to="/login"> LOGIN</Link> |{" "}
+            </Link>
+            <Link to="/login"> LOGIN</Link> |{" "}
             <Link to="/register">REGISTER</Link> |{" "}
             <Link to="/admin"> ADMIN</Link> | <Link to="/cafes"> CAFES</Link> |{" "}
-            <Link to="/coffees"> COFFEES</Link>
+            <Link to="/coffees"> COFFEES</Link> | <Link to="/orders"> ORDERS</Link>
           </nav>
         </header>
         <Switch>
@@ -140,6 +141,7 @@ const App = () => {
           <Route exact path="/login" render={() => <LoginView />} />
           <Route exact path="/register" render={() => <RegisterView />} />
           <Route exact path="/admin" render={() => <AdminDashBoardView />} />
+          <Route exact path="/orders" render={() => <AllOrdersView />} />
         </Switch>
       </BrowserRouter>
     </div>
