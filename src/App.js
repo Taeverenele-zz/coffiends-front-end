@@ -18,6 +18,14 @@ const App = () => {
   const [userLocation, setUserLocation] = useState([]);
   const [coffee, setCoffee] = useState({ id: "", name: "", price: 0 });
   const [cafe, setCafe] = useState("");
+  const [loggedInUser, setLoggedInUser] = useState(false);
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+    user_name: "",
+    role: "user",
+    phone: ""
+  });
 
   //COFFEES
   const updateCoffeeArray = (eachEntry) => {
@@ -55,6 +63,25 @@ const App = () => {
     setUserLocation([-27.468298, 153.0247838]); // uncomment code above & comment this out for dynamic location
   }, [reload, cafes, coffees]);
 
+  useEffect(() => {
+    fetch("http://localhost:5000/users/check", {
+      credentials: "include"
+    })
+    .then(data => data.json())
+    .then(json => {
+      if (json.username) {
+        setLoggedInUser({json})
+      }
+    })
+  }, []);
+
+  const handleLogout = () => {
+    fetch("http://localhost:5000/users/logout", {
+        credentials: "include"
+      })
+      .then(() => setLoggedInUser(false));
+  };
+
   return (
     <div className="container mt-4">
       <BrowserRouter>
@@ -63,10 +90,23 @@ const App = () => {
             <Link to="/">
               <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
             </Link>
-            <Link to="/login"> LOGIN</Link> |{" "}
-            <Link to="/register">REGISTER</Link> |{" "}
-            <Link to="/admin"> ADMIN</Link> | <Link to="/cafes"> CAFES</Link> |{" "}
-            <Link to="/coffees"> COFFEES</Link> | <Link to="/orders"> ORDERS</Link>
+            <Link to="/admin"> ADMIN</Link> |{" "} 
+            <Link to="/cafes"> CAFES</Link> |{" "}
+            <Link to="/coffees"> COFFEES</Link> |{" "}
+            <Link to="/orders"> ORDERS</Link> |{" "}
+            {!loggedInUser ? (
+              <>
+                <Link to="/login"> LOGIN</Link> |{" "}
+                <Link to="/register">REGISTER</Link> |{" "}
+              </>
+            ) : (
+              <>
+                <span>
+                  Logged in as {loggedInUser.username}
+                </span> |{" "}
+                <button onClick={handleLogout}>Log Out</button>
+              </>
+            )}
           </nav>
         </header>
         <Switch>
@@ -135,11 +175,37 @@ const App = () => {
             exact
             path="/order"
             render={(props) => (
-              <OrderView {...props} coffee={coffee} cafe={cafe} />
+              <OrderView
+                {...props}
+                coffee={coffee}
+                cafe={cafe}
+              />
             )}
           />
-          <Route exact path="/login" render={() => <LoginView />} />
-          <Route exact path="/register" render={() => <RegisterView />} />
+          <Route
+            exact
+            path="/register"
+            render={(props) => (
+              <RegisterView
+                {...props}
+                setLoggedInUser={setLoggedInUser}
+                user={user}
+                setUser={setUser}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/login"
+            render={(props) => (
+              <LoginView
+                {...props}
+                setLoggedInUser={setLoggedInUser}
+                user={user}
+                setUser={setUser}
+              />
+            )}
+          />
           <Route exact path="/admin" render={() => <AdminDashBoardView />} />
           <Route exact path="/orders" render={() => <AllOrdersView />} />
         </Switch>
