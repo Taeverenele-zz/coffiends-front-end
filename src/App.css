@@ -21,16 +21,6 @@
     text-decoration: underline;
   }
 
-  .Order-Panel {
-    height: 100vh;
-    width: 40vh;
-    border: 3px black solid;
-    position: fixed;
-    z-index: 2000;
-    background-color: White; 
-    right: 0px
-  }
-
   .Order-Panel-margin {
     margin: 15px;
   }
@@ -47,4 +37,25 @@
 
   .Remove-Dot {
     list-style-type: none;
+  }
+
+  .Show-Order{
+    height: 100vh;
+    width: 40vh;
+    border: 3px black solid;
+    position: fixed;
+    z-index: 2000;
+    background-color: White; 
+    right: 0px;
+    transition: 1.0s ease
+  }
+
+  .Hide-Order{
+    height: 100vh;
+    width: 35vw;
+    border: 3px black solid;
+    position: fixed;
+    z-index: 2000;
+    background-color: White; 
+    right: -100vw
   }

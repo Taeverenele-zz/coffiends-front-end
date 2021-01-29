@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 
 const OrderView = (props) => {
-  const { coffee, cafe, setShow} = props;
+  const { coffee, cafe} = props;
   const [ orderPrice, setOrderPrice ] = useState(coffee.price);
   const [ size, setSize ] = useState("Regular");
   const [ milk, setMilk ] = useState("Regular Milk");
   const [ sugar, setSugar ] = useState(0);
   const [ pickupTime, setPickupTime ] = useState(Date.now());
   
+  console.log("load check")
+
   useEffect(() => {
     let time = new Date().getTime();
     let date = new Date(time);
@@ -78,9 +80,9 @@ const OrderView = (props) => {
     );
   };
 
+ 
   return (
     <>
-      <button onClick={() => setShow(false)} className="Order-Panel-margin">Cancel</button>
       <h3>{cafe.cafe_name}</h3>
       <h4>{coffee.name}</h4>
       <form onSubmit={handleSubmit}>
@@ -130,7 +132,7 @@ const OrderView = (props) => {
             <option value="30">30 mins</option>
           </select>
         </div>
-        <button>${orderPrice.toFixed(2)} - BUY NOW</button>
+        {/* <button>${orderPrice.toFixed(2)} - BUY NOW</button> */}
       </form>
     </>
   );
