@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+<<<<<<< HEAD
 import { Motion, spring } from "react-motion";
 import { Container, Row } from "reactstrap";
+=======
+import { Container, Row}  from "reactstrap";
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
 import axios from "axios";
 import OrderView from "./OrderView";
 import "../App.css";
@@ -14,6 +18,7 @@ function MapView(props) {
   const [dropdownOpen, setOpen] = useState(false);
 
   const toggle = () => setOpen(!dropdownOpen);
+
 
   useEffect(() => {
     const time = new Date();
@@ -41,11 +46,32 @@ function MapView(props) {
       }
     });
     setCafe(cafe);
+<<<<<<< HEAD
     // setShow(true); // uncommment for popup ordering
   }
+=======
+    setShow(true) // uncommment for popup ordering
+  };
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
+
+
+
+const showPanel = () => {
+  var orderElement = document.getElementById("orderPanel");
+  orderElement.classList.remove("Hide-Order")
+  orderElement.classList.add("Show-Order");
+}
+
+const hidePanel = () => {
+  var orderElement = document.getElementById("orderPanel");
+  orderElement.classList.remove("Show-Order")
+  orderElement.classList.add("Hide-Order");
+}
+
 
   return (
     <>
+<<<<<<< HEAD
       <Motion
         defaultStyle={{ x: 2000, opacity: 0 }}
         style={{ x: spring(show ? 0 : 2000), opacity: spring(show ? 1 : 0) }}
@@ -64,6 +90,18 @@ function MapView(props) {
           </Container>
         )}
       </Motion>
+=======
+    
+
+        <Container>
+            <div className="Hide-Order" id="orderPanel" >
+              <button onClick={hidePanel}>Close</button>
+              <OrderView coffee={coffee} cafe={cafe}  />
+            </div>
+        </Container>
+
+
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
 
       <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false}>
         <TileLayer
@@ -83,6 +121,7 @@ function MapView(props) {
               </p>
               <p>{cafe.address}</p>
               <p>{coffee.name}</p>
+<<<<<<< HEAD
               {cafe.menu.map((item) =>
                 item.coffee === coffee.id ? (
                   <Link to="/order" onClick={() => handleClick(cafe, coffee)}>
@@ -93,6 +132,12 @@ function MapView(props) {
                 )
               )}
               <Link onClick={() => setShow(true)}>BUY</Link>
+=======
+              {cafe.menu.map((item) => 
+              {item.coffee === coffee.id ? <Link to="/order" onClick={() => handleClick(cafe, coffee)}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>}
+              )}
+              <Link onClick={showPanel}>BUY</Link>
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
             </Popup>
           </Marker>
         ))}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 
 const OrderView = (props) => {
+<<<<<<< HEAD
   const { coffee, cafe, setShow } = props;
   const [orderPrice, setOrderPrice] = useState(coffee.price);
   const [size, setSize] = useState("Regular");
@@ -8,6 +9,17 @@ const OrderView = (props) => {
   const [sugar, setSugar] = useState(0);
   const [pickupTime, setPickupTime] = useState(Date.now());
   console.log("test");
+=======
+  const { coffee, cafe} = props;
+  const [ orderPrice, setOrderPrice ] = useState(coffee.price);
+  const [ size, setSize ] = useState("Regular");
+  const [ milk, setMilk ] = useState("Regular Milk");
+  const [ sugar, setSugar ] = useState(0);
+  const [ pickupTime, setPickupTime ] = useState(Date.now());
+  
+  console.log("load check")
+
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
   useEffect(() => {
     let time = new Date().getTime();
     let date = new Date(time);
@@ -78,11 +90,15 @@ const OrderView = (props) => {
     );
   };
 
+ 
   return (
     <>
+<<<<<<< HEAD
       <button onClick={() => setShow(false)} className="Order-Panel-margin">
         Cancel
       </button>
+=======
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
       <h3>{cafe.cafe_name}</h3>
       <h4>{coffee.name}</h4>
       <form onSubmit={handleSubmit}>

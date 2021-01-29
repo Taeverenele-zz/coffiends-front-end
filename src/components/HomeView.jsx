@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+<<<<<<< HEAD
 import {
   Container,
   Row,
@@ -15,6 +16,12 @@ import {
 } from "reactstrap";
 import logo from "../assets/Logo.png";
 import coffee from "../assets/coffee.svg";
+=======
+import { Card, Button, CardImg, CardTitle, CardText, CardDeck, CardSubtitle, CardBody } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
+import logo from '../assets/Logo.png';
+import coffeeImg from '../assets/coffee.svg';
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
 
 const HomeView = (props) => {
   const { coffees, setCoffee } = props;
@@ -78,6 +85,7 @@ const HomeView = (props) => {
         </Row>
       </Container>
 
+<<<<<<< HEAD
       <div>
         {coffees.map((coffee) => (
           <p
@@ -91,6 +99,27 @@ const HomeView = (props) => {
 
       <div>
         <CardDeck style={{ margin: "10px" }}>
+=======
+    <div>
+      <Container>
+        <Row className="justify-content-center">
+          {coffees.map((coffee) => (
+            <CardDeck style={{margin: "50px" }}>
+                <Card>
+                  <CardImg top width="100%" src={coffeeImg} alt="Card image cap" />
+                    <CardBody style={{width: "230px"}}  >
+                          <p  key={coffee._id} onClick={() => addUserCoffee(coffee.name, coffee._id)}>{coffee.name} - <Link to="/map"><Button color="primary" size="sm"> Search </Button></Link></p>
+                    </CardBody >
+                </Card>
+            </CardDeck>
+          ))}
+        </Row>
+      </Container>
+    </div>
+
+      {/* <div>
+        <CardDeck style={{margin: "10px" }}>
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
           <Card>
             <CardImg top width="100%" src={coffee} alt="Card image cap" />
             <CardBody>
@@ -184,7 +213,12 @@ const HomeView = (props) => {
             </CardBody>
           </Card>
         </CardDeck>
+<<<<<<< HEAD
       </div>
+=======
+      </div> */}
+
+>>>>>>> 65f36bc44c51cc63ea5d6ffc61a7289bde7c5c63
     </div>
   );
 };
