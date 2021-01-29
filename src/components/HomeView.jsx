@@ -48,12 +48,16 @@ const HomeView = (props) => {
           </Col>
 
           <Col sm={{ size: 4 }} xs={{ size: 3 }} style={{ textAlign: "end" }}>
-            <Button color="primary" size="sm" style={{ margin: "10px" }}>
-              Log In
-            </Button>
-            <Button color="primary" size="sm">
-              Register
-            </Button>
+            <Link to="/login">
+              <Button color="primary" size="sm" style={{ margin: "10px" }}>
+                Log In
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button color="primary" size="sm">
+                Sign Up
+              </Button>
+            </Link>
           </Col>
         </Row>
       </Container>
