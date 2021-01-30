@@ -1,13 +1,22 @@
 import React from "react";
 import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 const LoginView = (props) => { 
-  const { user, setUser, setLoggedInUser } = props
+  const { user, setUser, setLoggedInUser, setUserCafe } = props;
 
   const handleChange = (e) => {
-    console.log(e.target.name);
     setUser({...user, [e.target.name]: e.target.value});
+  };
+
+  const getUserCafe = (id) => {
+    axios
+      .get(`http://localhost:5000/cafes/user/${id}`)
+      .then((res) => {
+        setUserCafe(res.data[0]);
+      })
+      .catch((error) => console.log(error));
   };
 
   const handleSubmit = (e) => {
@@ -21,6 +30,7 @@ const LoginView = (props) => {
       .then(data => data.json())
       .then(json => {
         setLoggedInUser(json);
+        getUserCafe(json.id);
         setUser({
           username: "",
           password: "",
@@ -28,7 +38,13 @@ const LoginView = (props) => {
           role: "user",
           phone: ""
         });
-        props.history.push("/");
+        if (json.role === "cafe") {
+          props.history.push("/dashboard");
+        } else if (json.role === "admin") {
+          props.history.push("/admin");
+        } else {
+          props.history.push("/");
+        };
       })
       .catch((error) => alert(error));
   };
