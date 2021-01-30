@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Container }  from "reactstrap";
 import axios from "axios";
-import OrderView from './OrderView';
+import NewOrderView from './NewOrderView';
 import "../App.css";
 
 function MapView(props) {
   const { coffee, setCoffee, userLocation, setCafe, cafe } = props;
-  const [cafeData, setCafeData] = useState([]);
+  const [ cafeData, setCafeData ] = useState([]);
   // const [dropdownOpen, setOpen] = useState(false);
   
   // const toggle = () => setOpen(!dropdownOpen);
@@ -21,7 +21,7 @@ function MapView(props) {
       time: "1000", // uncomment line above to use actual time & comment this one out
       coffee: coffee.id
     };
-    
+    console.log(coffee)
     axios
       .post("http://localhost:5000/map/", postBody)
       .then(res => setCafeData(res.data))
@@ -60,7 +60,7 @@ function MapView(props) {
       {/* <Container>
           <div className="Hide-Order" id="orderPanel" >
             <button onClick={hidePanel}>Close</button>
-            <OrderView coffee={coffee} cafe={cafe}  />
+            <NewOrderView coffee={coffee} cafe={cafe}  />
           </div>
       </Container> */}
 
@@ -81,8 +81,8 @@ function MapView(props) {
               <p>{cafe.address}</p>
               <p>{coffee.name}</p>
               {cafe.menu.map((item) => 
-                item.coffee === coffee.id ? <Link to="/order" onClick={() => handleClick(cafe, coffee)}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
-                // item.coffee === coffee.id ? <Link to="/order" onClick={() => showPanel}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
+                item.coffee === coffee.id ? <Link to="/orders/new" onClick={() => handleClick(cafe, coffee)}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
+                // item.coffee === coffee.id ? <Link to="/orders/new" onClick={() => showPanel}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
               )}
             </Popup>
           </Marker>

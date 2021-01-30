@@ -3,30 +3,34 @@ import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import { Button } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
-import AllOrdersView from "./components/AllOrdersView";
+import CafeDashboardView from "./components/CafeDashboardView";
+import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
 import CoffeesView from "./components/CoffeesView";
 import HomeView from "./components/HomeView";
 import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
-import OrderView from "./components/OrderView";
+import NewOrderView from "./components/NewOrderView";
+import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
 
 const App = () => {
-  const [reload, setReload] = useState(true);
-  const [coffees, setCoffees] = useState([]);
-  const [cafes, setCafes] = useState([]);
-  const [userLocation, setUserLocation] = useState([]);
-  const [coffee, setCoffee] = useState({ id: "", name: "", price: 0 });
-  const [cafe, setCafe] = useState("");
-  const [loggedInUser, setLoggedInUser] = useState(false);
-  const [user, setUser] = useState({
+  const [ reload, setReload ] = useState(true);
+  const [ coffees, setCoffees ] = useState([]);
+  const [ cafes, setCafes ] = useState([]);
+  const [ userLocation, setUserLocation ] = useState([]);
+  const [ coffee, setCoffee ] = useState({ id: "", name: "", price: 0 });
+  const [ cafe, setCafe ] = useState("");
+  const [ loggedInUser, setLoggedInUser ] = useState(false);
+  const [ user, setUser ] = useState({
     username: "",
     password: "",
     user_name: "",
     role: "user",
     phone: ""
   });
+  const [ userCafe, setUserCafe ] = useState({});
+  const [ menu, setMenu ] = useState([]);
 
   useEffect(() => {
     fetch("http://localhost:5000/users/check", { credentials: "include" })
@@ -95,10 +99,23 @@ const App = () => {
             </Link>
             {loggedInUser ? (
               <>
-                {loggedInUser.role === "admin" ? (<Link to="/admin"> ADMIN</Link> |" ")  : <></> }
-                <Link to="/cafes"> CAFES</Link> |{" "}
-                <Link to="/coffees"> COFFEES</Link> |{" "}
-                <Link to="/orders"> ORDERS</Link>
+                {loggedInUser.role === "admin" ? (
+                  <>
+                    <Link to="/admin">ADMIN</Link> |{" "}
+                    <Link to="/cafes"> CAFES</Link> |{" "}
+                    <Link to="/coffees"> COFFEES</Link> |{" "}
+                  </>
+                )  : <></> }
+                {loggedInUser.role === "cafe" ? (
+                  <>
+                    <Link to="/dashboard">CAFE DASHBOARD</Link>
+                  </>
+                )  : <></> }
+                {loggedInUser.role !== "cafe" ? (
+                  <>
+                    <Link to="/orders"> ORDERS</Link>
+                  </>
+                )  : <></> }
                 <Link to="/logout">
                   <Button color="dark" size="sm" style={{ margin: "5px" }} onClick={handleLogout}>
                     LOG OUT
@@ -147,9 +164,12 @@ const App = () => {
             render={(props) => (
               <LoginView
                 {...props}
+                loggedInUser={loggedInUser}
                 setLoggedInUser={setLoggedInUser}
                 user={user}
                 setUser={setUser}
+                userCafe={userCafe}
+                setUserCafe={setUserCafe}
               />
             )}
           />
@@ -211,9 +231,9 @@ const App = () => {
               />
               <Route
                 exact
-                path="/order"
+                path="/orders/new"
                 render={(props) => (
-                  <OrderView
+                  <NewOrderView
                     {...props}
                     coffee={coffee}
                     cafe={cafe}
@@ -221,8 +241,42 @@ const App = () => {
                   />
                 )}
               />
-              <Route exact path="/admin" render={() => <AdminDashBoardView />} />
-              <Route exact path="/orders" render={() => <AllOrdersView />} />
+              <Route
+                exact
+                path="/orders"
+                render={(props) => (
+                  <OrdersView
+                    {...props}
+                    loggedInUser={loggedInUser}
+                    userCafe={userCafe}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/dashboard"
+                render={(props) => (
+                  <CafeDashboardView
+                    {...props}
+                    loggedInUser={loggedInUser}
+                    userCafe={userCafe}
+                    setMenu={setMenu}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/menu"
+                render={(props) => (
+                  <CafeMenuView
+                    {...props}
+                    loggedInUser={loggedInUser}
+                    userCafe={userCafe}
+                    setMenu={setMenu}
+                    menu={menu}
+                  />
+                )}
+              />
               <Route exact path="/logout">
                 <Redirect to="/" />
               </Route>

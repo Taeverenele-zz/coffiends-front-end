@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
-const OrderView = (props) => {
+const NewOrderView = (props) => {
   const { coffee, cafe, loggedInUser } = props;
-  const [orderPrice, setOrderPrice] = useState(coffee.price);
-  const [size, setSize] = useState("Regular");
-  const [milk, setMilk] = useState("Regular Milk");
-  const [sugar, setSugar] = useState(0);
-  const [pickupTime, setPickupTime] = useState(Date.now());
-  const [ oderId, setOrderId ] = useState("");
+  const [ orderPrice, setOrderPrice ] = useState(coffee.price);
+  const [ size, setSize ] = useState("Regular");
+  const [ milk, setMilk ] = useState("Regular Milk");
+  const [ sugar, setSugar ] = useState(0);
+  const [ pickupTime, setPickupTime ] = useState(Date.now());
+  const [ orderId, setOrderId ] = useState("");
 
   useEffect(() => {
     let time = new Date().getTime();
@@ -91,16 +91,6 @@ const OrderView = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     createOrder();
-    // alert(
-    //   `
-    //     YOUR ORDER HAS BEEN PLACED!
-    //     ${size} ${coffee.name}
-    //     ${milk}
-    //     ${sugar} Sugars
-    //     Pick up at ${pickupTime} from ${cafe.cafe_name}
-    //     ${cafe.address}
-    //   `
-    // );
   };
 
   return (
@@ -157,7 +147,7 @@ const OrderView = (props) => {
         </div>
         <button>${orderPrice.toFixed(2)} - BUY NOW</button>
       </form>
-      {oderId ? (
+      {orderId ? (
         <Redirect to="/orders" />
       ) : (<></>)
       }
@@ -165,4 +155,4 @@ const OrderView = (props) => {
   );
 };
 
-export default OrderView;
+export default NewOrderView;
