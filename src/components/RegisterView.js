@@ -1,9 +1,8 @@
 import React from "react";
-import axios from "axios";
-import { Button, Form, FormGroup, Label, Input,Container, Row, Col } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 
 const RegisterView = (props) => {
-  const { user, setUser, setLoggedInUser } = props
+  const { user, setUser, setLoggedInUser } = props;
 
   const handleChange = (e) => {
     console.log(e.target.name);
@@ -12,21 +11,28 @@ const RegisterView = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/users/register", user, { credentials: "include" })
-      .then((res) => {
-        console.log(res)
-        setLoggedInUser(res.data);
-        setUser({
-          username: "",
-          password: "",
-          user_name: "",
-          role: "user",
-          phone: ""
-        });
-        props.history.push("/")
-      })
-      .catch((error) => alert(error.response.data.message));
+    fetch("http://localhost:5000/users/register", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    })
+      .then(data => data.json())
+      .then(json => {
+        if (json.id) {
+          setLoggedInUser(json);
+          setUser({
+            username: "",
+            password: "",
+            user_name: "",
+            role: "user",
+            phone: ""
+          });
+          props.history.push("/");
+        } else {
+          alert(json.message);
+        };
+      });
   };
 
   return (

@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
 import {
   Container,
   Row,
@@ -26,7 +25,7 @@ const HomeView = (props) => {
 
   return (
     <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
-      <Container style={{ padding: "0", margin: "0" }} fluid="true">
+      {/* <Container style={{ padding: "0", margin: "0" }} fluid="true">
         <Row className="align-items-center">
           <Col sm={{ size: 4 }} xs={{ size: 4 }}>
             <a href="/">
@@ -60,7 +59,7 @@ const HomeView = (props) => {
             </Link>
           </Col>
         </Row>
-      </Container>
+      </Container> */}
 
       <Container style={{ marginTop: "40px" }}>
         <Row className="justify-content-center" style={{ height: "100px" }}>
@@ -78,7 +77,7 @@ const HomeView = (props) => {
           }}
         >
           <div>
-            <h4>About Coffiends</h4>
+            click your favourite brew below to find cafes near you!
           </div>
         </Row>
       </Container>
@@ -88,7 +87,7 @@ const HomeView = (props) => {
           <Row className="justify-content-center">
             {coffees.map((coffee) => (
               <CardDeck style={{ margin: "50px" }}>
-                <Card>
+                <Card key={coffee._id}>
                   <CardImg
                     top
                     width="100%"
@@ -96,18 +95,21 @@ const HomeView = (props) => {
                     alt="Card image cap"
                   />
                   <CardBody style={{ width: "230px" }}>
-                    <p
+                  <CardTitle tag="h5">{coffee.name}</CardTitle>
+                  <CardSubtitle tag="h6" className="mb-2 text-muted">
+                    {coffee.description}
+                  </CardSubtitle>
+                    {/* <p
                       key={coffee._id}
                       onClick={() => addUserCoffee(coffee.name, coffee._id)}
-                    >
-                      {coffee.name} -{" "}
-                      <Link to="/map">
+                    > */}
+                      {/* {coffee.name} -{" "} */}
+                      <Link to="/map" onClick={() => addUserCoffee(coffee.name, coffee._id)}>
                         <Button color="primary" size="sm">
-                          {" "}
-                          Search{" "}
+                          SEARCH
                         </Button>
                       </Link>
-                    </p>
+                    {/* </p> */}
                   </CardBody>
                 </Card>
               </CardDeck>
