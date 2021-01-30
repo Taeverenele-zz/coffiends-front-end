@@ -1,7 +1,6 @@
 import React from "react";
 import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 const LoginView = (props) => { 
   const { user, setUser, setLoggedInUser } = props
@@ -11,13 +10,17 @@ const LoginView = (props) => {
     setUser({...user, [e.target.name]: e.target.value});
   };
 
-  const handleLogin = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/users/login", user, { credentials: "include" })
-      .then((res) => {
-        console.log(res)
-        setLoggedInUser(res.data);
+    fetch("http://localhost:5000/users/login", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    })
+      .then(data => data.json())
+      .then(json => {
+        setLoggedInUser(json);
         setUser({
           username: "",
           password: "",
@@ -25,20 +28,19 @@ const LoginView = (props) => {
           role: "user",
           phone: ""
         });
-        props.history.push("/")
+        props.history.push("/");
       })
       .catch((error) => alert(error));
-    
   };
 
   return (
     <Container>
-      <Row className="justify-content-center margin-add-top underline-text">
+      <Row className="justify-content-center margin-add-top">
         <h1>Log In</h1>
       </Row>
 
       <Row className="justify-content-center">
-        <Form onSubmit={handleLogin}>
+        <Form onSubmit={handleSubmit}>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
               <Label for="exampleEmail" className="mr-sm-2">Email:</Label>
@@ -56,22 +58,15 @@ const LoginView = (props) => {
           </Row>
         </Form>
       </Row>
+      <br />
       <Row className="login-form-margin-top justify-content-center">
-        <p></p>
+        Not signed up yet?
       </Row>
       <Row className="login-form-margin-top justify-content-center">
-        <button><Link to="/register">SIGN UP</Link></button>
+        <Link to="/register">Sign Up Now!</Link>
       </Row>
-
-
-
-</Container>
-
-
-    )
-
-}
-
-
+    </Container>
+  );
+};
 
 export default LoginView;

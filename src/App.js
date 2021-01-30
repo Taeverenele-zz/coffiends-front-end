@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import { Button } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
 import AllOrdersView from "./components/AllOrdersView";
 import CafesView from "./components/CafesView";
@@ -26,6 +27,16 @@ const App = () => {
     role: "user",
     phone: ""
   });
+
+  useEffect(() => {
+    fetch("http://localhost:5000/users/check", { credentials: "include" })
+      .then(data => data.json())
+      .then(json => {
+        if (json) {
+          setLoggedInUser(json);
+        };
+      });
+  }, []);
 
   //COFFEES
   const updateCoffeeArray = (eachEntry) => {
@@ -63,23 +74,15 @@ const App = () => {
     setUserLocation([-27.468298, 153.0247838]); // uncomment code above & comment this out for dynamic location
   }, [reload, cafes, coffees]);
 
-  useEffect(() => {
-    fetch("http://localhost:5000/users/check", {
-      credentials: "include"
-    })
-    .then(data => data.json())
-    .then(json => {
-      if (json.username) {
-        setLoggedInUser({json})
-      }
-    })
-  }, []);
-
   const handleLogout = () => {
-    fetch("http://localhost:5000/users/logout", {
-        credentials: "include"
-      })
-      .then(() => setLoggedInUser(false));
+    fetch("http://localhost:5000/users/logout", { credentials: "include" })
+      .then((res) => {
+        if (res.status == 200) {
+          setLoggedInUser(false);
+        } else {
+          console.log(res);
+        };
+      });
   };
 
   return (
@@ -90,21 +93,30 @@ const App = () => {
             <Link to="/">
               <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
             </Link>
-            <Link to="/admin"> ADMIN</Link> |{" "} 
-            <Link to="/cafes"> CAFES</Link> |{" "}
-            <Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/orders"> ORDERS</Link> |{" "}
-            {!loggedInUser ? (
+            {loggedInUser ? (
               <>
-                <Link to="/login"> LOGIN</Link> |{" "}
-                <Link to="/register">REGISTER</Link> |{" "}
+                {loggedInUser.role === "admin" ? (<Link to="/admin"> ADMIN</Link> |" ")  : <></> }
+                <Link to="/cafes"> CAFES</Link> |{" "}
+                <Link to="/coffees"> COFFEES</Link> |{" "}
+                <Link to="/orders"> ORDERS</Link>
+                <Link to="/logout">
+                  <Button color="dark" size="sm" style={{ margin: "5px" }} onClick={handleLogout}>
+                    LOG OUT
+                  </Button>
+                </Link>
               </>
             ) : (
-              <>
-                <span>
-                  Logged in as {loggedInUser.username}
-                </span> |{" "}
-                <button onClick={handleLogout}>Log Out</button>
+              <> 
+                <Link to="/login">
+                  <Button color="primary" size="sm" style={{ margin: "2px" }}>
+                    LOG IN
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button color="info" size="sm" style={{ margin: "2px" }}>
+                    SIGN UP
+                  </Button>
+                </Link>
               </>
             )}
           </nav>
@@ -115,71 +127,6 @@ const App = () => {
             path="/"
             render={(props) => (
               <HomeView {...props} coffees={coffees} setCoffee={setCoffee} />
-            )}
-          />
-          <Route
-            exact
-            path="/coffees"
-            render={(props) => (
-              <CoffeesView
-                {...props}
-                coffees={coffees}
-                setReload={setReload}
-                deleteCoffee={deleteCoffee}
-                updateCoffeeArray={updateCoffeeArray}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin"
-            render={(props) => (
-              <AdminDashBoardView
-                {...props}
-                cafes={cafes}
-                setCafes={setCafes}
-                reload={reload}
-                setReload={setReload}
-                coffees={coffees}
-                setCoffees={setCoffees}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/cafes"
-            render={(props) => (
-              <CafesView
-                {...props}
-                cafes={cafes}
-                setCafes={setCafes}
-                setReload={setReload}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/map"
-            render={(props) => (
-              <MapView
-                {...props}
-                coffee={coffee}
-                setCoffee={setCoffee}
-                userLocation={userLocation}
-                cafe={cafe}
-                setCafe={setCafe}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/order"
-            render={(props) => (
-              <OrderView
-                {...props}
-                coffee={coffee}
-                cafe={cafe}
-              />
             )}
           />
           <Route
@@ -206,8 +153,85 @@ const App = () => {
               />
             )}
           />
-          <Route exact path="/admin" render={() => <AdminDashBoardView />} />
-          <Route exact path="/orders" render={() => <AllOrdersView />} />
+          {loggedInUser ? (
+            <>
+              <Route
+                exact
+                path="/coffees"
+                render={(props) => (
+                  <CoffeesView
+                    {...props}
+                    coffees={coffees}
+                    setReload={setReload}
+                    deleteCoffee={deleteCoffee}
+                    updateCoffeeArray={updateCoffeeArray}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin"
+                render={(props) => (
+                  <AdminDashBoardView
+                    {...props}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    reload={reload}
+                    setReload={setReload}
+                    coffees={coffees}
+                    setCoffees={setCoffees}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/cafes"
+                render={(props) => (
+                  <CafesView
+                    {...props}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    setReload={setReload}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/map"
+                render={(props) => (
+                  <MapView
+                    {...props}
+                    coffee={coffee}
+                    setCoffee={setCoffee}
+                    userLocation={userLocation}
+                    cafe={cafe}
+                    setCafe={setCafe}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/order"
+                render={(props) => (
+                  <OrderView
+                    {...props}
+                    coffee={coffee}
+                    cafe={cafe}
+                    loggedInUser={loggedInUser}
+                  />
+                )}
+              />
+              <Route exact path="/admin" render={() => <AdminDashBoardView />} />
+              <Route exact path="/orders" render={() => <AllOrdersView />} />
+              <Route exact path="/logout">
+                <Redirect to="/" />
+              </Route>
+            </>
+          ) : (
+            <>
+              <h1>PLEASE LOG IN OR SIGN UP</h1>
+            </>
+          )}
         </Switch>
       </BrowserRouter>
     </div>

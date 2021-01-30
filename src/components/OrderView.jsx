@@ -3,7 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
 const OrderView = (props) => {
-  const { coffee, cafe } = props;
+  const { coffee, cafe, loggedInUser } = props;
   const [orderPrice, setOrderPrice] = useState(coffee.price);
   const [size, setSize] = useState("Regular");
   const [milk, setMilk] = useState("Regular Milk");
@@ -18,14 +18,14 @@ const OrderView = (props) => {
     let min = String(date.getMinutes());
     if (hr.length < 2) {
       hr = "0" + hr;
-    }
+    };
     if (min.length < 2) {
       min = "0" + min;
-    }
+    };
     setPickupTime(`${hr}:${min}`);
     if (coffee.name === "Espresso" || coffee.name === "Long Black") {
       setMilk("No milk");
-    }
+    };
   }, []);
 
   const handleSize = (event) => {
@@ -36,7 +36,7 @@ const OrderView = (props) => {
       setOrderPrice(coffee.price - 0.5);
     } else if (event.target.value === "Regular") {
       setOrderPrice(coffee.price);
-    }
+    };
   };
 
   const handleMilk = (event) => {
@@ -55,23 +55,23 @@ const OrderView = (props) => {
       time = time + 1200000;
     } else if (event.target.value === "30") {
       time = time + 1800000;
-    }
+    };
     let date = new Date(time);
     let hr = String(date.getHours());
     let min = String(date.getMinutes());
     if (hr.length < 2) {
       hr = "0" + hr;
-    }
+    };
     if (min.length < 2) {
       min = "0" + min;
-    }
+    };
     setPickupTime(`${hr}:${min}`);
   };
   
     const createOrder = () => {
       const order = {
         cafe: cafe._id,
-        user: "60134ade89bd83c271a7d14c",
+        user: loggedInUser.id,
         coffee: coffee.name,
         size: size,
         milk: milk,
@@ -83,8 +83,7 @@ const OrderView = (props) => {
       axios
         .post("http://localhost:5000/orders", order)
         .then(res => {
-          console.log(res.data._id)
-          setOrderId(res.data._id)
+          setOrderId(res.data._id);
         })
         .catch(error => console.log(error.message));
     };
