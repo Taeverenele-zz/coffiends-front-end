@@ -13,7 +13,6 @@ import MapView from "./components/MapView";
 import NewOrderView from "./components/NewOrderView";
 import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
-import CafeDashboardView from "./components/CafeDashboardView"
 
 const App = () => {
   const [ reload, setReload ] = useState(true);
@@ -189,25 +188,104 @@ const App = () => {
                   />
                 )}
               />
-            )}
-          />
-          <Route
-            exact
-            path="/order"
-            render={(props) => (
-              <OrderView {...props} coffee={coffee} cafe={cafe} />
-            )}
-          />
-          <Route
-            exact
-            path="/CafeDashboard"
-            render={(props) => (
-              <CafeDashboardView />
-            )}
-          />
-          <Route exact path="/login" render={() => <LoginView />} />
-          <Route exact path="/register" render={() => <RegisterView />} />
-          <Route exact path="/admin" render={() => <AdminDashBoardView />} />
+              <Route
+                exact
+                path="/admin"
+                render={(props) => (
+                  <AdminDashBoardView
+                    {...props}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    reload={reload}
+                    setReload={setReload}
+                    coffees={coffees}
+                    setCoffees={setCoffees}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/cafes"
+                render={(props) => (
+                  <CafesView
+                    {...props}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    setReload={setReload}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/map"
+                render={(props) => (
+                  <MapView
+                    {...props}
+                    coffee={coffee}
+                    setCoffee={setCoffee}
+                    userLocation={userLocation}
+                    cafe={cafe}
+                    setCafe={setCafe}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/orders/new"
+                render={(props) => (
+                  <NewOrderView
+                    {...props}
+                    coffee={coffee}
+                    cafe={cafe}
+                    loggedInUser={loggedInUser}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/orders"
+                render={(props) => (
+                  <OrdersView
+                    {...props}
+                    loggedInUser={loggedInUser}
+                    userCafe={userCafe}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/dashboard"
+                render={(props) => (
+                  <CafeDashboardView
+                    {...props}
+                    loggedInUser={loggedInUser}
+                    userCafe={userCafe}
+                    setMenu={setMenu}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/menu"
+                render={(props) => (
+                  <CafeMenuView
+                    {...props}
+                    loggedInUser={loggedInUser}
+                    userCafe={userCafe}
+                    setMenu={setMenu}
+                    menu={menu}
+                  />
+                )}
+              />
+              <Route exact path="/logout">
+                <Redirect to="/" />
+              </Route>
+            </>
+          ) : (
+            <>
+              <h1>PLEASE LOG IN OR SIGN UP</h1>
+            </>
+          )}
         </Switch>
       </BrowserRouter>
     </div>
