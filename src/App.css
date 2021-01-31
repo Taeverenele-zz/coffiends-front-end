@@ -59,3 +59,17 @@
     background-color: White; 
     right: -100vw
   }
+
+  .Dashboard-Margin-Left {
+    margin-left: 10px;
+  }
+
+  .Dashboard-Hide {
+    opacity: 0;
+    transition: 1.0s ease
+  }
+
+  .Dashboard-Show {
+    opacity: 1;
+    transition: 1.0s ease
+  }
