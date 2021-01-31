@@ -3,41 +3,37 @@ import { Link } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { Container }  from "reactstrap";
 import axios from "axios";
-import NewOrderView from './NewOrderView';
+import NewOrderForm from './NewOrderForm';
 import "../App.css";
 
 function MapView(props) {
-  const { coffee, setCoffee, userLocation, setCafe, cafe } = props;
-  const [ cafeData, setCafeData ] = useState([]);
+  const { userCoffee, setUserCoffee, userLocation, setCafe } = props;
+  const [ cafesData, setCafesData ] = useState([]);
   // const [dropdownOpen, setOpen] = useState(false);
-  
   // const toggle = () => setOpen(!dropdownOpen);
 
   useEffect(() => {
+    getCafeData();
+  }, []);
+
+  const getCafeData = async () => {
     const time = new Date();
     const postBody = {
       location: userLocation,
-      // time: (String(time.getHours()) + String(time.getMinutes())),
-      time: "1000", // uncomment line above to use actual time & comment this one out
-      coffee: coffee.id
+      time: (String(time.getHours()) + String(time.getMinutes())),
+      // time: "1000", // uncomment line above to use actual time & comment this one out
+      coffee: userCoffee.id
     };
-    console.log(coffee)
-    axios
-      .post("http://localhost:5000/map/", postBody)
-      .then(res => setCafeData(res.data))
-      .catch(error => console.log(error.message));
-  }, []);
+
+    const response = await axios.post("http://localhost:5000/map/", postBody);
+    const searchResults = await response.data;
+    setCafesData(searchResults);
+  };
 
   function handleClick(cafe, coffee) {
     cafe.menu.map((menuitem) => {
-      if (menuitem.coffee == coffee.id) {
-        setCoffee(
-          {
-            id: coffee.id,
-            name: coffee.name,
-            price: menuitem.price
-          }
-        );
+      if (menuitem.coffee === coffee.id) {
+        setUserCoffee({ ...userCoffee, price:  menuitem.price });
       };
     });
     setCafe(cafe);
@@ -60,7 +56,7 @@ function MapView(props) {
       {/* <Container>
           <div className="Hide-Order" id="orderPanel" >
             <button onClick={hidePanel}>Close</button>
-            <NewOrderView coffee={coffee} cafe={cafe}  />
+            <NewOrderForm coffee={coffee} cafe={cafe}  />
           </div>
       </Container> */}
 
@@ -70,7 +66,7 @@ function MapView(props) {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"  
         />
 
-        {cafeData.map((cafe) => (
+        {cafesData.map((cafe) => (
           <Marker
             key={cafe._id}
             position={[cafe.location[0], cafe.location[1]]}
@@ -79,9 +75,9 @@ function MapView(props) {
               <h3>{cafe.cafe_name}</h3>
               <p>Hrs: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</p>
               <p>{cafe.address}</p>
-              <p>{coffee.name}</p>
+              <p>{userCoffee.name}</p>
               {cafe.menu.map((item) => 
-                item.coffee === coffee.id ? <Link to="/orders/new" onClick={() => handleClick(cafe, coffee)}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
+                item.coffee === userCoffee.id ? <Link to="/orders/new" onClick={() => handleClick(cafe, userCoffee)}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
                 // item.coffee === coffee.id ? <Link to="/orders/new" onClick={() => showPanel}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
               )}
             </Popup>

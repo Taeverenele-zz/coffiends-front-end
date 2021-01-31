@@ -3,99 +3,84 @@ import axios from "axios";
 import OrderTable from "./OrderTable";
 
 const OrdersView = (props) => {
-  const { loggedInUser, userCafe } = props;
+  const { loggedInUser, loggedInCafe } = props;
   const [ orders, setOrders ] = useState([]);
   const [ pastOrders, setPastOrders ] = useState([]);
   const [ showPastOrders, setShowPastOrders ] = useState(false);
 
   useEffect(() => {
-    getActiveOrders();
+    getOrders("active");
   }, []);
 
-  const getActiveOrders = () => {
-    if (loggedInUser.role === "user") {
-      retrieveUserActiveOrders();
-    } else if (loggedInUser.role === "cafe") {
-      retrieveCafeActiveOrders();
-    } else {
-      retrieveAllActiveOrders();
-    };
-  };
-
-  const getPastRoleOrders = () => {
-    if (loggedInUser.role === "user") {
-      retrieveUserPastOrders();
-    } else if (loggedInUser.role === "cafe") {
-      retrieveCafePastOrders();
-    } else {
-      retrieveAllPastOrders();
+  const getOrders = (type) => {
+    switch (type) {
+      case "active":
+        if (loggedInUser.role === "user") {
+          retrieveUserOrders();
+        } else if (loggedInUser.role === "cafe") {
+          retrieveCafeOrders();
+        } else {
+          retrieveAllOrders();
+        };
+        break;
+      case "past":
+        if (loggedInUser.role === "user") {
+          retrieveUserOrders("past");
+        } else if (loggedInUser.role === "cafe") {
+          retrieveCafeOrders("past");
+        } else {
+          retrieveAllOrders("past");
+        };
+        break;
+      default:
+        break;
     };
   };
 
   const getPastOrders = (type) => {
     if (!showPastOrders && type) {
-      getPastRoleOrders();
+      getOrders("past");
       setShowPastOrders(true);
     } else if (showPastOrders && !type) {
-      getPastRoleOrders();
+      getOrders("past");
     } else {
       setShowPastOrders(false);
     };
   };
 
-  const retrieveAllActiveOrders = () => {
-    axios
-      .get("http://localhost:5000/orders")
-      .then(res => setOrders(res.data))
-      .catch(err => console.log(err.message));
-  };
-
-  const retrieveUserActiveOrders = () => {
-    if (loggedInUser.role === "user") {
-      axios
-      .get(`http://localhost:5000/users/${loggedInUser.id}/orders`)
-      .then(res => setOrders(res.data))
-      .catch(err => console.log(err.message));
+  const retrieveAllOrders = async (pastOrders) => {
+    let url = "http://localhost:5000/orders";
+    if (pastOrders) {
+      url = "http://localhost:5000/orders/past";
     };
+    const response = await axios.get(url);
+    const allOrders = await response.data;
+    pastOrders ? setPastOrders(allOrders) : setOrders(allOrders);
   };
 
-  const retrieveCafeActiveOrders = () => {
-    if (loggedInUser.role === "cafe") {
-      axios
-      .get(`http://localhost:5000/cafes/${userCafe._id}/orders`)
-      .then(res => setOrders(res.data))
-      .catch(err => console.log(err.message));
+  const retrieveUserOrders = async (pastOrders) => {
+    let url = `http://localhost:5000/users/${loggedInUser._id}/orders`;
+    if (pastOrders) {
+      url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
     };
+    const response = await axios.get(url);
+    const userOrders = await response.data;
+    pastOrders ? setPastOrders(userOrders) : setOrders(userOrders);
   };
 
-  const retrieveAllPastOrders = () => {
-    axios
-      .get("http://localhost:5000/orders/past")
-      .then(res => setPastOrders(res.data))
-      .catch(err => console.log(err.message));
-  };
-
-  const retrieveUserPastOrders = () => {
-    if (loggedInUser.role === "user") {
-      axios
-      .get(`http://localhost:5000/users/${loggedInUser.id}/orders/past`)
-      .then(res => setPastOrders(res.data))
-      .catch(err => console.log(err.message));
+  const retrieveCafeOrders = async (pastOrders) => {
+    let url = `http://localhost:5000/cafes/${loggedInCafe._id}/orders`;
+    if (pastOrders) {
+      url = `http://localhost:5000/cafes/${loggedInCafe._id}/orders/past`;
     };
-  };
-
-  const retrieveCafePastOrders = () => {
-    if (loggedInUser.role === "cafe") {
-      axios
-      .get(`http://localhost:5000/cafes/${userCafe._id}/orders/past`)
-      .then(res => setPastOrders(res.data))
-      .catch(err => console.log(err.message));
-    };
+    const response = await axios.get(url);
+    const cafeOrders = await response.data;
+    pastOrders ? setPastOrders(cafeOrders) : setOrders(cafeOrders);
   };
 
   return (
     <>
-      <OrderTable orders={orders} getActiveOrders={getActiveOrders} getPastOrders={getPastOrders} loggedInUser={loggedInUser} />
+      <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} loggedInUser={loggedInUser} />
       <button onClick={() => getPastOrders(true)}>Show Recent Completed Orders</button>
       {showPastOrders ? (
         <div>
