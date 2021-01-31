@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 import {
   Container,
   Row,
@@ -18,15 +18,25 @@ import logo from "../assets/Logo.png";
 import coffeeImg from "../assets/coffee.svg";
 
 const HomeView = (props) => {
-  const { coffees, setCoffee } = props;
+  const { coffees, setCoffees, setUserCoffee } = props;
 
-  function addUserCoffee(name, id) {
-    setCoffee({ name, id });
-  }
+  useEffect(() => {
+    getAllCoffees();
+  }, []);
+
+  const getAllCoffees = async () => {
+    const response = await axios.get("http://localhost:5000/coffees/", coffees);
+    const allCoffees = await response.data;
+    await setCoffees(allCoffees);
+  };
+
+  function addUserCoffee(id, name) {
+    setUserCoffee({ id, name });
+  };
 
   return (
     <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
-      <Container style={{ padding: "0", margin: "0" }} fluid="true">
+      {/* <Container style={{ padding: "0", margin: "0" }} fluid="true">
         <Row className="align-items-center">
           <Col sm={{ size: 4 }} xs={{ size: 4 }}>
             <a href="/">
@@ -48,15 +58,19 @@ const HomeView = (props) => {
           </Col>
 
           <Col sm={{ size: 4 }} xs={{ size: 3 }} style={{ textAlign: "end" }}>
-            <Button color="primary" size="sm" style={{ margin: "10px" }}>
-              Log In
-            </Button>
-            <Button color="primary" size="sm">
-              Register
-            </Button>
+            <Link to="/login">
+              <Button color="primary" size="sm" style={{ margin: "10px" }}>
+                Log In
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button color="primary" size="sm">
+                Sign Up
+              </Button>
+            </Link>
           </Col>
         </Row>
-      </Container>
+      </Container> */}
 
       <Container style={{ marginTop: "40px" }}>
         <Row className="justify-content-center" style={{ height: "100px" }}>
@@ -74,7 +88,7 @@ const HomeView = (props) => {
           }}
         >
           <div>
-            <h4>About Coffiends</h4>
+            click your favourite brew below to find cafes near you!
           </div>
         </Row>
       </Container>
@@ -84,7 +98,7 @@ const HomeView = (props) => {
           <Row className="justify-content-center">
             {coffees.map((coffee) => (
               <CardDeck style={{ margin: "50px" }}>
-                <Card>
+                <Card key={coffee._id}>
                   <CardImg
                     top
                     width="100%"
@@ -92,18 +106,21 @@ const HomeView = (props) => {
                     alt="Card image cap"
                   />
                   <CardBody style={{ width: "230px" }}>
-                    <p
+                  <CardTitle tag="h5">{coffee.name}</CardTitle>
+                  <CardSubtitle tag="h6" className="mb-2 text-muted">
+                    {coffee.description}
+                  </CardSubtitle>
+                    {/* <p
                       key={coffee._id}
                       onClick={() => addUserCoffee(coffee.name, coffee._id)}
-                    >
-                      {coffee.name} -{" "}
-                      <Link to="/map">
+                    > */}
+                      {/* {coffee.name} -{" "} */}
+                      <Link to="/map" onClick={() => addUserCoffee(coffee._id, coffee.name)}>
                         <Button color="primary" size="sm">
-                          {" "}
-                          Search{" "}
+                          SEARCH
                         </Button>
                       </Link>
-                    </p>
+                    {/* </p> */}
                   </CardBody>
                 </Card>
               </CardDeck>

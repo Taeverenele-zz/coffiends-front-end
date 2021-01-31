@@ -2,14 +2,14 @@ import { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
-const OrderView = (props) => {
-  const { coffee, cafe } = props;
-  const [orderPrice, setOrderPrice] = useState(coffee.price);
-  const [size, setSize] = useState("Regular");
-  const [milk, setMilk] = useState("Regular Milk");
-  const [sugar, setSugar] = useState(0);
-  const [pickupTime, setPickupTime] = useState(Date.now());
-  const [ oderId, setOrderId ] = useState("");
+const NewOrderForm = (props) => {
+  const { userCoffee, cafe, loggedInUser } = props;
+  const [ orderPrice, setOrderPrice ] = useState(userCoffee.price);
+  const [ size, setSize ] = useState("Regular");
+  const [ milk, setMilk ] = useState("Regular Milk");
+  const [ sugar, setSugar ] = useState(0);
+  const [ pickupTime, setPickupTime ] = useState(Date.now());
+  const [ orderId, setOrderId ] = useState("");
 
   useEffect(() => {
     let time = new Date().getTime();
@@ -18,25 +18,25 @@ const OrderView = (props) => {
     let min = String(date.getMinutes());
     if (hr.length < 2) {
       hr = "0" + hr;
-    }
+    };
     if (min.length < 2) {
       min = "0" + min;
-    }
+    };
     setPickupTime(`${hr}:${min}`);
-    if (coffee.name === "Espresso" || coffee.name === "Long Black") {
+    if (userCoffee.name === "Espresso" || userCoffee.name === "Long Black") {
       setMilk("No milk");
-    }
+    };
   }, []);
 
   const handleSize = (event) => {
     setSize(event.target.value);
     if (event.target.value === "Large") {
-      setOrderPrice(coffee.price + 0.5);
+      setOrderPrice(userCoffee.price + 0.5);
     } else if (event.target.value === "Small") {
-      setOrderPrice(coffee.price - 0.5);
+      setOrderPrice(userCoffee.price - 0.5);
     } else if (event.target.value === "Regular") {
-      setOrderPrice(coffee.price);
-    }
+      setOrderPrice(userCoffee.price);
+    };
   };
 
   const handleMilk = (event) => {
@@ -55,66 +55,51 @@ const OrderView = (props) => {
       time = time + 1200000;
     } else if (event.target.value === "30") {
       time = time + 1800000;
-    }
+    };
     let date = new Date(time);
     let hr = String(date.getHours());
     let min = String(date.getMinutes());
     if (hr.length < 2) {
       hr = "0" + hr;
-    }
+    };
     if (min.length < 2) {
       min = "0" + min;
-    }
+    };
     setPickupTime(`${hr}:${min}`);
   };
   
-    const createOrder = () => {
+    const createOrder = async () => {
       const order = {
         cafe: cafe._id,
-        user: "60134ade89bd83c271a7d14c",
-        coffee: coffee.name,
+        user: loggedInUser._id,
+        coffee: userCoffee.name,
         size: size,
         milk: milk,
         sugar: sugar,
         pickup_time: pickupTime,
         total: orderPrice
       };
-  
-      axios
-        .post("http://localhost:5000/orders", order)
-        .then(res => {
-          console.log(res.data._id)
-          setOrderId(res.data._id)
-        })
-        .catch(error => console.log(error.message));
+      const response = await axios.post("http://localhost:5000/orders", order);
+      const newOrder = await response.data._id;
+      setOrderId(newOrder);
     };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     createOrder();
-    // alert(
-    //   `
-    //     YOUR ORDER HAS BEEN PLACED!
-    //     ${size} ${coffee.name}
-    //     ${milk}
-    //     ${sugar} Sugars
-    //     Pick up at ${pickupTime} from ${cafe.cafe_name}
-    //     ${cafe.address}
-    //   `
-    // );
   };
 
   return (
     <>
       <button><Link to="/map">Cancel</Link></button>
       <h3>{cafe.cafe_name}</h3>
-      <h4>{coffee.name}</h4>
+      <h4>{userCoffee.name}</h4>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Size: </label>
           <select value={size} onChange={handleSize}>
             <option value="Regular">Regular</option>
-            {coffee.name === "Espresso" ? (
+            {userCoffee.name === "Espresso" ? (
               <></>
             ) : (
               <>
@@ -124,7 +109,7 @@ const OrderView = (props) => {
             )}
           </select>
         </div>
-        {coffee.name === "Espresso" || coffee.name === "Long Black" ? (
+        {userCoffee.name === "Espresso" || userCoffee.name === "Long Black" ? (
           <div></div>
         ) : (
           <div>
@@ -158,7 +143,7 @@ const OrderView = (props) => {
         </div>
         <button>${orderPrice.toFixed(2)} - BUY NOW</button>
       </form>
-      {oderId ? (
+      {orderId ? (
         <Redirect to="/orders" />
       ) : (<></>)
       }
@@ -166,4 +151,4 @@ const OrderView = (props) => {
   );
 };
 
-export default OrderView;
+export default NewOrderForm;
