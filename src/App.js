@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import { Button } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
-import CafeDashboardView from "./components/CafeDashboardView";
+import CafeDashboardView from "./components/CafeDashboardView.js";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
 import CoffeesView from "./components/CoffeesView";

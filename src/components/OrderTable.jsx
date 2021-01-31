@@ -36,7 +36,7 @@ const OrderTable = (props) => {
                 {orders ? (orders.map((order) => (
                   <tr key={order._id}>
                     <td>{order.cafe.cafe_name}</td>
-                    <td>{order.user.user_name}</td>
+                    {/* <td>{order.user.user_name}</td> */}
                     <td>{new Date(order.order_date).toLocaleString("en-Au", {timeZone: "Australia/Brisbane"})}</td>
                     <td>{String(order.active)}</td>
                     <td>{order.coffee}</td>

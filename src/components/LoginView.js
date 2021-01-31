@@ -30,9 +30,9 @@ const LoginView = (props) => {
         response = await axios.get(`http://localhost:5000/cafes/user/${userDetails._id}`)
         const cafeDetails = await response.data
         await setLoggedInCafe(cafeDetails);
-        props.history.push("/dashboard");
+        props.history.push("/");
       } else if (userDetails.role === "admin") {
-        props.history.push("/admin");
+        props.history.push("/");
       } else {
         props.history.push("/");
       };
