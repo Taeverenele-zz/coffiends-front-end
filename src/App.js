@@ -1,23 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import { Button } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
+import CafeDashboardView from "./components/CafeDashboardView";
+import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
 import CoffeesView from "./components/CoffeesView";
 import HomeView from "./components/HomeView";
 import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
-import OrderView from "./components/OrderView";
+import NewOrderView from "./components/NewOrderView";
+import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
 import CafeDashboardView from "./components/CafeDashboardView"
 
 const App = () => {
-  const [reload, setReload] = useState(true);
-  const [coffees, setCoffees] = useState([]);
-  const [cafes, setCafes] = useState([]);
-  const [userLocation, setUserLocation] = useState([]);
-  const [coffee, setCoffee] = useState({ id: "", name: "", price: 0 });
-  const [cafe, setCafe] = useState("");
+  const [ reload, setReload ] = useState(true);
+  const [ coffees, setCoffees ] = useState([]);
+  const [ cafes, setCafes ] = useState([]);
+  const [ userLocation, setUserLocation ] = useState([]);
+  const [ coffee, setCoffee ] = useState({ id: "", name: "", price: 0 });
+  const [ cafe, setCafe ] = useState("");
+  const [ loggedInUser, setLoggedInUser ] = useState(false);
+  const [ user, setUser ] = useState({
+    username: "",
+    password: "",
+    user_name: "",
+    role: "user",
+    phone: ""
+  });
+  const [ userCafe, setUserCafe ] = useState({});
+  const [ menu, setMenu ] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:5000/users/check", { credentials: "include" })
+      .then(data => data.json())
+      .then(json => {
+        if (json) {
+          setLoggedInUser(json);
+        };
+      });
+  }, []);
 
   //COFFEES
   const updateCoffeeArray = (eachEntry) => {
@@ -55,7 +79,16 @@ const App = () => {
     setUserLocation([-27.468298, 153.0247838]); // uncomment code above & comment this out for dynamic location
   }, [reload, cafes, coffees]);
 
-  // CAFES
+  const handleLogout = () => {
+    fetch("http://localhost:5000/users/logout", { credentials: "include" })
+      .then((res) => {
+        if (res.status == 200) {
+          setLoggedInUser(false);
+        } else {
+          console.log(res);
+        };
+      });
+  };
 
   return (
     <div className="container mt-4">
@@ -64,11 +97,46 @@ const App = () => {
           <nav>
             <Link to="/">
               <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-            </Link>{" "}
-            | <Link to="/login"> LOGIN</Link> |{" "}
-            <Link to="/register">REGISTER</Link> |{" "}
-            <Link to="/admin"> ADMIN</Link> | <Link to="/cafes"> CAFES</Link> |{" "}
-            <Link to="/coffees"> COFFEES</Link>
+            </Link>
+            {loggedInUser ? (
+              <>
+                {loggedInUser.role === "admin" ? (
+                  <>
+                    <Link to="/admin">ADMIN</Link> |{" "}
+                    <Link to="/cafes"> CAFES</Link> |{" "}
+                    <Link to="/coffees"> COFFEES</Link> |{" "}
+                  </>
+                )  : <></> }
+                {loggedInUser.role === "cafe" ? (
+                  <>
+                    <Link to="/dashboard">CAFE DASHBOARD</Link>
+                  </>
+                )  : <></> }
+                {loggedInUser.role !== "cafe" ? (
+                  <>
+                    <Link to="/orders"> ORDERS</Link>
+                  </>
+                )  : <></> }
+                <Link to="/logout">
+                  <Button color="dark" size="sm" style={{ margin: "5px" }} onClick={handleLogout}>
+                    LOG OUT
+                  </Button>
+                </Link>
+              </>
+            ) : (
+              <> 
+                <Link to="/login">
+                  <Button color="primary" size="sm" style={{ margin: "2px" }}>
+                    LOG IN
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button color="info" size="sm" style={{ margin: "2px" }}>
+                    SIGN UP
+                  </Button>
+                </Link>
+              </>
+            )}
           </nav>
         </header>
         <Switch>
@@ -81,40 +149,45 @@ const App = () => {
           />
           <Route
             exact
-            path="/coffees"
+            path="/register"
             render={(props) => (
-              <CoffeesView
+              <RegisterView
                 {...props}
-                coffees={coffees}
-                setReload={setReload}
-                deleteCoffee={deleteCoffee}
-                updateCoffeeArray={updateCoffeeArray}
+                setLoggedInUser={setLoggedInUser}
+                user={user}
+                setUser={setUser}
               />
             )}
           />
           <Route
             exact
-            path="/cafes"
+            path="/login"
             render={(props) => (
-              <CafesView
+              <LoginView
                 {...props}
-                cafes={cafes}
-                setCafes={setCafes}
-                setReload={setReload}
+                loggedInUser={loggedInUser}
+                setLoggedInUser={setLoggedInUser}
+                user={user}
+                setUser={setUser}
+                userCafe={userCafe}
+                setUserCafe={setUserCafe}
               />
             )}
           />
-          <Route
-            exact
-            path="/map"
-            render={(props) => (
-              <MapView
-                {...props}
-                coffee={coffee}
-                setCoffee={setCoffee}
-                userLocation={userLocation}
-                cafe={cafe}
-                setCafe={setCafe}
+          {loggedInUser ? (
+            <>
+              <Route
+                exact
+                path="/coffees"
+                render={(props) => (
+                  <CoffeesView
+                    {...props}
+                    coffees={coffees}
+                    setReload={setReload}
+                    deleteCoffee={deleteCoffee}
+                    updateCoffeeArray={updateCoffeeArray}
+                  />
+                )}
               />
             )}
           />

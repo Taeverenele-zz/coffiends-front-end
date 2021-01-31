@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
+import { Link, Redirect } from "react-router-dom";
+import axios from "axios";
 
-const OrderView = (props) => {
-  const { coffee, cafe} = props;
+const NewOrderView = (props) => {
+  const { coffee, cafe, loggedInUser } = props;
   const [ orderPrice, setOrderPrice ] = useState(coffee.price);
   const [ size, setSize ] = useState("Regular");
   const [ milk, setMilk ] = useState("Regular Milk");
   const [ sugar, setSugar ] = useState(0);
   const [ pickupTime, setPickupTime ] = useState(Date.now());
-  
-  console.log("load check")
+  const [ orderId, setOrderId ] = useState("");
 
   useEffect(() => {
     let time = new Date().getTime();
@@ -30,11 +31,11 @@ const OrderView = (props) => {
   const handleSize = (event) => {
     setSize(event.target.value);
     if (event.target.value === "Large") {
-      setOrderPrice((coffee.price + 0.5));
+      setOrderPrice(coffee.price + 0.5);
     } else if (event.target.value === "Small") {
-      setOrderPrice((coffee.price - 0.5));
+      setOrderPrice(coffee.price - 0.5);
     } else if (event.target.value === "Regular") {
-      setOrderPrice((coffee.price));
+      setOrderPrice(coffee.price);
     };
   };
 
@@ -66,23 +67,35 @@ const OrderView = (props) => {
     };
     setPickupTime(`${hr}:${min}`);
   };
+  
+    const createOrder = () => {
+      const order = {
+        cafe: cafe._id,
+        user: loggedInUser.id,
+        coffee: coffee.name,
+        size: size,
+        milk: milk,
+        sugar: sugar,
+        pickup_time: pickupTime,
+        total: orderPrice
+      };
+  
+      axios
+        .post("http://localhost:5000/orders", order)
+        .then(res => {
+          setOrderId(res.data._id);
+        })
+        .catch(error => console.log(error.message));
+    };
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    alert(
-      `
-        ${size} ${coffee.name}
-        ${milk}
-        ${sugar} Sugars
-        Pick up at ${pickupTime} from ${cafe.cafe_name}
-        ${cafe.address}
-      `
-    );
+    createOrder();
   };
 
- 
   return (
     <>
+      <button><Link to="/map">Cancel</Link></button>
       <h3>{cafe.cafe_name}</h3>
       <h4>{coffee.name}</h4>
       <form onSubmit={handleSubmit}>
@@ -90,29 +103,29 @@ const OrderView = (props) => {
           <label>Size: </label>
           <select value={size} onChange={handleSize}>
             <option value="Regular">Regular</option>
-            {coffee.name === "Espresso" ?
-              (<></>) : (
-                <>
-                  <option value="Small">Small -$0.50</option>
-                  <option value="Large">Large +$0.50</option>
-                </>
-              )
-            }
+            {coffee.name === "Espresso" ? (
+              <></>
+            ) : (
+              <>
+                <option value="Small">Small -$0.50</option>
+                <option value="Large">Large +$0.50</option>
+              </>
+            )}
           </select>
         </div>
-        {coffee.name === "Espresso" || coffee.name === "Long Black" ?
-          (<div></div>) : (
-            <div>
-              <label>Milk:</label>
-              <select value={milk} onChange={handleMilk}>
-                <option value="Regular Milk">Full Cream</option>
-                <option value="Skim Milk">Skim</option>
-                <option value="Soy Milk">Soy</option>
-                <option value="Almond Milk">Almond</option>
-              </select>
-            </div>
-          )
-        }
+        {coffee.name === "Espresso" || coffee.name === "Long Black" ? (
+          <div></div>
+        ) : (
+          <div>
+            <label>Milk:</label>
+            <select value={milk} onChange={handleMilk}>
+              <option value="Regular Milk">Full Cream</option>
+              <option value="Skim Milk">Skim</option>
+              <option value="Soy Milk">Soy</option>
+              <option value="Almond Milk">Almond</option>
+            </select>
+          </div>
+        )}
         <div>
           <label>Sugar:</label>
           <select value={sugar} onChange={handleSugar}>
@@ -132,10 +145,14 @@ const OrderView = (props) => {
             <option value="30">30 mins</option>
           </select>
         </div>
-        {/* <button>${orderPrice.toFixed(2)} - BUY NOW</button> */}
+        <button>${orderPrice.toFixed(2)} - BUY NOW</button>
       </form>
+      {orderId ? (
+        <Redirect to="/orders" />
+      ) : (<></>)
+      }
     </>
   );
 };
 
-export default OrderView;
+export default NewOrderView;

@@ -1,129 +1,183 @@
-import {React, useState} from "react";
-import { Container, Row, Col, Input, Button, Form } from 'reactstrap';
-import { useForm } from "react-hook-form";
-import NewAdminCafe from "./AdminAddCafe"
-import NewAdminCoffee from "./AdminAddCoffee"
+import { React, useState, useEffect } from "react";
+import {
+  Navbar,
+  Container,
+  Row,
+  Col,
+  Input,
+  Button,
+  Form,
+  NavItem,
+  Nav,
+  Table,
+} from "reactstrap";
+import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import axios from "axios";
 
+import NewCafeForm from "./NewCafeForm";
+import NewCoffeeForm from "./NewCoffeeForm";
 
 const AdminDashboardView = (props) => {
+  const { cafes, setCafes, reload, setReload, coffees, setCoffees } = props;
+  const [isEditing, setIsEditing] = useState(false);
+  const initialState = {
+    cafe_name: "",
+    address: "",
+    operating_hours: [],
+    location: [],
+  };
+  const [cafeData, setCafeData] = useState(initialState);
+  const [cafeSearchTerm, setCafeSearchTerm] = useState("");
+  const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
 
-const [exampleCafes, setExampleCafe] = useState([])
-const [exampleCoffees, setExampleCoffee] = useState([])
+  const editCafe = (cafe) => {
+    setIsEditing(true);
+    setCafeData(cafe);
+  };
+  const addCafe = (newCafe) => {
+    setCafes([...cafes, newCafe]);
+  };
 
-const addCafe = (cafe) => {
-    setExampleCafe([...exampleCafes, {cafe: cafe} ])
-}
+  const deleteCafe = (id) => {
+    axios
+      .delete(`http://localhost:5000/cafes/${id}`, cafes)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
+  };
 
-const addCoffee = (coffee) => {
-    setExampleCoffee([...exampleCoffees, {coffee: coffee} ])
-}
+  const handleCafeSearchTermChange = (e) => {
+    setCafeSearchTerm(e.target.value);
+  };
+  const handleCoffeeSearchTermChange = (e) => {
+    setCoffeeSearchTerm(e.target.value);
+  };
 
-    return (
+  return (
+    <>
+      <BrowserRouter>
+        <Navbar color="light" light>
+          <Link to="/">
+            <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
+          </Link>
+          <div>
+            <h1>COFFIENDS</h1>
+          </div>
+          <Nav>
+            <NavItem className="mr-3">
+              <Link to="/cafes/new">Add Cafe</Link>
+            </NavItem>
+            <NavItem className="mr-3">
+              <Link to="/coffees/new">Add Coffee</Link>
+            </NavItem>
+            <NavItem className="mr-3">
+              <Link to="/">Log Out</Link>
+            </NavItem>
+          </Nav>
+        </Navbar>
+        <Switch>
+          <Route
+            exact
+            path="/cafes/new"
+            render={(props) => (
+              <NewCafeForm
+                {...props}
+                cafeData={cafeData}
+                setCafeData={setCafeData}
+                addCafe={addCafe}
+              />
+            )}
+          />
+          <Route
+            exact
+            path="/coffees/new"
+            render={(props) => <NewCoffeeForm />}
+          />
+        </Switch>
         <Container>
+          <Row className="justify-content-center margin-add-top">
+            <h1>Admin Dashboard</h1>
+          </Row>
 
-        <NewAdminCafe addCafe={addCafe}>
-            
-        </NewAdminCafe>
-
-
-        <NewAdminCoffee addCoffee={addCoffee}>
-
-
-        </NewAdminCoffee>
-
-
-            
-
-
-            <Row className="justify-content-center margin-add-top">
-                <h1>Admin</h1>
-            </Row>
-            <Row className="justify-content-center">
-                <h1>Dashboard</h1>
-            </Row>
-
-            <Row>
-                <Col sm={{size: 6}} className="text-center margin-add-top">
-                    <h3>All Cafes</h3>
-                </Col>
-                <Col sm={{size: 6}} className="text-center margin-add-top">
-                    <h3>All Coffees</h3>
-                </Col>
-            </Row>
-
-            <Row className="text-center">
-                <Col className="Admin-Dashboard-Center">
-                
-                <Input
-                    type="search"
-                    name="search"
-                    id="exampleSearch"
-                    placeholder="search Cafes"
-                    style={{width: "200px"}}
-                    
-                />
-                </Col>
-
-                <Col className="Admin-Dashboard-Center">
-                <Input
-                    type="search"
-                    name="search"
-                    id="exampleSearch"
-                    placeholder="search Cafes"
-                    style={{width: "200px"}}
-                />
-                </Col>
-            </Row>
-
-                    {/* <ul>
-                        {exampleCafes.map(cafe => {
-                            return (<li >{cafe.cafe}</li>)
-                        })}
-                        
-                    </ul> */}
-            <Row className="margin-add-top">
-
-                <Col className="Admin-Dashboard-Center align-self-center" sm={{size: 6}} >
-
-                    <ul>
-
-                        {exampleCafes.map(cafe => {
-                           return ( <li className="Remove-Dot"> {cafe.cafe} 
-                            <Button color="primary" size="sm" className="Admin-Button-Margin">Edit</Button>
-                            <Button color="primary" size="sm" className="Admin-Button-Margin">Delete</Button>   
-                           </li>)
-                           
-                        })}
-
-                    </ul>
-
-
-
-                </Col >
-                
-
-                <Col className="Admin-Dashboard-Center align-self-center" sm={{size: 3}}>
-                <ul>
-
-                    {exampleCoffees.map(coffee => {
-                    return ( <li className="Remove-Dot"> {coffee.coffee} 
-                        <Button color="primary" size="sm" className="Admin-Button-Margin">Edit</Button>
-                        <Button color="primary" size="sm" className="Admin-Button-Margin">Delete</Button>   
-                    </li>)
-                    
-                    })}
-
-                </ul>
-                </Col>
-                
-            </Row>
-
+          <Row>
+            <Col sm={{ size: 6 }} className="margin-add-top">
+              <h3 className="text-center">All Cafes</h3>
+              <Input
+                placeholder="Search"
+                value={cafeSearchTerm}
+                onChange={handleCafeSearchTermChange}
+              />
+              <Table className="margin-add-top">
+                <thead>
+                  <tr>
+                    <th>Cafe Name</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {cafes
+                    .filter((c) =>
+                      c.cafe_name
+                        .trim()
+                        .toLowerCase()
+                        .includes(cafeSearchTerm.trim().toLowerCase())
+                    )
+                    .map((cafe) => (
+                      <tr key={cafe._id}>
+                        <td>{cafe.cafe_name}</td>
+                        <td>
+                          <Button>Edit</Button>
+                        </td>
+                        <td>
+                          <Button>Delete</Button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </Col>
+            <Col sm={{ size: 6 }} className="margin-add-top">
+              <h3 className="text-center">All Coffees</h3>
+              <Input
+                placeholder="Search"
+                value={coffeeSearchTerm}
+                onChange={handleCoffeeSearchTermChange}
+              />
+              <Table className="margin-add-top">
+                <thead>
+                  <tr>
+                    <th>Cafe Name</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {coffees
+                    .filter((c) =>
+                      c.name
+                        .trim()
+                        .toLowerCase()
+                        .includes(coffeeSearchTerm.trim().toLowerCase())
+                    )
+                    .map((coffee) => (
+                      <tr key={coffee._id}>
+                        <td>{coffee.name}</td>
+                        <td>
+                          <Button>Edit</Button>
+                        </td>
+                        <td>
+                          <Button>Delete</Button>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
         </Container>
-    )
-}
+      </BrowserRouter>
+    </>
+  );
+};
 
-
-
-
-
-export default AdminDashboardView 
+export default AdminDashboardView;

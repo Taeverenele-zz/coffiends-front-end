@@ -1,55 +1,88 @@
-import React from "react"
+import React from "react";
 import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 import { Link } from "react-router-dom";
-
-
+import axios from "axios";
 
 const LoginView = (props) => { 
+  const { user, setUser, setLoggedInUser, setUserCafe } = props;
 
-    return (
-<Container>
+  const handleChange = (e) => {
+    setUser({...user, [e.target.name]: e.target.value});
+  };
 
-        <Row className="justify-content-center margin-add-top underline-text">
-            <h1>Log In</h1>
-        </Row>
+  const getUserCafe = (id) => {
+    axios
+      .get(`http://localhost:5000/cafes/user/${id}`)
+      .then((res) => {
+        setUserCafe(res.data[0]);
+      })
+      .catch((error) => console.log(error));
+  };
 
-    <Row className="justify-content-center">
-        <Form>
-            <Row>
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:5000/users/login", {
+      method: "POST",
+      body: JSON.stringify(user),
+      headers: { "Content-Type": "application/json" },
+      credentials: "include"
+    })
+      .then(data => data.json())
+      .then(json => {
+        setLoggedInUser(json);
+        getUserCafe(json.id);
+        setUser({
+          username: "",
+          password: "",
+          user_name: "",
+          role: "user",
+          phone: ""
+        });
+        if (json.role === "cafe") {
+          props.history.push("/dashboard");
+        } else if (json.role === "admin") {
+          props.history.push("/admin");
+        } else {
+          props.history.push("/");
+        };
+      })
+      .catch((error) => alert(error));
+  };
+
+  return (
+    <Container>
+      <Row className="justify-content-center margin-add-top">
+        <h1>Log In</h1>
+      </Row>
+
+      <Row className="justify-content-center">
+        <Form onSubmit={handleSubmit}>
+          <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
-                <Label for="exampleEmail" className="mr-sm-2">Email:</Label>
-                <Input type="email" name="email" id="exampleEmail" placeholder="Email:" />
+              <Label for="exampleEmail" className="mr-sm-2">Email:</Label>
+              <Input type="email" name="username" id="exampleEmail" onChange={handleChange} value={user.username} placeholder="Email:" />
             </FormGroup>
-            </Row>
-            <Row>
-                <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-                    <Label for="examplePassword" className="mr-sm-2">Password:</Label>
-                    <Input type="password" name="password" id="examplePassword" placeholder="Password:" />
-                </FormGroup>
-            </Row>
-            <Row className="justify-content-center">
-                <Button className="login-form-margin-top">Log-In</Button>
-            </Row>
+          </Row>
+          <Row>
+            <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
+              <Label for="examplePassword" className="mr-sm-2">Password:</Label>
+              <Input type="password" name="password" id="examplePassword" onChange={handleChange} value={user.password} placeholder="Password:" />
+            </FormGroup>
+          </Row>
+          <Row className="justify-content-center">
+            <Button className="login-form-margin-top">LOG IN</Button>
+          </Row>
         </Form>
-    </Row>
-
-
-        <Row className="login-form-margin-top justify-content-center">
-            <p>Not a member? click here to register. </p>
-        </Row>
-        <Row className="login-form-margin-top justify-content-center">
-            <Link to="/register"> Register Now!</Link>
-        </Row>
-
-
-
-</Container>
-
-
-    )
-
-}
-
-
+      </Row>
+      <br />
+      <Row className="login-form-margin-top justify-content-center">
+        Not signed up yet?
+      </Row>
+      <Row className="login-form-margin-top justify-content-center">
+        <Link to="/register">Sign Up Now!</Link>
+      </Row>
+    </Container>
+  );
+};
 
 export default LoginView;
