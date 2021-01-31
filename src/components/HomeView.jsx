@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 import {
   Container,
   Row,
@@ -17,11 +18,21 @@ import logo from "../assets/Logo.png";
 import coffeeImg from "../assets/coffee.svg";
 
 const HomeView = (props) => {
-  const { coffees, setCoffee } = props;
+  const { coffees, setCoffees, setUserCoffee } = props;
 
-  function addUserCoffee(name, id) {
-    setCoffee({ name, id });
-  }
+  useEffect(() => {
+    getAllCoffees();
+  }, []);
+
+  const getAllCoffees = async () => {
+    const response = await axios.get("http://localhost:5000/coffees/", coffees);
+    const allCoffees = await response.data;
+    await setCoffees(allCoffees);
+  };
+
+  function addUserCoffee(id, name) {
+    setUserCoffee({ id, name });
+  };
 
   return (
     <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
@@ -104,7 +115,7 @@ const HomeView = (props) => {
                       onClick={() => addUserCoffee(coffee.name, coffee._id)}
                     > */}
                       {/* {coffee.name} -{" "} */}
-                      <Link to="/map" onClick={() => addUserCoffee(coffee.name, coffee._id)}>
+                      <Link to="/map" onClick={() => addUserCoffee(coffee._id, coffee.name)}>
                         <Button color="primary" size="sm">
                           SEARCH
                         </Button>
