@@ -9,6 +9,7 @@ import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
 import OrderView from "./components/OrderView";
 import RegisterView from "./components/RegisterView";
+import CafeDashboardView from "./components/CafeDashboardView"
 
 const App = () => {
   const [reload, setReload] = useState(true);
@@ -122,6 +123,13 @@ const App = () => {
             path="/order"
             render={(props) => (
               <OrderView {...props} coffee={coffee} cafe={cafe} />
+            )}
+          />
+          <Route
+            exact
+            path="/CafeDashboard"
+            render={(props) => (
+              <CafeDashboardView />
             )}
           />
           <Route exact path="/login" render={() => <LoginView />} />
