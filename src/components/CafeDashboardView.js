@@ -128,9 +128,6 @@ const CafeDashboardView = (props) => {
 
         </Container>
     )
-}
-
-
-
+};
 
 export default CafeDashboardView

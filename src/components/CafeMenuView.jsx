@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Row, Col, Table } from "reactstrap";
 
-// cab022014@coderacademy.edu.au
-
 const CafeMenuView = (props) => {
   const { loggedInUser } = props;
   // const [ availCoffees, setAvailCoffees ] = useState([]);
