@@ -1,52 +1,49 @@
-import React from "react";
-import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 
 const LoginView = (props) => { 
-  const { user, setUser, setLoggedInUser, setUserCafe } = props;
+  const { setLoggedInUser, setLoggedInCafe } = props;
+  const [ loginDetails, setLoginDetails ] = useState({ username: "", password: "" });
 
   const handleChange = (e) => {
-    setUser({...user, [e.target.name]: e.target.value});
+    setLoginDetails({...loginDetails, [e.target.name]: e.target.value});
   };
 
-  const getUserCafe = (id) => {
-    axios
-      .get(`http://localhost:5000/cafes/user/${id}`)
-      .then((res) => {
-        setUserCafe(res.data[0]);
-      })
-      .catch((error) => console.log(error));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/users/login", {
+
+    let response = await fetch("http://localhost:5000/users/login", {
       method: "POST",
-      body: JSON.stringify(user),
+      body: JSON.stringify(loginDetails),
       headers: { "Content-Type": "application/json" },
       credentials: "include"
-    })
-      .then(data => data.json())
-      .then(json => {
-        setLoggedInUser(json);
-        getUserCafe(json.id);
-        setUser({
-          username: "",
-          password: "",
-          user_name: "",
-          role: "user",
-          phone: ""
-        });
-        if (json.role === "cafe") {
-          props.history.push("/dashboard");
-        } else if (json.role === "admin") {
-          props.history.push("/admin");
-        } else {
-          props.history.push("/");
-        };
-      })
-      .catch((error) => alert(error));
+    });
+    if (response.status === 400){
+      alert("Invalid login details")
+    } else {
+      const userDetails = await response.json()
+      await setLoggedInUser(userDetails);
+
+      if (userDetails.role === "cafe") {
+        response = await axios.get(`http://localhost:5000/cafes/user/${userDetails._id}`)
+        const cafeDetails = await response.data
+        await setLoggedInCafe(cafeDetails);
+        props.history.push("/dashboard");
+      } else if (userDetails.role === "admin") {
+        props.history.push("/admin");
+      } else {
+        props.history.push("/");
+      };
+      setLoginDetails({
+        username: "",
+        password: "",
+        user_name: "",
+        role: "user",
+        phone: ""
+      });
+    };
   };
 
   return (
@@ -54,19 +51,18 @@ const LoginView = (props) => {
       <Row className="justify-content-center margin-add-top">
         <h1>Log In</h1>
       </Row>
-
       <Row className="justify-content-center">
         <Form onSubmit={handleSubmit}>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
               <Label for="exampleEmail" className="mr-sm-2">Email:</Label>
-              <Input type="email" name="username" id="exampleEmail" onChange={handleChange} value={user.username} placeholder="Email:" />
+              <Input type="email" name="username" id="exampleEmail" onChange={handleChange} value={loginDetails.username} placeholder="Email:" />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
               <Label for="examplePassword" className="mr-sm-2">Password:</Label>
-              <Input type="password" name="password" id="examplePassword" onChange={handleChange} value={user.password} placeholder="Password:" />
+              <Input type="password" name="password" id="examplePassword" onChange={handleChange} value={loginDetails.password} placeholder="Password:" />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">

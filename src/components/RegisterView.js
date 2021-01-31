@@ -1,38 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 
 const RegisterView = (props) => {
-  const { user, setUser, setLoggedInUser } = props;
+  const { setLoggedInUser } = props;
+  const [ loginDetails, setLoginDetails ] = useState({
+    username: "",
+    password: "",
+    user_name: "",
+    role: "user",
+    phone: ""
+  });
 
   const handleChange = (e) => {
-    console.log(e.target.name);
-    setUser({...user, [e.target.name]: e.target.value});
+    setLoginDetails({...loginDetails, [e.target.name]: e.target.value});
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:5000/users/register", {
+
+    let response = await fetch("http://localhost:5000/users/register", {
       method: "POST",
-      body: JSON.stringify(user),
+      body: JSON.stringify(loginDetails),
       headers: { "Content-Type": "application/json" },
       credentials: "include"
-    })
-      .then(data => data.json())
-      .then(json => {
-        if (json.id) {
-          setLoggedInUser(json);
-          setUser({
-            username: "",
-            password: "",
-            user_name: "",
-            role: "user",
-            phone: ""
-          });
-          props.history.push("/");
-        } else {
-          alert(json.message);
-        };
+    });
+    const userDetails = await response.json();
+    if (userDetails.message) {
+      alert(userDetails.message)
+    } else if (userDetails._id) {
+      await setLoggedInUser(userDetails);
+      setLoginDetails({
+        username: "",
+        password: "",
+        user_name: "",
+        role: "user",
+        phone: ""
       });
+      props.history.push("/");
+    };
   };
 
   return (
@@ -45,25 +50,25 @@ const RegisterView = (props) => {
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
               <Label for="exampleEmail" className="mr-sm-2">Email:</Label>
-              <Input type="email" name="username" id="exampleEmail" onChange={handleChange} value={user.username} placeholder="Email:" />
+              <Input type="email" name="username" id="exampleEmail" onChange={handleChange} value={loginDetails.username} placeholder="Email:" />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
               <Label for="examplePassword" className="mr-sm-2">Password:</Label>
-              <Input type="password" name="password" id="examplePassword" onChange={handleChange} value={user.password} placeholder="Password:" />
+              <Input type="password" name="password" id="examplePassword" onChange={handleChange} value={loginDetails.password} placeholder="Password:" />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
               <Label for="exampleName" className="mr-sm-2">Name:</Label>
-              <Input type="name" name="user_name" id="exampleName" onChange={handleChange} value={user.user_name} placeholder="Name:" />
+              <Input type="name" name="user_name" id="exampleName" onChange={handleChange} value={loginDetails.user_name} placeholder="Name:" />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
               <Label for="exampleNumber" className="mr-sm-2">Phone:</Label>
-              <Input type="mobileNumber" name="phone" id="numberExample" onChange={handleChange} value={user.phone} placeholder="Number:" />
+              <Input type="mobileNumber" name="phone" id="numberExample" onChange={handleChange} value={loginDetails.phone} placeholder="Number:" />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">

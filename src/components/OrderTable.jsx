@@ -3,16 +3,13 @@ import { Row, Col, Table } from "reactstrap";
 import axios from "axios";
 
 const OrderTable = (props) => {
-  const { orders, getActiveOrders, getPastOrders, loggedInUser } = props;
+  const { orders, getOrders, getPastOrders, loggedInUser } = props;
 
-  const completeOrder = (id) => {
-    axios
-      .put(`http://localhost:5000/orders/${id}`)
-      .then(() => {
-        getActiveOrders();
-        getPastOrders(false);
-      })
-      .catch((error) => console.log(error));
+  const completeOrder = async (id) => {
+    const response = await axios.put(`http://localhost:5000/orders/${id}`);
+    const completedOrder = await response.data;
+    await getOrders();
+    await getPastOrders(false);
   };
 
   return (
@@ -50,7 +47,7 @@ const OrderTable = (props) => {
                     <td>${order.total.toFixed(2)}</td>
                     {(order.active && loggedInUser.role === "cafe") ? (
                       <td>
-                        <Link to="/orders" onClick={() => completeOrder(order._id)}>COMPLETE</Link>
+                        <Link to="/dashboard" onClick={() => completeOrder(order._id)}>COMPLETE</Link>
                       </td>
                     ) : (<></>)
                     }
