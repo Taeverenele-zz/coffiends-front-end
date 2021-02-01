@@ -3,7 +3,7 @@ import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import axios from "axios";
 import { Button } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
-import CafeDashboardView from "./components/CafeDashboardView.js";
+import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
 import CoffeesView from "./components/CoffeesView";
@@ -15,13 +15,12 @@ import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
 
 const App = () => {
-  const [reload, setReload] = useState(true);
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [loggedInCafe, setLoggedInCafe] = useState(null);
-  const [coffees, setCoffees] = useState([]);
-  const [userCoffee, setUserCoffee] = useState({ id: "", name: "", price: 0 });
-  const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
-  const [cafe, setCafe] = useState("");
+  const [ reload, setReload ] = useState(true);
+  const [ loggedInUser, setLoggedInUser ] = useState(null);
+  const [ coffees, setCoffees ] = useState([]);
+  const [ userCoffee, setUserCoffee ] = useState({ id: "", name: "", price: 0 });
+  const [ userLocation, setUserLocation ] = useState([ -27.468298, 153.0247838 ]);
+  const [ cafe, setCafe ] = useState("");
 
 
   // Checks session for a logged in user
@@ -110,142 +109,51 @@ const App = () => {
           </nav>
         </header>
         <Switch>
-          <Route
-            exact
-            path="/"
-            render={(props) => (
-              <HomeView
-                {...props}
-                coffees={coffees}
-                setCoffees={setCoffees}
-                setUserCoffee={setUserCoffee}
-              />
-            )}
-          />
+          <Route exact path="/" render={(props) => (
+            <HomeView {...props}
+              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} /> )} />
 
-          <Route
-            exact
-            path="/register"
-            render={(props) => (
-              <RegisterView
-                {...props}
-                setLoggedInUser={setLoggedInUser}
-                loggedInUser={loggedInUser}
-              />
-            )}
-          />
+          <Route exact path="/register" render={(props) => (
+            <RegisterView {...props}
+              setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser} /> )} />
 
-          <Route
-            exact
-            path="/login"
-            render={(props) => (
-              <LoginView
-                {...props}
-                setLoggedInUser={setLoggedInUser}
-                setLoggedInCafe={setLoggedInCafe}
-              />
-            )}
-          />
-
+          <Route exact path="/login" render={(props) => (
+            <LoginView {...props}
+              setLoggedInUser={setLoggedInUser} /> )} />
+          
           {loggedInUser ? (
             <>
-              <Route
-                exact
-                path="/map"
-                render={(props) => (
-                  <MapView
-                    {...props}
-                    userCoffee={userCoffee}
-                    setUserCoffee={setUserCoffee}
-                    userLocation={userLocation}
-                    setCafe={setCafe}
-                  />
-                )}
-              />
+              <Route exact path="/map" render={(props) => (
+                <MapView {...props}
+                  userCoffee={userCoffee} setUserCoffee={setUserCoffee} userLocation={userLocation} setCafe={setCafe} /> )} />
 
-              <Route
-                exact
-                path="/orders/new"
-                render={(props) => (
-                  <NewOrderForm
-                    {...props}
-                    userCoffee={userCoffee}
-                    cafe={cafe}
-                    loggedInUser={loggedInUser}
-                  />
-                )}
-              />
+              <Route exact path="/orders/new" render={(props) => (
+                <NewOrderForm {...props}
+                  userCoffee={userCoffee} cafe={cafe} loggedInUser={loggedInUser} /> )} />
 
-              <Route
-                exact
-                path="/orders"
-                render={(props) => (
-                  <OrdersView
-                    {...props}
-                    loggedInUser={loggedInUser}
-                    loggedInCafe={loggedInCafe}
-                  />
-                )}
-              />
+              <Route exact path="/orders" render={(props) => (
+                <OrdersView {...props}
+                  loggedInUser={loggedInUser} /> )} />
+              
+              <Route exact path="/dashboard" render={(props) => (
+                <CafeDashboardView {...props} 
+                  loggedInUser={loggedInUser} /> )} />
 
-              <Route
-                exact
-                path="/dashboard"
-                render={(props) => (
-                  <CafeDashboardView
-                    {...props}
-                    loggedInUser={loggedInUser}
-                    loggedInCafe={loggedInCafe}
-                  />
-                )}
-              />
+              <Route exact path="/menu" render={(props) => (
+                <CafeMenuView {...props}
+                  loggedInUser={loggedInUser} coffees={coffees} /> )} />
+              
+              <Route exact path="/admin" render={(props) => (
+                <AdminDashBoardView {...props}
+                  cafes={cafes} setCafes={setCafes} reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
 
-              <Route
-                exact
-                path="/menu"
-                render={(props) => (
-                  <CafeMenuView {...props} loggedInUser={loggedInUser} />
-                )}
-              />
+              <Route exact path="/coffees" render={(props) => (
+                <CoffeesView {...props}
+                  coffees={coffees} setReload={setReload} deleteCoffee={deleteCoffee} updateCoffeeArray={updateCoffeeArray} /> )} />
 
-              <Route
-                exact
-                path="/admin"
-                render={(props) => (
-                  <AdminDashBoardView
-                    {...props}
-                    reload={reload}
-                    setReload={setReload}
-                    coffees={coffees}
-                    setCoffees={setCoffees}
-                    handleLogout= {handleLogout}
-                  />
-                )}
-              />
-
-              <Route
-                exact
-                path="/coffees"
-                render={(props) => (
-                  <CoffeesView
-                    {...props}
-                    coffees={coffees}
-                    setReload={setReload}
-                    setCoffees={setCoffees}
-                  />
-                )}
-              />
-
-              {/* <Route
-                exact
-                path="/cafes"
-                render={(props) => (
-                  <CafesView
-                    {...props}
-                    setReload={setReload}
-                  />
-                )}
-              /> */}
+              <Route exact path="/cafes" render={(props) => (
+                <CafesView {...props}
+                  cafes={cafes} setCafes={setCafes} setReload={setReload} /> )} />
 
               <Route exact path="/logout">
                 <Redirect to="/login" />
