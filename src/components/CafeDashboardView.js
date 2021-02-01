@@ -21,7 +21,7 @@ const CafeDashboardView = (props) => {
     return (
         <Container> 
             <Row className="justify-content-center margin-add-top">
-                <h1>Current Orders</h1>
+                <h1> Past Orders</h1>
             </Row>
             <Row className="margin-add-top">
             <Table responsive>

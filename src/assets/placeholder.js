@@ -12,3 +12,5 @@ render={(props) => (
   <CafeDashboardView />
 )}
 /> */}
+
+<Row className="Justified-content-center" ></Row>
