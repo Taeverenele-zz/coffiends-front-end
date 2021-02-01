@@ -21,61 +21,52 @@ const App = () => {
   const [ userCoffee, setUserCoffee ] = useState({ id: "", name: "", price: 0 });
   const [ userLocation, setUserLocation ] = useState([ -27.468298, 153.0247838 ]);
   const [ cafe, setCafe ] = useState("");
-  const [ cafes, setCafes ] = useState([]);
 
+
+  // Checks session for a logged in user
   useEffect(() => {
     fetch("http://localhost:5000/users/check", { credentials: "include" })
-      .then(data => data.json())
-      .then(json => {
+      .then((data) => data.json())
+      .then((json) => {
         if (json) {
           setLoggedInUser(json);
-        };
+        }
       });
   }, []);
 
-  const updateCoffeeArray = (eachEntry) => {
-    setCoffees([...coffees, eachEntry]);
-  };
-
-  const deleteCoffee = (id) => {
-    axios
-      .delete(`http://localhost:5000/coffees/${id}`, coffees)
-      .then((res) => console.log(res))
-      .catch((error) => console.log(error));
-  };
-
-  useEffect(() => {
-    if (reload === true) {
-      axios
-        .get("http://localhost:5000/coffees/", coffees)
-        .then((res) => {
-          setCoffees(res.data);
-          setReload(false);
-        })
-        .catch((error) => console.log(error));
-      axios
-        .get("http://localhost:5000/cafes/", cafes)
-        .then((res) => {
-          setCafes(res.data);
-          setReload(false);
-        })
-        .catch((error) => console.log(error));
-    }
+  // useEffect(() => {
+  //   if (reload === true) {
+  //     axios
+  //       .get("http://localhost:5000/coffees/", coffees)
+  //       .then((res) => {
+  //         setCoffees(res.data);
+  //         setReload(false);
+  //       })
+  //       .catch((error) => console.log(error));
+  //     axios
+  //       .get("http://localhost:5000/cafes/", cafes)
+  //       .then((res) => {
+  //         setCafes(res.data);
+  //         setReload(false);
+  //       })
+  //       .catch((error) => console.log(error));
+  //   }
     // navigator.geolocation.getCurrentPosition(
     //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
     //   error => console.log(error.message)
     // );
-  }, [reload, cafes, coffees]);
-
+  // }, [reload, cafes, coffees]);
+// 
   const handleLogout = () => {
-    fetch("http://localhost:5000/users/logout", { credentials: "include" })
-      .then((res) => {
-        if (res.status == 200) {
-          setLoggedInUser(false);
-        } else {
-          console.log(res);
-        };
-      });
+    fetch("http://localhost:5000/users/logout", {
+      credentials: "include",
+    }).then((res) => {
+      if (res.status == 200) {
+        setLoggedInUser(false);
+      } else {
+        console.log(res);
+      }
+    });
   };
 
   return (
@@ -83,19 +74,37 @@ const App = () => {
       <BrowserRouter>
         <header>
           <nav>
-            <Link to="/"><img src="logo.png" alt="Logo" style={{ height: "50px" }} /></Link>
+            <Link to="/">
+              <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
+            </Link>
             <Link to="/orders"> ORDERS</Link> |{" "}
             <Link to="/dashboard">CAFE DASHBOARD</Link> |{" "}
             <Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/cafes"> CAFES</Link> |{" "}
-            <Link to="/admin">ADMIN</Link>
+            <Link to="/cafes"> CAFES</Link> | <Link to="/admin">ADMIN</Link>
             {!loggedInUser ? (
               <>
-              <Link to="/login"><Button color="primary" size="sm" style={{ margin: "2px" }}>LOG IN</Button></Link>
-              <Link to="/register"><Button color="info" size="sm" style={{ margin: "2px" }}>SIGN UP</Button></Link>
+                <Link to="/login">
+                  <Button color="primary" size="sm" style={{ margin: "2px" }}>
+                    LOG IN
+                  </Button>
+                </Link>
+                <Link to="/register">
+                  <Button color="info" size="sm" style={{ margin: "2px" }}>
+                    SIGN UP
+                  </Button>
+                </Link>
               </>
             ) : (
-              <Link to="/logout"><Button color="dark" size="sm" style={{ margin: "5px" }} onClick={handleLogout}>LOG OUT</Button></Link>
+              <Link to="/logout">
+                <Button
+                  color="dark"
+                  size="sm"
+                  style={{ margin: "5px" }}
+                  onClick={handleLogout}
+                >
+                  LOG OUT
+                </Button>
+              </Link>
             )}
           </nav>
         </header>
@@ -136,22 +145,18 @@ const App = () => {
               
               <Route exact path="/admin" render={(props) => (
                 <AdminDashBoardView {...props}
-                  cafes={cafes} setCafes={setCafes} reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
+                  reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
 
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
-                  coffees={coffees} setReload={setReload} deleteCoffee={deleteCoffee} updateCoffeeArray={updateCoffeeArray} /> )} />
-
-              <Route exact path="/cafes" render={(props) => (
-                <CafesView {...props}
-                  cafes={cafes} setCafes={setCafes} setReload={setReload} /> )} />
+                  coffees={coffees} setReload={setReload} /> )} />
 
               <Route exact path="/logout">
                 <Redirect to="/login" />
               </Route>
             </>
           ) : (
-              <h1>PLEASE LOG IN OR SIGN UP</h1>
+            <h1>PLEASE LOG IN OR SIGN UP</h1>
           )}
         </Switch>
       </BrowserRouter>

@@ -1,14 +1,25 @@
 import React from "react";
 import { Row, Col, Table } from "reactstrap";
 import NewCoffeeForm from "./NewCoffeeForm";
+import axios from "axios";
 
 const CoffeesView = (props) => {
-  const { coffees, deleteCoffee, updateCoffeeArray } = props;
+  const { coffees, setCoffees } = props;
 
   const handleClick = (index) => {
     deleteCoffee(index);
     console.log(props);
     props.setReload(true);
+  };
+  const updateCoffeeArray = (eachEntry) => {
+    setCoffees([...coffees, eachEntry]);
+  };
+
+  const deleteCoffee = (id) => {
+    axios
+      .delete(`http://localhost:5000/coffees/${id}`, coffees)
+      .then((res) => console.log(res))
+      .catch((error) => console.log(error));
   };
 
   return (
