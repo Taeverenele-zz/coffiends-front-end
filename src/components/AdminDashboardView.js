@@ -20,33 +20,39 @@ const AdminDashboardView = (props) => {
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");
   const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
 
+  // Add all coffees and cafes into state
   useEffect(() => {
     getAllCoffees();
     getAllCafes();
   }, [])
-
-  const getAllCoffees = async () => {
-    const response = await axios.get("http://localhost:5000/coffees/", coffees);
-    const allCoffees = await response.data;
-    await setCoffees(allCoffees);
+  // Get all cafes from database
+  const getAllCafes = () => {
+    axios.get("http://localhost:5000/cafes/", cafes)
+    .then(res => setCafes(res.data))
+    .catch(error => console.log(error));
   };
-  const getAllCafes = async () => {
-    const response = await axios.get("http://localhost:5000/cafes/", cafes);
-    const allCafes = await response.data;
-    await setCafes(allCafes);
-  };
-
+  
   const editCafe = (cafe) => {
     setIsEditing(true);
-    console.log(cafe)
+    console.log('!!!!!!!!', cafe)
     setCafeData(cafe);
   };
-
-
+  
   const deleteCafe = (id) => {
     axios
-      .delete(`http://localhost:5000/cafes/${id}`, cafes)
-      .then((res) => setCafes(cafes.filter(cafe => cafe._id !== id)))
+    .delete(`http://localhost:5000/cafes/${id}`, cafes)
+    .then((res) => setCafes(cafes.filter(cafe => cafe._id !== id)))
+    .catch(error => console.log(error));
+  };
+  const getAllCoffees = () => {
+    axios.get("http://localhost:5000/coffees/", coffees)
+    .then(res => setCoffees(res.data))
+    .catch(error => console.log(error))
+  };
+  const deleteCoffee = (id) => {
+    axios
+      .delete(`http://localhost:5000/coffees/${id}`, coffees)
+      .then((res) => setCoffees(coffees.filter(coffee => coffee._id !== id)))
       .catch((error) => console.log(error));
   };
 
@@ -61,7 +67,7 @@ const AdminDashboardView = (props) => {
     <>
       <BrowserRouter>
         <Navbar color="light" light>
-          <Link to="/">
+          <Link to="/admin">
             <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
           </Link>
           <div>
@@ -69,10 +75,10 @@ const AdminDashboardView = (props) => {
           </div>
           <Nav>
             <NavItem className="mr-3">
-              <Link to="/cafes/new">Add Cafe</Link>
+              <Link to="/admin/new_cafe"><Button>Add Cafe</Button></Link>
             </NavItem>
             <NavItem className="mr-3">
-              <Link to="/coffees/new">Add Coffee</Link>
+              <Link to="/admin/new_coffee"><Button>Add Coffee</Button></Link>
             </NavItem>
             <NavItem className="mr-3">
               <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
@@ -80,11 +86,11 @@ const AdminDashboardView = (props) => {
           </Nav>
         </Navbar>
         <Switch>
-          <Route exact path="/cafes/new" render={(props) => (
+          <Route exact path="/admin/new_cafe" render={(props) => (
               <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={isEditing} setIsEditing={setIsEditing} editCafe={editCafe} />
             )}
           />
-          <Route exact path="/coffees/new" render={(props) => (<NewCoffeeForm {...props} />)}
+          <Route exact path="/admin/new_coffee" render={(props) => (<NewCoffeeForm {...props} />)}
           />
         </Switch>
         <Container>
@@ -106,8 +112,8 @@ const AdminDashboardView = (props) => {
                 </thead>
                 <tbody>
                   {cafes
-                    .filter((c) =>
-                      c.cafe_name
+                    .filter((cafe) =>
+                      cafe.cafe_name
                         .trim()
                         .toLowerCase()
                         .includes(cafeSearchTerm.trim().toLowerCase())
@@ -140,8 +146,8 @@ const AdminDashboardView = (props) => {
                 </thead>
                 <tbody>
                   {coffees
-                    .filter((c) =>
-                      c.name
+                    .filter((coffee) =>
+                      coffee.name
                         .trim()
                         .toLowerCase()
                         .includes(coffeeSearchTerm.trim().toLowerCase())
@@ -153,7 +159,7 @@ const AdminDashboardView = (props) => {
                           <Button>Edit</Button>
                         </td>
                         <td>
-                          <Button>Delete</Button>
+                          <Button onClick={() => deleteCoffee(coffee._id)}>Delete</Button>
                         </td>
                       </tr>
                     ))}

@@ -19,14 +19,12 @@ const NewCafeForm = (props) => {
     console.log(isEditing)
     if (isEditing) {
       axios.get(`http://localhost:5000/users/${cafeData.owner}`).then((res) => {
-        console.log('***', res.data)
         setUserData(res.data);
       });
     }
   }, []);
 
   const addCafe = (newCafe) => {
-    console.log(cafes)
     setCafes([...cafes, newCafe]);
   };
 

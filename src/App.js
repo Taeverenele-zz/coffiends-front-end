@@ -33,29 +33,6 @@ const App = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   if (reload === true) {
-  //     axios
-  //       .get("http://localhost:5000/coffees/", coffees)
-  //       .then((res) => {
-  //         setCoffees(res.data);
-  //         setReload(false);
-  //       })
-  //       .catch((error) => console.log(error));
-  //     axios
-  //       .get("http://localhost:5000/cafes/", cafes)
-  //       .then((res) => {
-  //         setCafes(res.data);
-  //         setReload(false);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-    // navigator.geolocation.getCurrentPosition(
-    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
-    //   error => console.log(error.message)
-    // );
-  // }, [reload, cafes, coffees]);
-// 
   const handleLogout = () => {
     fetch("http://localhost:5000/users/logout", {
       credentials: "include",
@@ -79,7 +56,8 @@ const App = () => {
             <Link to="/orders"> ORDERS</Link> |{" "}
             <Link to="/dashboard">CAFE DASHBOARD</Link> |{" "}
             <Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/cafes"> CAFES</Link> | <Link to="/admin">ADMIN</Link>
+            <Link to="/cafes"> CAFES</Link> | 
+            <Link to="/admin">ADMIN</Link>
             {!loggedInUser ? (
               <>
                 <Link to="/login">
@@ -150,6 +128,7 @@ const App = () => {
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
                   coffees={coffees} setReload={setReload} /> )} />
+                  
 
               <Route exact path="/logout">
                 <Redirect to="/login" />
