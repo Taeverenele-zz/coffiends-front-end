@@ -11,7 +11,7 @@ const initialUserState = {
 };
 
 const NewCafeForm = (props) => {
-  const { setCafeData, cafeData, initialState, isEditing, setIsEditing, cafes, setCafes, editCafe } = props;
+  const { setCafeData, cafeData, initialCafeState, isEditing, setIsEditing, cafes, setCafes, editCafe } = props;
 
   const [userData, setUserData] = useState(initialUserState);
 
@@ -19,14 +19,12 @@ const NewCafeForm = (props) => {
     console.log(isEditing)
     if (isEditing) {
       axios.get(`http://localhost:5000/users/${cafeData.owner}`).then((res) => {
-        console.log('***', res.data)
         setUserData(res.data);
       });
     }
   }, []);
 
   const addCafe = (newCafe) => {
-    console.log(cafes)
     setCafes([...cafes, newCafe]);
   };
 
@@ -56,17 +54,25 @@ const NewCafeForm = (props) => {
       .then((res) => console.log(res.data));
   };
 
-  const saveNewCafe = async () => {
-    let response = await axios.post("http://localhost:5000/users/register", userData)
-    const cafeId = await response.data._id;
-    const newCafeData = {...cafeData, owner: cafeId};
-    response = await axios.post("http://localhost:5000/cafes", newCafeData)
-    setCafeData(response.data);
-    addCafe(newCafeData);
+  const saveNewUser = () => {
+    return axios.post("http://localhost:5000/users/register", userData).then(res => {
+      const cafeId = res.data._id;
+      const newCafeData = {...cafeData, owner: cafeId};
+      addCafe(newCafeData);
+      return newCafeData
+    })
   };
+
+  const saveNewCafe = (newCafeData) => {
+    return axios.post("http://localhost:5000/cafes", newCafeData).then(() => {
+      setCafeData(initialCafeState);
+      setUserData(initialUserState);
+    })
+  };
+
   const cancelEditing = () => {
     setIsEditing(false);
-    setCafeData(initialState);
+    setCafeData(initialCafeState);
     setUserData(initialUserState);
     props.history.push('/admin');
   };
@@ -81,11 +87,12 @@ const NewCafeForm = (props) => {
       updateExistingUser();
       updateExistingCafe();
     } else {
-      saveNewCafe();
+      saveNewUser().then(newCafeData => {
+        saveNewCafe(newCafeData).then(() => {
+          props.history.push('/admin');
+        });
+      })
     }
-    props.history.push('/admin');
-    // setCafeData(initialState);
-    // setUserData(initialUserState);
   };
 
   return (

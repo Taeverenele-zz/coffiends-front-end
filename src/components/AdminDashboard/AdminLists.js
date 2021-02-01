@@ -1,53 +1,13 @@
-import { React, useState, useEffect } from "react";
+import React, {useState}  from 'react'
 import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table } from "reactstrap";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import axios from "axios";
-import NewCafeForm from "./NewCafeForm";
-import NewCoffeeForm from "./NewCoffeeForm";
 
-const AdminDashboardView = (props) => {
-  const { reload, setReload, coffees, setCoffees, handleLogout } = props;
-  const [isEditing, setIsEditing] = useState(false);
-  const [cafes, setCafes] = useState([]);
-  const initialState = {
-    cafe_name: "",
-    address: "",
-    operating_hours: [],
-    location: [],
-  };
-  const [cafeData, setCafeData] = useState(initialState);
+const AdminLists = (props) => {
+
+  const {cafes, editCafe, deleteCafe,coffees, deleteCoffee} = props;
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");
   const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
 
-  useEffect(() => {
-    getAllCoffees();
-    getAllCafes();
-  }, [])
-
-  const getAllCoffees = async () => {
-    const response = await axios.get("http://localhost:5000/coffees/", coffees);
-    const allCoffees = await response.data;
-    await setCoffees(allCoffees);
-  };
-  const getAllCafes = async () => {
-    const response = await axios.get("http://localhost:5000/cafes/", cafes);
-    const allCafes = await response.data;
-    await setCafes(allCafes);
-  };
-
-  const editCafe = (cafe) => {
-    setIsEditing(true);
-    console.log(cafe)
-    setCafeData(cafe);
-  };
-
-
-  const deleteCafe = (id) => {
-    axios
-      .delete(`http://localhost:5000/cafes/${id}`, cafes)
-      .then((res) => setCafes(cafes.filter(cafe => cafe._id !== id)))
-      .catch((error) => console.log(error));
-  };
 
   const handleCafeSearchTermChange = (e) => {
     setCafeSearchTerm(e.target.value);
@@ -57,36 +17,8 @@ const AdminDashboardView = (props) => {
   };
 
   return (
-    <>
-      <BrowserRouter>
-        <Navbar color="light" light>
-          <Link to="/">
-            <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-          </Link>
-          <div>
-            <h1>COFFIENDS</h1>
-          </div>
-          <Nav>
-            <NavItem className="mr-3">
-              <Link to="/cafes/new">Add Cafe</Link>
-            </NavItem>
-            <NavItem className="mr-3">
-              <Link to="/coffees/new">Add Coffee</Link>
-            </NavItem>
-            <NavItem className="mr-3">
-              <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
-            </NavItem>
-          </Nav>
-        </Navbar>
-        <Switch>
-          <Route exact path="/cafes/new" render={(props) => (
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={isEditing} setIsEditing={setIsEditing} editCafe={editCafe} />
-            )}
-          />
-          <Route exact path="/coffees/new" render={(props) => (<NewCoffeeForm {...props} />)}
-          />
-        </Switch>
-        <Container>
+    <BrowserRouter>
+    <Container>
           <Row className="justify-content-center margin-add-top">
             <h1>Admin Dashboard</h1>
           </Row>
@@ -105,8 +37,8 @@ const AdminDashboardView = (props) => {
                 </thead>
                 <tbody>
                   {cafes
-                    .filter((c) =>
-                      c.cafe_name
+                    .filter((cafe) =>
+                      cafe.cafe_name
                         .trim()
                         .toLowerCase()
                         .includes(cafeSearchTerm.trim().toLowerCase())
@@ -115,7 +47,7 @@ const AdminDashboardView = (props) => {
                       <tr key={cafe._id}>
                         <td>{cafe.cafe_name}</td>
                         <td>
-                          <Link to='/cafes/new'><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
+                          <Link to='/admin/new_cafe'><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
                         </td>
                         <td>
                           <Button onClick={() => deleteCafe(cafe._id)}>Delete</Button>
@@ -139,8 +71,8 @@ const AdminDashboardView = (props) => {
                 </thead>
                 <tbody>
                   {coffees
-                    .filter((c) =>
-                      c.name
+                    .filter((coffee) =>
+                      coffee.name
                         .trim()
                         .toLowerCase()
                         .includes(coffeeSearchTerm.trim().toLowerCase())
@@ -152,7 +84,7 @@ const AdminDashboardView = (props) => {
                           <Button>Edit</Button>
                         </td>
                         <td>
-                          <Button>Delete</Button>
+                          <Button onClick={() => deleteCoffee(coffee._id)}>Delete</Button>
                         </td>
                       </tr>
                     ))}
@@ -161,9 +93,8 @@ const AdminDashboardView = (props) => {
             </Col>
           </Row>
         </Container>
-      </BrowserRouter>
-    </>
-  );
-};
+        </BrowserRouter>
+  )
+}
 
-export default AdminDashboardView;
+export default AdminLists
