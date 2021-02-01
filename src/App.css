@@ -65,11 +65,19 @@
   }
 
   .Dashboard-Hide {
-    opacity: 0;
     transition: 1.0s ease
   }
 
   .Dashboard-Show {
-    opacity: 1;
     transition: 1.0s ease
   }
+
+.Cafe-Dashboard-Expand {
+  align-self: center;
+  place-self: center;
+  margin-left: 20px;
+}
+
+.Cafe-Header-Margin{
+  margin-top: 30px;
+}
