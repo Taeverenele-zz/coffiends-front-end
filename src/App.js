@@ -145,15 +145,11 @@ const App = () => {
               
               <Route exact path="/admin" render={(props) => (
                 <AdminDashBoardView {...props}
-                  cafes={cafes} setCafes={setCafes} reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
+                  reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
 
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
-                  coffees={coffees} setReload={setReload} deleteCoffee={deleteCoffee} updateCoffeeArray={updateCoffeeArray} /> )} />
-
-              <Route exact path="/cafes" render={(props) => (
-                <CafesView {...props}
-                  cafes={cafes} setCafes={setCafes} setReload={setReload} /> )} />
+                  coffees={coffees} setReload={setReload} /> )} />
 
               <Route exact path="/logout">
                 <Redirect to="/login" />
