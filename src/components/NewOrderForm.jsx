@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, Redirect } from "react-router-dom";
 import axios from "axios";
+import StripeForm from "./StripeForm";
 
 const NewOrderForm = (props) => {
   const { userCoffee, cafe, loggedInUser } = props;
@@ -10,6 +11,18 @@ const NewOrderForm = (props) => {
   const [ sugar, setSugar ] = useState(0);
   const [ pickupTime, setPickupTime ] = useState(Date.now());
   const [ orderId, setOrderId ] = useState("");
+
+  const [ orderDetails, setOrderDetails ] = useState({
+      cafe: cafe._id,
+      user: loggedInUser._id,
+      coffee: userCoffee.name,
+      size: "Regular",
+      milk: "Regular",
+      sugar: 0,
+      pickup_time: "",
+      total: userCoffee.price,
+      email: loggedInUser.username,
+  });
 
   useEffect(() => {
     let time = new Date().getTime();
@@ -26,25 +39,32 @@ const NewOrderForm = (props) => {
     if (userCoffee.name === "Espresso" || userCoffee.name === "Long Black") {
       setMilk("No milk");
     };
+    setOrderDetails({ ...orderDetails, milk: milk })
+    setOrderDetails({ ...orderDetails, pickup_time: `${hr}:${min}` });
   }, []);
 
   const handleSize = (event) => {
     setSize(event.target.value);
     if (event.target.value === "Large") {
       setOrderPrice(userCoffee.price + 0.5);
+      setOrderDetails({ ...orderDetails, total: userCoffee.price + 0.5 });
     } else if (event.target.value === "Small") {
       setOrderPrice(userCoffee.price - 0.5);
+      setOrderDetails({ ...orderDetails, total: userCoffee.price - 0.5 });
     } else if (event.target.value === "Regular") {
       setOrderPrice(userCoffee.price);
+      setOrderDetails({ ...orderDetails, total: userCoffee.price });
     };
   };
 
   const handleMilk = (event) => {
     setMilk(event.target.value);
+    setOrderDetails({ ...orderDetails, milk: event.target.value });
   };
 
   const handleSugar = (event) => {
     setSugar(event.target.value);
+    setOrderDetails({ ...orderDetails, sugar: event.target.value });
   };
 
   const handlePickupTime = (event) => {
@@ -66,6 +86,7 @@ const NewOrderForm = (props) => {
       min = "0" + min;
     };
     setPickupTime(`${hr}:${min}`);
+    setOrderDetails({ ...orderDetails, pickup_time: `${hr}:${min}` });
   };
   
     const createOrder = async () => {
@@ -141,8 +162,10 @@ const NewOrderForm = (props) => {
             <option value="30">30 mins</option>
           </select>
         </div>
-        <button>${orderPrice.toFixed(2)} - BUY NOW</button>
+        {/* <button>${orderPrice.toFixed(2)} - BUY NOW</button> */}
+        {/* <Link to="/payment">PAYMENT</Link> */}
       </form>
+      <StripeForm orderDetails={orderDetails} />
       {orderId ? (
         <Redirect to="/orders" />
       ) : (<></>)
