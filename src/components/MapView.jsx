@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { Container }  from "reactstrap";
+import { Container } from "reactstrap";
 import axios from "axios";
-import NewOrderForm from './NewOrderForm';
+import NewOrderForm from "./NewOrderForm";
 import "../App.css";
 
 function MapView(props) {
   const { userCoffee, setUserCoffee, userLocation, setCafe } = props;
-  const [ cafesData, setCafesData ] = useState([]);
+  const [cafesData, setCafesData] = useState([]);
   // const [dropdownOpen, setOpen] = useState(false);
   // const toggle = () => setOpen(!dropdownOpen);
 
@@ -17,12 +17,12 @@ function MapView(props) {
   }, []);
 
   const getCafeData = async () => {
-    const time = new Date();
+    // const time = new Date();
     const postBody = {
       location: userLocation,
-      time: (String(time.getHours()) + String(time.getMinutes())),
-      // time: "1000", // uncomment line above to use actual time & comment this one out
-      coffee: userCoffee.id
+      // time: (String(time.getHours()) + String(time.getMinutes())),
+      time: "1000", // uncomment line above to use actual time & comment this one out
+      coffee: userCoffee.id,
     };
 
     const response = await axios.post("http://localhost:5000/map/", postBody);
@@ -33,11 +33,11 @@ function MapView(props) {
   function handleClick(cafe, coffee) {
     cafe.menu.map((menuitem) => {
       if (menuitem.coffee === coffee.id) {
-        setUserCoffee({ ...userCoffee, price:  menuitem.price });
-      };
+        setUserCoffee({ ...userCoffee, price: menuitem.price });
+      }
     });
     setCafe(cafe);
-  };
+  }
 
   // const showPanel = () => {
   //   var orderElement = document.getElementById("orderPanel");
@@ -62,8 +62,8 @@ function MapView(props) {
 
       <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false}>
         <TileLayer
-            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"  
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
         {cafesData.map((cafe) => (
@@ -73,19 +73,31 @@ function MapView(props) {
           >
             <Popup key={cafe._id}>
               <h3>{cafe.cafe_name}</h3>
-              <p>Hrs: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</p>
+              <p>
+                Hrs: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}
+              </p>
               <p>{cafe.address}</p>
               <p>{userCoffee.name}</p>
-              {cafe.menu.map((item) => 
-                item.coffee === userCoffee.id ? <Link to="/orders/new" onClick={() => handleClick(cafe, userCoffee)}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
+              {cafe.menu.map(
+                (item) =>
+                  item.coffee === userCoffee.id ? (
+                    <Link
+                      to="/orders/new"
+                      onClick={() => handleClick(cafe, userCoffee)}
+                    >
+                      ${item.price.toFixed(2)} - BUY NOW
+                    </Link>
+                  ) : (
+                    <></>
+                  )
                 // item.coffee === coffee.id ? <Link to="/orders/new" onClick={() => showPanel}>${item.price.toFixed(2)} - BUY NOW</Link> : <></>
               )}
             </Popup>
           </Marker>
-          ))}
-        </MapContainer>
+        ))}
+      </MapContainer>
     </>
   );
-};
+}
 
 export default MapView;

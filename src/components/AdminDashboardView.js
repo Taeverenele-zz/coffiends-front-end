@@ -1,16 +1,5 @@
 import { React, useState, useEffect } from "react";
-import {
-  Navbar,
-  Container,
-  Row,
-  Col,
-  Input,
-  Button,
-  Form,
-  NavItem,
-  Nav,
-  Table,
-} from "reactstrap";
+import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table } from "reactstrap";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import axios from "axios";
 
@@ -18,8 +7,9 @@ import NewCafeForm from "./NewCafeForm";
 import NewCoffeeForm from "./NewCoffeeForm";
 
 const AdminDashboardView = (props) => {
-  const { cafes, setCafes, reload, setReload, coffees, setCoffees } = props;
+  const { reload, setReload, coffees, setCoffees, handleLogout } = props;
   const [isEditing, setIsEditing] = useState(false);
+  const [cafes, setCafes] = useState([]);
   const initialState = {
     cafe_name: "",
     address: "",
@@ -30,13 +20,27 @@ const AdminDashboardView = (props) => {
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");
   const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
 
+  useEffect(() => {
+    getAllCoffees();
+    getAllCafes();
+  }, [])
+
+  const getAllCoffees = async () => {
+    const response = await axios.get("http://localhost:5000/coffees/", coffees);
+    const allCoffees = await response.data;
+    await setCoffees(allCoffees);
+  };
+  const getAllCafes = async () => {
+    const response = await axios.get("http://localhost:5000/cafes/", cafes);
+    const allCafes = await response.data;
+    await setCafes(allCafes);
+  };
+
   const editCafe = (cafe) => {
     setIsEditing(true);
     setCafeData(cafe);
   };
-  const addCafe = (newCafe) => {
-    setCafes([...cafes, newCafe]);
-  };
+
 
   const deleteCafe = (id) => {
     axios
@@ -70,41 +74,26 @@ const AdminDashboardView = (props) => {
               <Link to="/coffees/new">Add Coffee</Link>
             </NavItem>
             <NavItem className="mr-3">
-              <Link to="/">Log Out</Link>
+              <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
             </NavItem>
           </Nav>
         </Navbar>
         <Switch>
-          <Route
-            exact
-            path="/cafes/new"
-            render={(props) => (
-              <NewCafeForm
-                {...props}
-                cafeData={cafeData}
-                setCafeData={setCafeData}
-                addCafe={addCafe}
-              />
+          <Route exact path="/cafes/new" render={(props) => (
+              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} setIsEditing={setIsEditing} />
             )}
           />
-          <Route
-            exact
-            path="/coffees/new"
-            render={(props) => <NewCoffeeForm />}
+          <Route exact path="/coffees/new" render={(props) => (<NewCoffeeForm {...props} />)}
           />
         </Switch>
         <Container>
           <Row className="justify-content-center margin-add-top">
             <h1>Admin Dashboard</h1>
           </Row>
-
           <Row>
             <Col sm={{ size: 6 }} className="margin-add-top">
               <h3 className="text-center">All Cafes</h3>
-              <Input
-                placeholder="Search"
-                value={cafeSearchTerm}
-                onChange={handleCafeSearchTermChange}
+              <Input placeholder="Search" value={cafeSearchTerm} onChange={handleCafeSearchTermChange}
               />
               <Table className="margin-add-top">
                 <thead>
@@ -138,10 +127,7 @@ const AdminDashboardView = (props) => {
             </Col>
             <Col sm={{ size: 6 }} className="margin-add-top">
               <h3 className="text-center">All Coffees</h3>
-              <Input
-                placeholder="Search"
-                value={coffeeSearchTerm}
-                onChange={handleCoffeeSearchTermChange}
+              <Input placeholder="Search" value={coffeeSearchTerm} onChange={handleCoffeeSearchTermChange}
               />
               <Table className="margin-add-top">
                 <thead>
