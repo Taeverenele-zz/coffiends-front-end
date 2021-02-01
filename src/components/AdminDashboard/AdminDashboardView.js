@@ -7,16 +7,16 @@ import NewCafeForm from "./NewCafeForm";
 import NewCoffeeForm from "./NewCoffeeForm";
 
 const AdminDashboardView = (props) => {
-  const { reload, setReload, coffees, setCoffees, handleLogout } = props;
+  const { coffees, setCoffees, handleLogout, match } = props;
   const [isEditing, setIsEditing] = useState(false);
   const [cafes, setCafes] = useState([]);
-  const initialState = {
+  const initialCafeState = {
     cafe_name: "",
     address: "",
     operating_hours: [],
     location: [],
   };
-  const [cafeData, setCafeData] = useState(initialState);
+  const [cafeData, setCafeData] = useState(initialCafeState);
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");
   const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
 
@@ -86,14 +86,13 @@ const AdminDashboardView = (props) => {
           </Nav>
         </Navbar>
         <Switch>
-          <Route exact path="/admin/new_cafe" render={(props) => (
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={isEditing} setIsEditing={setIsEditing} editCafe={editCafe} />
+          <Route exact path={match.path + '/new_cafe'} render={(props) => (
+              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={isEditing} setIsEditing={setIsEditing} editCafe={editCafe} initialCafeState={initialCafeState} />
             )}
           />
           <Route exact path="/admin/new_coffee" render={(props) => (<NewCoffeeForm {...props} />)}
           />
-        </Switch>
-        <Container>
+          <Route exact path="/admin" render={(props) => (<Container>
           <Row className="justify-content-center margin-add-top">
             <h1>Admin Dashboard</h1>
           </Row>
@@ -122,7 +121,7 @@ const AdminDashboardView = (props) => {
                       <tr key={cafe._id}>
                         <td>{cafe.cafe_name}</td>
                         <td>
-                          <Link to='/cafes/new'><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
+                          <Link to='/admin/new_cafe'><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
                         </td>
                         <td>
                           <Button onClick={() => deleteCafe(cafe._id)}>Delete</Button>
@@ -167,7 +166,10 @@ const AdminDashboardView = (props) => {
               </Table>
             </Col>
           </Row>
-        </Container>
+        </Container>)}
+          />
+        </Switch>
+        
       </BrowserRouter>
     </>
   );

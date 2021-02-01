@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { Button } from "reactstrap";
-import AdminDashBoardView from "./components/AdminDashboardView";
+import AdminDashBoardView from "./components/AdminDashboard/AdminDashboardView";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
@@ -14,7 +14,6 @@ import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
 
 const App = () => {
-  const [ reload, setReload ] = useState(true);
   const [ loggedInUser, setLoggedInUser ] = useState(null);
   const [ coffees, setCoffees ] = useState([]);
   const [ userCoffee, setUserCoffee ] = useState({ id: "", name: "", price: 0 });
@@ -121,15 +120,14 @@ const App = () => {
                 <CafeMenuView {...props}
                   loggedInUser={loggedInUser} coffees={coffees} /> )} />
               
-              <Route exact path="/admin" render={(props) => (
+              <Route path="/admin" render={(props) => (
                 <AdminDashBoardView {...props}
-                  reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
+                  coffees={coffees} setCoffees={setCoffees} /> )} />
 
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
-                  coffees={coffees} setReload={setReload} /> )} />
+                  coffees={coffees} /> )} />
                   
-
               <Route exact path="/logout">
                 <Redirect to="/login" />
               </Route>

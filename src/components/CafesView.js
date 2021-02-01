@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Row, Col, Table } from "reactstrap";
-import NewCafeForm from "./NewCafeForm";
+import NewCafeForm from "./AdminDashboard/NewCafeForm";
 import axios from "axios";
 
 const CafeView = (props) => {
