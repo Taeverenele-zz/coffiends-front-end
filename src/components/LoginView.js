@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
 import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
 
 const LoginView = (props) => { 
-  const { setLoggedInUser, setLoggedInCafe } = props;
+  const { setLoggedInUser } = props;
   const [ loginDetails, setLoginDetails ] = useState({ username: "", password: "" });
 
   const handleChange = (e) => {
@@ -27,9 +26,6 @@ const LoginView = (props) => {
       await setLoggedInUser(userDetails);
 
       if (userDetails.role === "cafe") {
-        response = await axios.get(`http://localhost:5000/cafes/user/${userDetails._id}`)
-        const cafeDetails = await response.data
-        await setLoggedInCafe(cafeDetails);
         props.history.push("/");
       } else if (userDetails.role === "admin") {
         props.history.push("/");
