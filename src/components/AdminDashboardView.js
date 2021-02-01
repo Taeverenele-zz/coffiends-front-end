@@ -2,7 +2,6 @@ import { React, useState, useEffect } from "react";
 import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table } from "reactstrap";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import axios from "axios";
-
 import NewCafeForm from "./NewCafeForm";
 import NewCoffeeForm from "./NewCoffeeForm";
 

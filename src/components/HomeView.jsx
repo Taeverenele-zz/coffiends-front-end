@@ -72,32 +72,11 @@ const HomeView = (props) => {
         </Row>
       </Container> */}
 
-      <Container style={{ marginTop: "40px" }}>
-        <Row className="justify-content-center" style={{ height: "100px" }}>
-          <div>
-            <h1>Coffiends</h1>
-          </div>
-        </Row>
-
-        <Row
-          className="justify-content-center"
-          style={{
-            height: "150px",
-            border: "2px solid black",
-            marginBottom: "10px",
-          }}
-        >
-          <div>
-            click your favourite brew below to find cafes near you!
-          </div>
-        </Row>
-      </Container>
-
       <div>
-        <Container>
-          <Row className="justify-content-center">
+        <Container fluid="true">
+          <Row className="justify-content-center" >
             {coffees.map((coffee) => (
-              <CardDeck style={{ margin: "50px" }}>
+              <CardDeck style={{ margin: "30px" }}>
                 <Card key={coffee._id}>
                   <CardImg
                     top

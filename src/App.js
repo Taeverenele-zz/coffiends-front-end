@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import { Button } from "reactstrap";
+import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table  } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
@@ -12,6 +12,7 @@ import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
+import NavBar from "./components/NavBar"
 
 const App = () => {
   const [ reload, setReload ] = useState(true);
@@ -69,44 +70,11 @@ const App = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
-        <header>
-          <nav>
-            <Link to="/">
-              <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-            </Link>
-            <Link to="/orders"> ORDERS</Link> |{" "}
-            <Link to="/dashboard">CAFE DASHBOARD</Link> |{" "}
-            <Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/cafes"> CAFES</Link> | <Link to="/admin">ADMIN</Link>
-            {!loggedInUser ? (
-              <>
-                <Link to="/login">
-                  <Button color="primary" size="sm" style={{ margin: "2px" }}>
-                    LOG IN
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button color="info" size="sm" style={{ margin: "2px" }}>
-                    SIGN UP
-                  </Button>
-                </Link>
-              </>
-            ) : (
-              <Link to="/logout">
-                <Button
-                  color="dark"
-                  size="sm"
-                  style={{ margin: "5px" }}
-                  onClick={handleLogout}
-                >
-                  LOG OUT
-                </Button>
-              </Link>
-            )}
-          </nav>
-        </header>
+
+        <NavBar loggedInUser={loggedInUser} > </NavBar>
+
         <Switch>
           <>
           <Route exact path="/" render={(props) => (
