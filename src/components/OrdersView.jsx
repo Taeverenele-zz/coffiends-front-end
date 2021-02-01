@@ -3,7 +3,7 @@ import axios from "axios";
 import OrderTable from "./OrderTable";
 
 const OrdersView = (props) => {
-  const { loggedInUser, loggedInCafe } = props;
+  const { loggedInUser } = props;
   const [ orders, setOrders ] = useState([]);
   const [ pastOrders, setPastOrders ] = useState([]);
   const [ showPastOrders, setShowPastOrders ] = useState(false);
@@ -69,9 +69,9 @@ const OrdersView = (props) => {
   };
 
   const retrieveCafeOrders = async (pastOrders) => {
-    let url = `http://localhost:5000/cafes/${loggedInCafe._id}/orders`;
+    let url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders`;
     if (pastOrders) {
-      url = `http://localhost:5000/cafes/${loggedInCafe._id}/orders/past`;
+      url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders/past`;
     };
     const response = await axios.get(url);
     const cafeOrders = await response.data;
