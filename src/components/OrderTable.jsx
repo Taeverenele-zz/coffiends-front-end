@@ -5,11 +5,14 @@ import axios from "axios";
 const OrderTable = (props) => {
   const { orders, getOrders, getPastOrders, loggedInUser } = props;
 
-  const completeOrder = async (id) => {
-    const response = await axios.put(`http://localhost:5000/orders/${id}`);
-    const completedOrder = await response.data;
-    await getOrders();
-    await getPastOrders(false);
+  const completeOrder = (id) => {
+    axios
+      .put(`http://localhost:5000/orders/${id}`)
+      .then((res) => {
+        console.log(res.data);
+        getOrders("active");
+        getPastOrders(false);
+      })
   };
 
   return (

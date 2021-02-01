@@ -48,14 +48,17 @@ const OrdersView = (props) => {
     };
   };
 
-  const retrieveAllOrders = async (pastOrders) => {
+  const retrieveAllOrders = (pastOrders) => {
     let url = "http://localhost:5000/orders";
     if (pastOrders) {
       url = "http://localhost:5000/orders/past";
     };
-    const response = await axios.get(url);
-    const allOrders = await response.data;
-    pastOrders ? setPastOrders(allOrders) : setOrders(allOrders);
+    axios
+      .get(url)
+      .then((res) => {
+        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
+      })
+      .catch((err) => console.log(err))
   };
 
   const retrieveUserOrders = async (pastOrders) => {
@@ -63,9 +66,13 @@ const OrdersView = (props) => {
     if (pastOrders) {
       url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
     };
-    const response = await axios.get(url);
-    const userOrders = await response.data;
-    pastOrders ? setPastOrders(userOrders) : setOrders(userOrders);
+
+    axios
+      .get(url)
+      .then((res) => {
+        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
+      })
+      .catch((err) => console.log(err))
   };
 
   const retrieveCafeOrders = async (pastOrders) => {
@@ -73,9 +80,13 @@ const OrdersView = (props) => {
     if (pastOrders) {
       url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders/past`;
     };
-    const response = await axios.get(url);
-    const cafeOrders = await response.data;
-    pastOrders ? setPastOrders(cafeOrders) : setOrders(cafeOrders);
+
+    axios
+      .get(url)
+      .then((res) => {
+        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
+      })
+      .catch((err) => console.log(err))
   };
 
   return (
