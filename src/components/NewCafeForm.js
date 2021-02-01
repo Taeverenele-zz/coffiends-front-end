@@ -3,34 +3,30 @@ import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 const initialUserState = {
-  user_name: "",
-  email: "",
+  username: "",
   password: "",
-  role: "",
-  phone: "",
+  user_name: "",
+  role: "user",
+  phone: ""
 };
 
 const NewCafeForm = (props) => {
-  const {
-    addCafe,
-    setCafeData,
-    cafeData,
-    initialState,
-    editing,
-    setEditing,
-    cafes,
-    setCafes,
-  } = props;
+  const { setCafeData, cafeData, initialState, isEditing, setIsEditing, cafes, setCafes } = props;
 
   const [userData, setUserData] = useState(initialUserState);
+
   useEffect(() => {
-    if (editing) {
+    if (isEditing) {
       axios.get(`http://localhost:5000/users/${cafeData.owner}`).then((res) => {
-        console.log("test");
         setUserData(res.data);
       });
     }
-  }, [cafeData.owner, editing]);
+  }, []);
+
+  const addCafe = (newCafe) => {
+    console.log(cafes)
+    setCafes([...cafes, newCafe]);
+  };
 
   const updateCafe = (newCafe) => {
     setCafes(cafes.map((cafe) => (cafe._id == cafeData._id ? newCafe : cafe)));
@@ -49,30 +45,29 @@ const NewCafeForm = (props) => {
       .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
       .then((res) => updateCafe(res.data))
       .catch((error) => console.log(error));
-    setEditing(false);
+    setIsEditing(false);
   };
 
   const updateExistingUser = () => {
-    console.log(userData);
     axios
       .patch(`http://localhost:5000/users/${userData._id}`, userData)
       .then((res) => console.log(res.data));
   };
 
-  const saveNewCafe = () => {
-    axios.post("http://localhost:5000/users", userData).then((res) => {
-      const cafeOwner = res.data._id;
-      axios.post("http://localhost:5000/cafes", cafeData).then((res) => {
-        res.data.owner = cafeOwner;
-        addCafe(res.data);
-        axios.put(`http://localhost:5000/cafes/${res.data._id}`, res.data);
-      });
-    });
+  const saveNewCafe = async () => {
+
+    let response = await axios.post("http://localhost:5000/users/register", userData)
+    const cafeId = await response.data._id;
+    const newCafeData = {...cafeData, owner: cafeId};
+    response = await axios.post("http://localhost:5000/cafes", newCafeData)
+    setCafeData(response.data);
+    addCafe(newCafeData);
   };
   const cancelEditing = () => {
-    setEditing(false);
+    setIsEditing(false);
     setCafeData(initialState);
     setUserData(initialUserState);
+    props.history.push('/admin');
   };
 
   const handleFinalSubmit = (e) => {
@@ -80,23 +75,25 @@ const NewCafeForm = (props) => {
     // console.log(userData);
     // if (cafeData.cafe_name && cafeData.address) { // add validation that all fields must be entered
     // console.log(cafeData);
-    if (editing) {
+    if (isEditing) {
       // Save updated cafe here
       updateExistingUser();
       updateExistingCafe();
     } else {
       saveNewCafe();
+      
+      
     }
-
-    setCafeData(initialState);
-    setUserData(initialUserState);
+    props.history.push('/admin');
+    // setCafeData(initialState);
+    // setUserData(initialUserState);
   };
 
   return (
     <div>
       <Row>
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-          <h2>{editing ? "Edit" : "Add New"} Cafe</h2>
+          <h2>{isEditing ? "Edit" : "Add New"} Cafe</h2>
         </Col>
       </Row>
       <Row className="mt-4">
@@ -119,10 +116,10 @@ const NewCafeForm = (props) => {
               ></Input>
             </FormGroup>
             <FormGroup>
-              <Label for="email">Email:</Label>
+              <Label for="username">Email:</Label>
               <Input
-                name="email"
-                value={userData.email}
+                name="username"
+                value={userData.username}
                 onChange={handleUserInputChange}
               ></Input>
             </FormGroup>
