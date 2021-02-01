@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import axios from "axios";
 import { Button } from "reactstrap";
 import AdminDashBoardView from "./components/AdminDashboardView";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
@@ -109,6 +108,7 @@ const App = () => {
           </nav>
         </header>
         <Switch>
+          <>
           <Route exact path="/" render={(props) => (
             <HomeView {...props}
               coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} /> )} />
@@ -158,6 +158,7 @@ const App = () => {
           ) : (
             <h1>PLEASE LOG IN OR SIGN UP</h1>
           )}
+          </>
         </Switch>
       </BrowserRouter>
     </div>

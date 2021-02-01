@@ -38,6 +38,7 @@ const AdminDashboardView = (props) => {
 
   const editCafe = (cafe) => {
     setIsEditing(true);
+    console.log(cafe)
     setCafeData(cafe);
   };
 
@@ -45,7 +46,7 @@ const AdminDashboardView = (props) => {
   const deleteCafe = (id) => {
     axios
       .delete(`http://localhost:5000/cafes/${id}`, cafes)
-      .then((res) => console.log(res))
+      .then((res) => setCafes(cafes.filter(cafe => cafe._id !== id)))
       .catch((error) => console.log(error));
   };
 
@@ -80,7 +81,7 @@ const AdminDashboardView = (props) => {
         </Navbar>
         <Switch>
           <Route exact path="/cafes/new" render={(props) => (
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} setIsEditing={setIsEditing} />
+              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={isEditing} setIsEditing={setIsEditing} editCafe={editCafe} />
             )}
           />
           <Route exact path="/coffees/new" render={(props) => (<NewCoffeeForm {...props} />)}
@@ -115,10 +116,10 @@ const AdminDashboardView = (props) => {
                       <tr key={cafe._id}>
                         <td>{cafe.cafe_name}</td>
                         <td>
-                          <Button>Edit</Button>
+                          <Link to='/cafes/new'><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
                         </td>
                         <td>
-                          <Button>Delete</Button>
+                          <Button onClick={() => deleteCafe(cafe._id)}>Delete</Button>
                         </td>
                       </tr>
                     ))}

@@ -11,13 +11,15 @@ const initialUserState = {
 };
 
 const NewCafeForm = (props) => {
-  const { setCafeData, cafeData, initialState, isEditing, setIsEditing, cafes, setCafes } = props;
+  const { setCafeData, cafeData, initialState, isEditing, setIsEditing, cafes, setCafes, editCafe } = props;
 
   const [userData, setUserData] = useState(initialUserState);
 
   useEffect(() => {
+    console.log(isEditing)
     if (isEditing) {
       axios.get(`http://localhost:5000/users/${cafeData.owner}`).then((res) => {
+        console.log('***', res.data)
         setUserData(res.data);
       });
     }
@@ -55,7 +57,6 @@ const NewCafeForm = (props) => {
   };
 
   const saveNewCafe = async () => {
-
     let response = await axios.post("http://localhost:5000/users/register", userData)
     const cafeId = await response.data._id;
     const newCafeData = {...cafeData, owner: cafeId};
@@ -81,8 +82,6 @@ const NewCafeForm = (props) => {
       updateExistingCafe();
     } else {
       saveNewCafe();
-      
-      
     }
     props.history.push('/admin');
     // setCafeData(initialState);
