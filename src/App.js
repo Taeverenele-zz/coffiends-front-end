@@ -117,9 +117,6 @@ const App = () => {
                 <AdminHome {...props}
                   coffees={coffees} setCoffees={setCoffees} /> )} />
 
-              <Route exact path="/coffees" render={(props) => (
-                <CoffeesView {...props}
-                  coffees={coffees} /> )} />
               
               <Route exact path="/payment" render={(props) => (
                 <StripeForm {...props}
