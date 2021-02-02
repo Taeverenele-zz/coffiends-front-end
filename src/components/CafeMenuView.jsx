@@ -1,20 +1,32 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { Row, Col, Table } from "reactstrap";
+import { Container, Row, Col, Input, Button, Table, Form, FormGroup } from "reactstrap";
 
 const CafeMenuView = (props) => {
-  const { loggedInUser, coffees } = props;
+  const { loggedInUser } = props;
   const [ menu, setMenu ] = useState([]);
+  const [ coffees, setCoffees ] = useState([]);
   const [ newCoffee, setNewCoffee ] = useState("");
   const [ newPrice, setNewPrice ] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`)
-      .then((res) => setMenu(res.data))
-      .catch((err) => console.log(err));    
+    getMenuData();
   }, []);
+
+  const getMenuData = async () => {
+    let cafemenuArr = [];
+    let response = await axios.get(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`);
+    const currentMenu = await response.data;
+    setMenu(response.data);
+    await currentMenu.forEach(element => {cafemenuArr.push(element.coffee._id)});
+
+    response = await axios.get("http://localhost:5000/coffees");
+    const allCoffees = await response.data;
+
+    response = await axios.post("http://localhost:5000/coffees/available", { menu: cafemenuArr, coffees: allCoffees });
+    const availCoffs = await response.data;
+    setCoffees(availCoffs);
+  };
 
   const handleCoffeeSelect = (e) => {
     setNewCoffee(e.target.value);
@@ -44,25 +56,28 @@ const CafeMenuView = (props) => {
 
     setNewCoffee("");
     setNewPrice("");
+    getMenuData();
   };
 
   const handleDelete = async (menuitem) => {
     let response = await axios.delete(`http://localhost:5000/menuitems/${menuitem._id}`);
     const delResp = await response.data;
+    console.log(delResp);
 
     let updatedCafeMenu = loggedInUser.cafe.menu.filter((id) => id !== menuitem._id)
 
     response = await axios.put(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`, { menu: updatedCafeMenu });
     const newMenuThing = await response.data;
     console.log(newMenuThing);
+    getMenuData();
   };
 
   return (
     <>
       {(loggedInUser && menu) ? (
         <>
+        <Container>
           <h2>{loggedInUser.cafe.cafe_name}</h2>
-          <Link to="/dashboard"><button>BACK</button></Link>
           <div className="mt-4">
             <Row>
               <Col>
@@ -72,6 +87,7 @@ const CafeMenuView = (props) => {
                       <th>Coffee</th>
                       <th>Description</th>
                       <th>Price</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -81,7 +97,7 @@ const CafeMenuView = (props) => {
                         <td>{item.coffee.description}</td>
                         <td>${item.price.toFixed(2)}</td>
                         <td>
-                          <button onClick={() => handleDelete(item)} >Delete</button>
+                          <Button color="danger" onClick={() => handleDelete(item)} >Delete</Button>
                         </td>
                       </tr>
                     ))) : <></>}
@@ -91,26 +107,29 @@ const CafeMenuView = (props) => {
             </Row>
           </div>
           <hr />
-          <h4>Add Coffee To Menu</h4>
-          <br />
-          <form onSubmit={handleSubmit}>
-            <div>
-              <select onChange={handleCoffeeSelect} value={newCoffee.name} >
-              <option disabled selected value> -- select coffee -- </option>
-                {coffees.map((coffee) => 
-                  <option key={coffee._id} value={coffee._id}>{coffee.name}</option>
-                )}
-              </select>
-            </div>
-            <br />
-            <div>
-              <input type="Number" placeholder="Price (eg 3.5)" onChange={handlePrice} value={newPrice} />
-            </div>
-            <br />
-            <div>
-              <button>Add</button>
-            </div>
-          </form>
+          <Row className="mt-4">
+            <Col sm="12" md={{ size: 6, offset: 3 }}>
+              <h4>Add Coffee To Menu</h4>
+              <br />
+                <Form onSubmit={handleSubmit}>
+                  <FormGroup>
+                    <select style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleCoffeeSelect} value={newCoffee.name} >
+                    <option defaultValue=""> -- select coffee -- </option>
+                      {coffees.map((coffee) => 
+                        <option key={coffee._id} value={coffee._id}>{coffee.name}</option>
+                      )}
+                    </select>
+                  </FormGroup>
+                  <FormGroup>
+                    <Input type="Number" placeholder="Price (eg 3.5)" onChange={handlePrice} value={newPrice} />
+                  </FormGroup>
+                  <FormGroup>
+                    <Button color="primary" >Add</Button>
+                  </FormGroup>
+                </Form>
+              </Col>
+            </Row>
+          </Container>
         </>
       ) : <h3>fetching data...</h3>}
     </>
