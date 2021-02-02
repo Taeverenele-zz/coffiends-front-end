@@ -9,7 +9,7 @@ import AdminLists from "./AdminLists";
 
 const AdminHome = (props) => {
   const { match, coffees, setCoffees, handleLogout } = props;
-  
+
   const [cafes, setCafes] = useState([]);
   const initialCafeState = {
     cafe_name: "",
@@ -25,36 +25,37 @@ const AdminHome = (props) => {
   };
   const [coffeeData, setCoffeeData] = useState(initialCoffeeData);
 
-
   // Add all coffees and cafes into state
   useEffect(() => {
     getAllCoffees();
     getAllCafes();
-  }, [])
+  }, []);
   // Get all cafes from database
   const getAllCafes = () => {
-    axios.get("http://localhost:5000/cafes/", cafes)
-    .then(res => setCafes(res.data))
-    .catch(error => console.log(error));
+    axios
+      .get("http://localhost:5000/cafes/", cafes)
+      .then((res) => setCafes(res.data))
+      .catch((error) => console.log(error));
   };
-  
+
   const deleteCafe = (id) => {
     axios
-    .delete(`http://localhost:5000/cafes/${id}`, cafes)
-    .then((res) => setCafes(cafes.filter(cafe => cafe._id !== id)))
-    .catch(error => console.log(error));
+      .delete(`http://localhost:5000/cafes/${id}`, cafes)
+      .then((res) => setCafes(cafes.filter((cafe) => cafe._id !== id)))
+      .catch((error) => console.log(error));
   };
 
   // Get all coffees from the database
   const getAllCoffees = () => {
-    axios.get("http://localhost:5000/coffees/", coffees)
-    .then(res => setCoffees(res.data))
-    .catch(error => console.log(error))
+    axios
+      .get("http://localhost:5000/coffees/", coffees)
+      .then((res) => setCoffees(res.data))
+      .catch((error) => console.log(error));
   };
   const deleteCoffee = (id) => {
     axios
       .delete(`http://localhost:5000/coffees/${id}`, coffees)
-      .then((res) => setCoffees(coffees.filter(coffee => coffee._id !== id)))
+      .then((res) => setCoffees(coffees.filter((coffee) => coffee._id !== id)))
       .catch((error) => console.log(error));
   };
 
@@ -70,35 +71,99 @@ const AdminHome = (props) => {
           </div>
           <Nav>
             <NavItem className="mr-3">
-              <Link to="/admin/new_cafe"><Button>Add Cafe</Button></Link>
+              <Link to="/admin/new_cafe">
+                <Button>Add Cafe</Button>
+              </Link>
             </NavItem>
             <NavItem className="mr-3">
-              <Link to="/admin/new_coffee"><Button>Add Coffee</Button></Link>
+              <Link to="/admin/new_coffee">
+                <Button>Add Coffee</Button>
+              </Link>
             </NavItem>
             <NavItem className="mr-3">
-              <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
+              <Link to="/logout">
+                <Button onClick={handleLogout}>Log Out</Button>
+              </Link>
             </NavItem>
           </Nav>
         </Navbar>
         <Switch>
-          <Route exact path={match.path + '/new_cafe'} render={(props) => (
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={false} initialCafeState={initialCafeState} />
+          <Route
+            exact
+            path={match.path + "/new_cafe"}
+            render={(props) => (
+              <NewCafeForm
+                {...props}
+                cafes={cafes}
+                cafeData={cafeData}
+                setCafeData={setCafeData}
+                setCafes={setCafes}
+                isEditing={false}
+                initialCafeState={initialCafeState}
+              />
             )}
           />
-          <Route exact path={match.path + '/edit_cafe'} render={(props) => (
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={true} initialCafeState={initialCafeState} />
+          <Route
+            exact
+            path={match.path + "/edit_cafe"}
+            render={(props) => (
+              <NewCafeForm
+                {...props}
+                cafes={cafes}
+                cafeData={cafeData}
+                setCafeData={setCafeData}
+                setCafes={setCafes}
+                isEditing={true}
+                initialCafeState={initialCafeState}
+              />
             )}
           />
-          <Route exact path="/admin/new_coffee" render={(props) => (
-              <NewCoffeeForm {...props} isEditing={false} coffees={coffees} setCoffees={setCoffees} coffeeData={coffeeData} setCoffeeData={setCoffeeData} initialCoffeeData={initialCoffeeData} />
+          <Route
+            exact
+            path="/admin/new_coffee"
+            render={(props) => (
+              <NewCoffeeForm
+                {...props}
+                isEditing={false}
+                coffees={coffees}
+                setCoffees={setCoffees}
+                coffeeData={coffeeData}
+                setCoffeeData={setCoffeeData}
+                initialCoffeeData={initialCoffeeData}
+              />
             )}
           />
-          <Route exact path="/admin/edit_coffee" render={(props) => (
-              <NewCoffeeForm {...props} isEditing={true} coffeeData={coffeeData} setCoffeeData={setCoffeeData} initialCoffeeData={initialCoffeeData} coffees={coffees} setCoffees={setCoffees} />
+          <Route
+            exact
+            path="/admin/edit_coffee"
+            render={(props) => (
+              <NewCoffeeForm
+                {...props}
+                isEditing={true}
+                coffeeData={coffeeData}
+                setCoffeeData={setCoffeeData}
+                initialCoffeeData={initialCoffeeData}
+                coffees={coffees}
+                setCoffees={setCoffees}
+              />
             )}
           />
-          <Route exact path="/admin" render={(props) => (
-              <AdminLists {...props} cafes={cafes} deleteCafe={deleteCafe} coffees={coffees} setCoffees={setCoffees} deleteCoffee={deleteCoffee} setCafeData={setCafeData} coffeeData={coffeeData} setCoffeeData={setCoffeeData} initialCoffeeData={initialCoffeeData} />
+          <Route
+            exact
+            path="/admin"
+            render={(props) => (
+              <AdminLists
+                {...props}
+                cafes={cafes}
+                deleteCafe={deleteCafe}
+                coffees={coffees}
+                setCoffees={setCoffees}
+                deleteCoffee={deleteCoffee}
+                setCafeData={setCafeData}
+                coffeeData={coffeeData}
+                setCoffeeData={setCoffeeData}
+                initialCoffeeData={initialCoffeeData}
+              />
             )}
           />
           <Redirect to="/admin" />
