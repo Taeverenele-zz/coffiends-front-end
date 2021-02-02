@@ -15,6 +15,8 @@ import PaymentCancelView from "./components/PaymentCancelView";
 import PaymentSuccessView from "./components/PaymentSuccessView";
 import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
+import NavBar from "./components/NavBar"
+
 
 const App = () => {
   const [ loggedInUser, setLoggedInUser ] = useState(null);
@@ -48,17 +50,24 @@ const App = () => {
   };
 
   return (
+
+
+
     <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
+
+      <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout}> </NavBar>
+
+
         <Switch>
           <>
           <Route exact path="/" render={(props) => (
             <HomeView {...props}
-              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} loggedInUser={loggedInUser} /> )} />
+              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> )} />
 
           <Route exact path="/register" render={(props) => (
             <RegisterView {...props}
-              setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser} /> )} />
+              setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser}  /> )} />
 
           <Route exact path="/login" render={(props) => (
             <LoginView {...props}

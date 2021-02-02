@@ -5,7 +5,7 @@ import { Navbar,Button, NavItem, Nav } from "reactstrap";
 
 const NavBar = (props) => {
     
-    const {handleLogout, loggedInUser} = props
+    const {handleLogout, loggedInUser } = props
 
     const navConditional = () => {
         if (loggedInUser) {

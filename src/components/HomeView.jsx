@@ -16,7 +16,6 @@ import {
 } from "reactstrap";
 import logo from "../assets/Logo.png";
 import coffeeImg from "../assets/coffee.svg";
-import NavBar from "./NavBar"
 
 
 const HomeView = (props) => {
@@ -38,11 +37,6 @@ const HomeView = (props) => {
 
   return (
     <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
-
-    {console.log(loggedInUser)}
-
-      <NavBar loggedInUser={loggedInUser} > </NavBar>
-
 
       <div>
         <Container fluid="true">
