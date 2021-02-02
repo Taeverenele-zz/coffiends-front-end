@@ -10,7 +10,7 @@ const ProductDisplay = ({ handleClick, orderPrice }) => (
 );
 
 const StripeForm = (props) => {
-  const { orderDetails } = props;
+  const { orderDetails, } = props;
 
   const handleClick = async (event) => {
     const stripe = await stripePromise;
