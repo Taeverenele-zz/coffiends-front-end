@@ -3,43 +3,68 @@ import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 const NewCoffeeForm = (props) => {
-  const { updateCoffeeArray } = props;
-  const initialState = {
-    name: "",
-    description: "",
-  };
-  const [eachEntry, setEachEntry] = useState(initialState);
-  const { name, description } = eachEntry;
+  const { updateCoffeeArray, coffees, setCoffees, coffeeData, setCoffeeData, initialCoffeeData, isEditing } = props;
 
   const handleInputChange = (e) => {
-    setEachEntry({ ...eachEntry, [e.target.name]: e.target.value });
+    setCoffeeData({ ...coffeeData, [e.target.name]: e.target.value });
+  };
+  const addCoffee = (newCoffee) => {
+
+    setCoffees([...coffees, newCoffee]);
+  }
+  const saveNewCoffee = () => {
+    console.log('1')
+    return axios.post("http://localhost:5000/coffees", coffeeData).then(() => {
+      console.log('2')
+      addCoffee(coffeeData)
+      setCoffeeData(initialCoffeeData)
+    })
+  };
+  const updateCoffee = (newCoffee) => {
+    console.log(newCoffee)
+    console.log(coffees)
+    setCoffees(coffees.map((coffee) => (coffee._id == coffeeData._id ? newCoffee : coffee)));
   };
 
-  const handleFinalSubmit = (e) => {
-    e.preventDefault();
-    updateCoffeeArray(eachEntry);
+  const updateExistingCoffee = () => {
     axios
-      .post("http://localhost:5000/coffees", eachEntry)
-      .then((res) => console.log(res.data));
-    setEachEntry(initialState);
+      .put(`http://localhost:5000/coffees/${coffeeData._id}`, coffeeData)
+      .then((res) => updateCoffee(res.data))
+      .catch((error) => console.log(error));
+      props.history.push('/admin');  
+  };
+  const cancelEditing = () => {
+    setCoffeeData(initialCoffeeData);
+    props.history.push('/admin');
+  };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if(isEditing) {
+      updateExistingCoffee();
+    } else {
+      saveNewCoffee().then(() => {
+        props.history.push('/admin');
+      })
+    }
   };
 
   return (
     <div>
       <Row>
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-          <h2>Add New Coffee</h2>
+        <h2>{isEditing ? "Edit" : "Add New"} Coffee</h2>
         </Col>
       </Row>
       <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }}>
-          <Form onSubmit={handleFinalSubmit}>
+          <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label for="name">Name:</Label>
               <Input
                 name="name"
                 placeholder="coffee name"
-                value={name}
+                value={coffeeData.name}
                 onChange={handleInputChange}
               ></Input>
             </FormGroup>
@@ -48,11 +73,12 @@ const NewCoffeeForm = (props) => {
               <Input
                 name="description"
                 placeholder="description"
-                value={description}
+                value={coffeeData.description}
                 onChange={handleInputChange}
               ></Input>
             </FormGroup>
             <Button>Submit</Button>
+            <Button onClick={cancelEditing}>Cancel</Button>
           </Form>
         </Col>
       </Row>

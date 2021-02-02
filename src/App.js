@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { Button } from "reactstrap";
-import AdminDashBoardView from "./components/AdminDashboard/AdminDashboardView";
+import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
@@ -120,8 +120,8 @@ const App = () => {
                 <CafeMenuView {...props}
                   loggedInUser={loggedInUser} coffees={coffees} /> )} />
               
-              <Route path="/admin" render={(props) => (
-                <AdminDashBoardView {...props}
+              <Route exact path="/admin" render={(props) => (
+                <AdminHome {...props}
                   coffees={coffees} setCoffees={setCoffees} /> )} />
 
               <Route exact path="/coffees" render={(props) => (
