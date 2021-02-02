@@ -25,10 +25,11 @@ const HomeView = (props) => {
     getAllCoffees();
   }, []);
 
-  const getAllCoffees = async () => {
-    const response = await axios.get("http://localhost:5000/coffees/", coffees);
-    const allCoffees = await response.data;
-    await setCoffees(allCoffees);
+  const getAllCoffees = () => {
+    axios
+      .get("http://localhost:5000/coffees/", coffees)
+      .then((res) => setCoffees(res.data))
+      .catch((err) => console.log(err));
   };
 
   function addUserCoffee(id, name) {
