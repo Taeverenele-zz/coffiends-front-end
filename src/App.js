@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { Button } from "reactstrap";
-import AdminDashBoardView from "./components/AdminDashboardView";
+import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
@@ -17,7 +17,6 @@ import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
 
 const App = () => {
-  const [ reload, setReload ] = useState(true);
   const [ loggedInUser, setLoggedInUser ] = useState(null);
   const [ coffees, setCoffees ] = useState([]);
   const [ userCoffee, setUserCoffee ] = useState({ id: "", name: "", price: 0 });
@@ -36,29 +35,6 @@ const App = () => {
       });
   }, []);
 
-  // useEffect(() => {
-  //   if (reload === true) {
-  //     axios
-  //       .get("http://localhost:5000/coffees/", coffees)
-  //       .then((res) => {
-  //         setCoffees(res.data);
-  //         setReload(false);
-  //       })
-  //       .catch((error) => console.log(error));
-  //     axios
-  //       .get("http://localhost:5000/cafes/", cafes)
-  //       .then((res) => {
-  //         setCafes(res.data);
-  //         setReload(false);
-  //       })
-  //       .catch((error) => console.log(error));
-  //   }
-    // navigator.geolocation.getCurrentPosition(
-    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
-    //   error => console.log(error.message)
-    // );
-  // }, [reload, cafes, coffees]);
-// 
   const handleLogout = () => {
     fetch("http://localhost:5000/users/logout", {
       credentials: "include",
@@ -83,7 +59,8 @@ const App = () => {
             <Link to="/orders"> ORDERS</Link> |{" "}
             <Link to="/dashboard">CAFE DASHBOARD</Link> |{" "}
             <Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/cafes"> CAFES</Link> | <Link to="/admin">ADMIN</Link>
+            <Link to="/cafes"> CAFES</Link> | 
+            <Link to="/admin">ADMIN</Link>
             {!loggedInUser ? (
               <>
                 <Link to="/login">
@@ -146,19 +123,15 @@ const App = () => {
                   loggedInUser={loggedInUser} coffees={coffees} /> )} />
               
               <Route exact path="/admin" render={(props) => (
-                <AdminDashBoardView {...props}
-                  reload={reload} setReload={setReload} coffees={coffees} setCoffees={setCoffees} /> )} />
+                <AdminHome {...props}
+                  coffees={coffees} setCoffees={setCoffees} /> )} />
 
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
-                  coffees={coffees} setReload={setReload} /> )} />
+                  coffees={coffees} /> )} />
               
               <Route exact path="/payment" render={(props) => (
                 <StripeForm {...props}
-                  loggedInUser={loggedInUser} /> )} />
-              
-              <Route exact path="/payment/success" render={(props) => (
-                <PaymentSuccessView {...props}
                   loggedInUser={loggedInUser} /> )} />
               
               <Route exact path="/payment/cancel" render={(props) => (

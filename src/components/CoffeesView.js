@@ -1,6 +1,6 @@
 import React from "react";
 import { Row, Col, Table } from "reactstrap";
-import NewCoffeeForm from "./NewCoffeeForm";
+import NewCoffeeForm from "./AdminDashboard/NewCoffeeForm";
 import axios from "axios";
 
 const CoffeesView = (props) => {
