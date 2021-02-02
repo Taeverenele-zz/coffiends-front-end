@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
 
 const NewCoffeeForm = (props) => {
   const { updateCoffeeArray, coffees, setCoffees, coffeeData, setCoffeeData, initialCoffeeData, isEditing } = props;
+  const [error, setError] = useState('')
 
   const handleInputChange = (e) => {
     setCoffeeData({ ...coffeeData, [e.target.name]: e.target.value });
@@ -35,8 +36,15 @@ const NewCoffeeForm = (props) => {
     props.history.push('/admin');
   };
   
+  // const validateForm = () => {
+  //   if(coffeeData.name.length < 3) {
+  //     setError('Coffee name must be longer than 2 characters')
+  //   }
+  // }
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    // validateForm();
     if(isEditing) {
       updateExistingCoffee();
     } else {
@@ -65,6 +73,7 @@ const NewCoffeeForm = (props) => {
                 onChange={handleInputChange}
                 required
               ></Input>
+              {/* {errors.name && errors.name.type === 'required' && (<p>Name is required</p>)} */}
             </FormGroup>
             <FormGroup>
               <Label for="description">Description:</Label>
