@@ -72,7 +72,7 @@ const AdminLists = (props) => {
                 )
                 .map((cafe) => (
                   <tr key={cafe._id}>
-                    <td>{cafe.cafe_name}</td>
+                    <td style={{ width: "70%" }}>{cafe.cafe_name}</td>
                     <td>
                       <Button onClick={() => editCafe(cafe)}>Edit</Button>
                     </td>
@@ -111,7 +111,7 @@ const AdminLists = (props) => {
                 )
                 .map((coffee) => (
                   <tr key={coffee._id}>
-                    <td>{coffee.name}</td>
+                    <td style={{ width: "70%" }}>{coffee.name}</td>
                     <td>
                       <Button onClick={() => editCoffee(coffee)}>Edit</Button>
                     </td>

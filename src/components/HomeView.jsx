@@ -17,9 +17,8 @@ import {
 import logo from "../assets/Logo.png";
 import coffeeImg from "../assets/coffee.svg";
 
-
 const HomeView = (props) => {
-  const { coffees, setCoffees, setUserCoffee,loggedInUser } = props;
+  const { coffees, setCoffees, setUserCoffee, loggedInUser } = props;
 
   useEffect(() => {
     getAllCoffees();
@@ -33,14 +32,13 @@ const HomeView = (props) => {
 
   function addUserCoffee(id, name) {
     setUserCoffee({ id, name });
-  };
+  }
 
   return (
     <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
-
       <div>
         <Container fluid="true">
-          <Row className="justify-content-center" >
+          <Row className="justify-content-center">
             {coffees.map((coffee, index) => (
               <CardDeck key={index} style={{ margin: "30px" }}>
                 <Card key={coffee._id}>
@@ -51,20 +49,23 @@ const HomeView = (props) => {
                     alt="Card image cap"
                   />
                   <CardBody style={{ width: "230px" }}>
-                  <CardTitle tag="h5">{coffee.name}</CardTitle>
-                  <CardSubtitle tag="h6" className="mb-2 text-muted">
-                    {coffee.description}
-                  </CardSubtitle>
+                    <CardTitle tag="h5">{coffee.name}</CardTitle>
+                    <CardSubtitle tag="h6" className="mb-2 text-muted">
+                      {coffee.description}
+                    </CardSubtitle>
                     {/* <p
                       key={coffee._id}
                       onClick={() => addUserCoffee(coffee.name, coffee._id)}
                     > */}
-                      {/* {coffee.name} -{" "} */}
-                      <Link to="/map" onClick={() => addUserCoffee(coffee._id, coffee.name)}>
-                        <Button color="primary" size="sm">
-                          SEARCH
-                        </Button>
-                      </Link>
+                    {/* {coffee.name} -{" "} */}
+                    <Link
+                      to="/map"
+                      onClick={() => addUserCoffee(coffee._id, coffee.name)}
+                    >
+                      <Button color="primary" size="sm">
+                        SEARCH
+                      </Button>
+                    </Link>
                     {/* </p> */}
                   </CardBody>
                 </Card>
