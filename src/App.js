@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table  } from "reactstrap";
-import AdminDashBoardView from "./components/AdminDashboard/AdminDashboardView";
+import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
