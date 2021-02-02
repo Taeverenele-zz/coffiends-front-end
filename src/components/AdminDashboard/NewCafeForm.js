@@ -14,7 +14,7 @@ const NewCafeForm = (props) => {
   const {
     setCafeData,
     cafeData,
-    initialCafeState,
+    initialCafeData,
     isEditing,
     cafes,
     setCafes,
@@ -38,7 +38,7 @@ const NewCafeForm = (props) => {
   useEffect(() => {
     if (!isEditing) {
       setUserData(initialUserState);
-      setCafeData(initialCafeState);
+      setCafeData(initialCafeData);
     }
   }, [isEditing]);
 
@@ -79,6 +79,7 @@ const NewCafeForm = (props) => {
     return axios
       .post("http://localhost:5000/users/register", userData)
       .then((res) => {
+        console.log(userData);
         const cafeId = res.data._id;
         const newCafeData = { ...cafeData, owner: cafeId };
         addCafe(newCafeData);
@@ -91,19 +92,20 @@ const NewCafeForm = (props) => {
     return axios
       .post("http://localhost:5000/cafes", newCafeData)
       .then(() => {
-        setCafeData(initialCafeState);
+        setCafeData(initialCafeData);
         setUserData(initialUserState);
       })
       .catch((error) => console.log(error));
   };
 
   const cancelEditing = () => {
-    setCafeData(initialCafeState);
+    setCafeData(initialCafeData);
     setUserData(initialUserState);
     props.history.push("/admin");
   };
 
   const handleFinalSubmit = (e) => {
+    console.log(isEditing);
     e.preventDefault();
     if (isEditing) {
       // Save updated cafe here
@@ -111,6 +113,7 @@ const NewCafeForm = (props) => {
       updateExistingCafe();
     } else {
       saveNewUser().then((newCafeData) => {
+        console.log("test", newCafeData);
         saveNewCafe(newCafeData)
           .then(() => {
             props.history.push("/admin");

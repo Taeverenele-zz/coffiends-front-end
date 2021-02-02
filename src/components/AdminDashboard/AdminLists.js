@@ -1,25 +1,13 @@
 import React, { useState } from "react";
-import {
-  Navbar,
-  Container,
-  Row,
-  Col,
-  Input,
-  Button,
-  NavItem,
-  Nav,
-  Table,
-} from "reactstrap";
+import { Container, Row, Col, Input, Button, Table } from "reactstrap";
 
 const AdminLists = (props) => {
   const {
     cafes,
     deleteCafe,
     coffees,
-    setCoffees,
     deleteCoffee,
     setCafeData,
-    coffeeData,
     setCoffeeData,
   } = props;
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");

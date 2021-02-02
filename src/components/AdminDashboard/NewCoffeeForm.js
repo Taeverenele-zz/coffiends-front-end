@@ -29,11 +29,13 @@ const NewCoffeeForm = (props) => {
       .catch((error) => console.log(error));
   };
   const updateCoffee = (newCoffee) => {
+    console.log("1", coffees);
     setCoffees(
       coffees.map((coffee) =>
         coffee._id == coffeeData._id ? newCoffee : coffee
       )
     );
+    console.log("2", coffees);
   };
 
   const updateExistingCoffee = () => {

@@ -3,38 +3,35 @@ import { Navbar, Button, NavItem, Nav } from "reactstrap";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import axios from "axios";
 
-import NewCafeForm from "./NewCafeForm";
-import NewCoffeeForm from "./NewCoffeeForm";
 import AdminLists from "./AdminLists";
 
 const AdminHome = (props) => {
-  const { match, coffees, setCoffees, handleLogout } = props;
-
-  const [cafes, setCafes] = useState([]);
-  const initialCafeState = {
-    cafe_name: "",
-    address: "",
-    operating_hours: [],
-    location: [],
-  };
-  const [cafeData, setCafeData] = useState(initialCafeState);
-
-  const initialCoffeeData = {
-    name: "",
-    description: "",
-  };
-  const [coffeeData, setCoffeeData] = useState(initialCoffeeData);
+  const {
+    coffees,
+    setCoffees,
+    handleLogout,
+    cafes,
+    setCafes,
+    cafeData,
+    setCafeData,
+    coffeeData,
+    setCoffeeData,
+    initialCoffeeData,
+  } = props;
 
   // Add all coffees and cafes into state
   useEffect(() => {
     getAllCoffees();
     getAllCafes();
   }, []);
+
   // Get all cafes from database
   const getAllCafes = () => {
     axios
       .get("http://localhost:5000/cafes/", cafes)
-      .then((res) => setCafes(res.data))
+      .then((res) => {
+        setCafes(res.data);
+      })
       .catch((error) => console.log(error));
   };
 
@@ -61,7 +58,18 @@ const AdminHome = (props) => {
 
   return (
     <>
-      <BrowserRouter>
+      <AdminLists
+        {...props}
+        cafes={cafes}
+        coffees={coffees}
+        cafeData={cafeData}
+        setCafeData={setCafeData}
+        deleteCafe={deleteCafe}
+        coffees={coffees}
+        setCoffeeData={setCoffeeData}
+        deleteCoffee={deleteCoffee}
+      />
+      {/* <BrowserRouter>
         <Switch>
 
         <Route exact path={match.path + '/new_cafe'} render={(props) => (	
@@ -123,7 +131,7 @@ const AdminHome = (props) => {
           />
           <Redirect to="/admin" />
         </Switch>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </>
   );
 };
