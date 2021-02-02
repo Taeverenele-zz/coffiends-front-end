@@ -11,7 +11,10 @@ import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import OrdersView from "./components/OrdersView";
+import PaymentCancelView from "./components/PaymentCancelView";
+import PaymentSuccessView from "./components/PaymentSuccessView";
 import RegisterView from "./components/RegisterView";
+import StripeForm from "./components/StripeForm";
 
 const App = () => {
   const [ loggedInUser, setLoggedInUser ] = useState(null);
@@ -52,6 +55,7 @@ const App = () => {
             <Link to="/">
               <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
             </Link>
+            
             <Link to="/orders"> ORDERS</Link> |{" "}
             <Link to="/dashboard">CAFE DASHBOARD</Link> |{" "}
             <Link to="/coffees"> COFFEES</Link> |{" "}
@@ -71,16 +75,14 @@ const App = () => {
                 </Link>
               </>
             ) : (
-              <Link to="/logout">
-                <Button
-                  color="dark"
-                  size="sm"
-                  style={{ margin: "5px" }}
-                  onClick={handleLogout}
-                >
-                  LOG OUT
-                </Button>
-              </Link>
+              <>
+                {loggedInUser ? (<span>logged in as {loggedInUser.name}</span>) : (<></>)}
+                <Link to="/logout">
+                  <Button color="dark" size="sm" style={{ margin: "5px" }}onClick={handleLogout}>
+                    LOG OUT
+                  </Button>
+                </Link>
+              </>
             )}
           </nav>
         </header>
@@ -127,7 +129,15 @@ const App = () => {
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
                   coffees={coffees} /> )} />
-                  
+              
+              <Route exact path="/payment" render={(props) => (
+                <StripeForm {...props}
+                  loggedInUser={loggedInUser} /> )} />
+              
+              <Route exact path="/payment/cancel" render={(props) => (
+                <PaymentCancelView {...props}
+                  loggedInUser={loggedInUser} /> )} />
+
               <Route exact path="/logout">
                 <Redirect to="/login" />
               </Route>
