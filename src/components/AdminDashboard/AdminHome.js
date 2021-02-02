@@ -62,60 +62,15 @@ const AdminHome = (props) => {
   return (
     <>
       <BrowserRouter>
-        <Navbar color="light" light>
-          <Link to="/admin">
-            <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-          </Link>
-          <div>
-            <h1>COFFIENDS</h1>
-          </div>
-          <Nav>
-            <NavItem className="mr-3">
-              <Link to="/admin/new_cafe">
-                <Button>Add Cafe</Button>
-              </Link>
-            </NavItem>
-            <NavItem className="mr-3">
-              <Link to="/admin/new_coffee">
-                <Button>Add Coffee</Button>
-              </Link>
-            </NavItem>
-            <NavItem className="mr-3">
-              <Link to="/logout">
-                <Button onClick={handleLogout}>Log Out</Button>
-              </Link>
-            </NavItem>
-          </Nav>
-        </Navbar>
         <Switch>
-          <Route
-            exact
-            path={match.path + "/new_cafe"}
-            render={(props) => (
-              <NewCafeForm
-                {...props}
-                cafes={cafes}
-                cafeData={cafeData}
-                setCafeData={setCafeData}
-                setCafes={setCafes}
-                isEditing={false}
-                initialCafeState={initialCafeState}
-              />
-            )}
+
+        <Route exact path={match.path + '/new_cafe'} render={(props) => (	
+              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={false} initialCafeState={initialCafeState} />	
+            )}	
           />
-          <Route
-            exact
-            path={match.path + "/edit_cafe"}
-            render={(props) => (
-              <NewCafeForm
-                {...props}
-                cafes={cafes}
-                cafeData={cafeData}
-                setCafeData={setCafeData}
-                setCafes={setCafes}
-                isEditing={true}
-                initialCafeState={initialCafeState}
-              />
+
+          <Route exact path={match.path + '/edit_cafe'} render={(props) => (
+              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={true} initialCafeState={initialCafeState} />
             )}
           />
           <Route
