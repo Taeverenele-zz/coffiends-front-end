@@ -63,7 +63,12 @@ const AdminHome = (props) => {
     <>
       <BrowserRouter>
         <Switch>
-          
+
+        <Route exact path={match.path + '/new_cafe'} render={(props) => (	
+              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={false} initialCafeState={initialCafeState} />	
+            )}	
+          />
+
           <Route exact path={match.path + '/edit_cafe'} render={(props) => (
               <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={true} initialCafeState={initialCafeState} />
             )}
