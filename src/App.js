@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
 import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table  } from "reactstrap";
-import AdminDashBoardView from "./components/AdminDashboardView";
+import AdminDashBoardView from "./components/AdminDashboard/AdminDashboardView";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import CafesView from "./components/CafesView";
@@ -12,7 +12,6 @@ import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
-import NavBar from "./components/NavBar"
 
 const App = () => {
   const [ loggedInUser, setLoggedInUser ] = useState(null);
@@ -49,13 +48,11 @@ const App = () => {
     <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
 
-        <NavBar loggedInUser={loggedInUser} > </NavBar>
-
         <Switch>
           <>
           <Route exact path="/" render={(props) => (
             <HomeView {...props}
-              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} /> )} />
+              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} loggedInUser={loggedInUser} /> )} />
 
           <Route exact path="/register" render={(props) => (
             <RegisterView {...props}

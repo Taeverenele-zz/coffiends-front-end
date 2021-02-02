@@ -4,23 +4,46 @@ import { Navbar,Button, NavItem, Nav } from "reactstrap";
 
 
 const NavBar = (props) => {
+    
+    const {handleLogout, loggedInUser} = props
 
-   const {handleLogout, loggedInUser} = props
-
-
-    console.log(loggedInUser.role)
-
-
-   switch (loggedInUser.role){
-    case "cafe": 
-    if (loggedInUser.role === "cafe")       
-}
-
-
-
-
-
-
+    const navConditional = () => {
+        if (loggedInUser) {
+            switch (loggedInUser.role) {
+                case 'cafe':
+                  return (
+                      <>
+                         <NavItem className="mr-3">
+                            <Link to="/dashboard"><Button >Dashboard</Button></Link>
+                            </NavItem>
+                            <NavItem className="mr-3">
+                            <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
+                        </NavItem>
+                      </>
+                  )
+                case 'user':
+                  return (
+                      <>
+                        <NavItem className="mr-3">
+                             <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
+                        </NavItem>
+                    </>
+                  )
+                case 'admin':
+                  return (
+                    <>
+                      <NavItem className="mr-3">
+                             <Link to="/admin"><Button >Admin Dashboard</Button></Link>
+                      </NavItem>
+                      <NavItem className="mr-3">
+                              <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
+                      </NavItem>
+                  </>
+                )
+            }
+        }
+        return null
+    }
     return (
         <header>
             <Navbar color="light" light>
@@ -31,9 +54,7 @@ const NavBar = (props) => {
                 <h1>COFFIENDS</h1>
             </div>
             <Nav>
-                <NavItem className="mr-3">
-                <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
-                </NavItem>
+                {navConditional()}
             </Nav>
             </Navbar>
         </header>
