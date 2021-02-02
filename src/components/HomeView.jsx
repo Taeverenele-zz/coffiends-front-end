@@ -16,9 +16,11 @@ import {
 } from "reactstrap";
 import logo from "../assets/Logo.png";
 import coffeeImg from "../assets/coffee.svg";
+import NavBar from "./NavBar"
+
 
 const HomeView = (props) => {
-  const { coffees, setCoffees, setUserCoffee } = props;
+  const { coffees, setCoffees, setUserCoffee,loggedInUser } = props;
 
   useEffect(() => {
     getAllCoffees();
@@ -36,68 +38,17 @@ const HomeView = (props) => {
 
   return (
     <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
-      {/* <Container style={{ padding: "0", margin: "0" }} fluid="true">
-        <Row className="align-items-center">
-          <Col sm={{ size: 4 }} xs={{ size: 4 }}>
-            <a href="/">
-              <img src={logo} alt="Logo" style={{ height: "125px" }}></img>
-            </a>
-          </Col>
 
-          <Col
-            sm={{ size: 4 }}
-            xs={{ size: 4 }}
-            className="justify-content-center text-center"
-          >
-            <input
-              type="search"
-              id=""
-              name=""
-              placeholder="Search Coffee?"
-            ></input>
-          </Col>
+    {console.log(loggedInUser)}
 
-          <Col sm={{ size: 4 }} xs={{ size: 3 }} style={{ textAlign: "end" }}>
-            <Link to="/login">
-              <Button color="primary" size="sm" style={{ margin: "10px" }}>
-                Log In
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button color="primary" size="sm">
-                Sign Up
-              </Button>
-            </Link>
-          </Col>
-        </Row>
-      </Container> */}
+      <NavBar loggedInUser={loggedInUser} > </NavBar>
 
-      <Container style={{ marginTop: "40px" }}>
-        <Row className="justify-content-center" style={{ height: "100px" }}>
-          <div>
-            <h1>Coffiends</h1>
-          </div>
-        </Row>
-
-        <Row
-          className="justify-content-center"
-          style={{
-            height: "150px",
-            border: "2px solid black",
-            marginBottom: "10px",
-          }}
-        >
-          <div>
-            click your favourite brew below to find cafes near you!
-          </div>
-        </Row>
-      </Container>
 
       <div>
-        <Container>
-          <Row className="justify-content-center">
-            {coffees.map((coffee) => (
-              <CardDeck style={{ margin: "50px" }}>
+        <Container fluid="true">
+          <Row className="justify-content-center" >
+            {coffees.map((coffee, index) => (
+              <CardDeck key={index} style={{ margin: "30px" }}>
                 <Card key={coffee._id}>
                   <CardImg
                     top

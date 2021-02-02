@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import { Button } from "reactstrap";
+import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table  } from "reactstrap";
 import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
@@ -48,49 +48,13 @@ const App = () => {
   };
 
   return (
-    <div className="container mt-4">
+    <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
-        <header>
-          <nav>
-            <Link to="/">
-              <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-            </Link>
-            
-            <Link to="/orders"> ORDERS</Link> |{" "}
-            <Link to="/dashboard">CAFE DASHBOARD</Link> |{" "}
-            <Link to="/coffees"> COFFEES</Link> |{" "}
-            <Link to="/cafes"> CAFES</Link> | 
-            <Link to="/admin">ADMIN</Link>
-            {!loggedInUser ? (
-              <>
-                <Link to="/login">
-                  <Button color="primary" size="sm" style={{ margin: "2px" }}>
-                    LOG IN
-                  </Button>
-                </Link>
-                <Link to="/register">
-                  <Button color="info" size="sm" style={{ margin: "2px" }}>
-                    SIGN UP
-                  </Button>
-                </Link>
-              </>
-            ) : (
-              <>
-                {loggedInUser ? (<span>logged in as {loggedInUser.name}</span>) : (<></>)}
-                <Link to="/logout">
-                  <Button color="dark" size="sm" style={{ margin: "5px" }}onClick={handleLogout}>
-                    LOG OUT
-                  </Button>
-                </Link>
-              </>
-            )}
-          </nav>
-        </header>
         <Switch>
           <>
           <Route exact path="/" render={(props) => (
             <HomeView {...props}
-              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} /> )} />
+              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee} loggedInUser={loggedInUser} /> )} />
 
           <Route exact path="/register" render={(props) => (
             <RegisterView {...props}
