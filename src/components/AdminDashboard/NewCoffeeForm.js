@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
+
 
 const NewCoffeeForm = (props) => {
   const { updateCoffeeArray, coffees, setCoffees, coffeeData, setCoffeeData, initialCoffeeData, isEditing } = props;
@@ -13,16 +14,12 @@ const NewCoffeeForm = (props) => {
     setCoffees([...coffees, newCoffee]);
   }
   const saveNewCoffee = () => {
-    console.log('1')
     return axios.post("http://localhost:5000/coffees", coffeeData).then(() => {
-      console.log('2')
       addCoffee(coffeeData)
       setCoffeeData(initialCoffeeData)
     })
   };
   const updateCoffee = (newCoffee) => {
-    console.log(newCoffee)
-    console.log(coffees)
     setCoffees(coffees.map((coffee) => (coffee._id == coffeeData._id ? newCoffee : coffee)));
   };
 
