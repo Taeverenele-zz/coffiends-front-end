@@ -63,6 +63,7 @@ const NewCoffeeForm = (props) => {
                 placeholder="coffee name"
                 value={coffeeData.name}
                 onChange={handleInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -72,6 +73,7 @@ const NewCoffeeForm = (props) => {
                 placeholder="description"
                 value={coffeeData.description}
                 onChange={handleInputChange}
+                required
               ></Input>
             </FormGroup>
             <Button>Submit</Button>

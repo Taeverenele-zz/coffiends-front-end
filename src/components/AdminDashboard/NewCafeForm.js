@@ -119,6 +119,7 @@ const NewCafeForm = (props) => {
                 name="cafe_name"
                 value={cafeData.cafe_name}
                 onChange={handleCafeInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -127,6 +128,7 @@ const NewCafeForm = (props) => {
                 name="user_name"
                 value={userData.user_name}
                 onChange={handleUserInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -135,6 +137,7 @@ const NewCafeForm = (props) => {
                 name="username"
                 value={userData.username}
                 onChange={handleUserInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -143,6 +146,7 @@ const NewCafeForm = (props) => {
                 name="password"
                 value={userData.password}
                 onChange={handleUserInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -151,6 +155,7 @@ const NewCafeForm = (props) => {
                 name="role"
                 value={userData.role}
                 onChange={handleUserInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -159,6 +164,7 @@ const NewCafeForm = (props) => {
                 name="phone"
                 value={userData.phone}
                 onChange={handleUserInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
@@ -167,12 +173,14 @@ const NewCafeForm = (props) => {
                 name="address"
                 value={cafeData.address}
                 onChange={handleCafeInputChange}
+                required
               ></Input>
             </FormGroup>
             <FormGroup>
               <Label for="opening">Opening time:</Label>
               <Input
                 name="operating_hours[0]"
+                required
                 value={cafeData.operating_hours[0] || ""}
                 onChange={(e) =>
                   handleCafeInputChange({
@@ -188,6 +196,7 @@ const NewCafeForm = (props) => {
               <Label for="closing">Closing time:</Label>
               <Input
                 name="operating_hours[1]"
+                required
                 value={cafeData.operating_hours[1] || ""}
                 onChange={(e) =>
                   handleCafeInputChange({
@@ -203,6 +212,7 @@ const NewCafeForm = (props) => {
               <Label for="latitude">Latitude:</Label>
               <Input
                 name="location[0]"
+                required
                 value={cafeData.location[0] || ""}
                 onChange={(e) =>
                   handleCafeInputChange({
@@ -218,6 +228,7 @@ const NewCafeForm = (props) => {
               <Label for="longitude">Longitude:</Label>
               <Input
                 name="location[1]"
+                required
                 value={cafeData.location[1] || ""}
                 onChange={(e) =>
                   handleCafeInputChange({
