@@ -4,7 +4,7 @@ import axios from "axios";
 
 
 const OrderTable = (props) => {
-  const { orders, getOrders, getPastOrders, loggedInUser, setOrders } = props;
+  const { orders, getOrders, getPastOrders, loggedInUser } = props;
 
   const completeOrder = (id) => {
     axios
@@ -14,6 +14,7 @@ const OrderTable = (props) => {
         getOrders("active");
         getPastOrders(false);
       })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -51,7 +52,7 @@ const OrderTable = (props) => {
                     <td>{order.sugar}</td>
                     <td>{order.pickup_time}</td>
                     <td>${order.total.toFixed(2)}</td>
-                    {(order.active && loggedInUser.role === "cafe") ? (
+                    {(loggedInUser && order.active && loggedInUser.role === "cafe") ? (
                       <td>
                          <Button onClick={() => completeOrder(order._id)}>Complete</Button>
                       </td>

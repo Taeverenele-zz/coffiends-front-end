@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Container, Row, Col, Input, Button, Table, Form, FormGroup } from "reactstrap";
 
 const CafeMenuView = (props) => {
-  const { loggedInUser } = props;
+  const { loggedInUser, getUserSession } = props;
   const [ menu, setMenu ] = useState([]);
   const [ coffees, setCoffees ] = useState([]);
   const [ newCoffee, setNewCoffee ] = useState("");
@@ -14,8 +14,9 @@ const CafeMenuView = (props) => {
   }, []);
 
   const getMenuData = async () => {
+    const user = await getUserSession();
     let cafemenuArr = [];
-    let response = await axios.get(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`);
+    let response = await axios.get(`http://localhost:5000/cafes/${user.cafe._id}/menu`);
     const currentMenu = await response.data;
     setMenu(response.data);
     await currentMenu.forEach(element => {cafemenuArr.push(element.coffee._id)});

@@ -92,7 +92,7 @@ const LoginView = (props) => {
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button className="login-form-margin-top">LOG IN</Button>
+            <Button className="login-form-margin-top" color="success">LOG IN</Button>
           </Row>
         </Form>
       </Row>

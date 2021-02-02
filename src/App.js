@@ -12,6 +12,7 @@ import PaymentCancelView from "./components/PaymentCancelView";
 import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
+import axios from "axios";
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -22,14 +23,23 @@ const App = () => {
 
   // Checks session for a logged in user
   useEffect(() => {
-    fetch("http://localhost:5000/users/check", { credentials: "include" })
-      .then((data) => data.json())
-      .then((json) => {
-        if (json) {
-          setLoggedInUser(json);
-        }
-      });
+    // fetch("http://localhost:5000/users/check", { credentials: "include" })
+    //   .then((data) => data.json())
+    //   .then((json) => {
+    //     if (json) {
+    //       setLoggedInUser(json);
+    //     }
+    //   });
+    getUserSession();
   }, []);
+
+  const getUserSession = async () => {
+    const response = await fetch("http://localhost:5000/users/check", { credentials: "include" })
+    const logged = await response.json();
+    console.log(logged)
+    setLoggedInUser(logged)
+    return logged
+  }
 
   const handleLogout = () => {
     fetch("http://localhost:5000/users/logout", {
@@ -76,9 +86,26 @@ const App = () => {
 
         <Switch>
           <>
-            <Route exact path="/" render={(props) => (
-              <HomeView {...props}
-                coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> )} />
+          {!loggedInUser ? (
+              <Route exact path="/" render={(props) => (
+                <LoginView {...props}
+                  setLoggedInUser={setLoggedInUser} /> )} />
+            ) : (<></>)}
+            {loggedInUser && loggedInUser.role === "user" ? (
+              <Route exact path="/" render={(props) =>
+                (<HomeView {...props}
+                  coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> )} />
+            ) : (<></>)}
+            {loggedInUser && loggedInUser.role === "cafe" ? (
+               <Route exact path="/" render={(props) => (
+                <CafeDashboardView {...props} 
+                  loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
+            ) : (<></>)}
+            {loggedInUser && loggedInUser.role === "admin" ? (
+               <Route exact path="/" render={(props) => (
+                <AdminHome {...props}
+                  coffees={coffees} setCoffees={setCoffees} /> )} />
+            ) : (<></>)}
 
             <Route exact path="/register" render={(props) => (
               <RegisterView {...props}
@@ -98,15 +125,15 @@ const App = () => {
 
             <Route exact path="/orders" render={(props) => (
               <OrdersView {...props}
-                loggedInUser={loggedInUser} /> )} />
+                loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
             
             <Route exact path="/dashboard" render={(props) => (
               <CafeDashboardView {...props} 
-                loggedInUser={loggedInUser} /> )} />
+                loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
 
             <Route exact path="/menu" render={(props) => (
               <CafeMenuView {...props}
-                loggedInUser={loggedInUser} coffees={coffees} /> )} />
+                loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
             
             <Route exact path="/admin" render={(props) => (
               <AdminHome {...props}

@@ -6,31 +6,40 @@ import { BsFillPlusSquareFill } from 'react-icons/bs';
 import { BsDashSquareFill } from 'react-icons/bs';
 
 const OrdersView = (props) => {
-  const { loggedInUser } = props;
+  // const { getUserSession } = props;
+  const [loggedInUser, setLoggedInUser] = useState(null);
   const [ orders, setOrders ] = useState([]);
   const [ pastOrders, setPastOrders ] = useState([]);
   const [ showPastOrders, setShowPastOrders ] = useState(false);
-
 
   useEffect(() => {
     getOrders("active");
   }, []);
 
-  const getOrders = (type) => {
+  const getUserSession = async () => {
+    const response = await fetch("http://localhost:5000/users/check", { credentials: "include" })
+    const logged = await response.json();
+    console.log(logged)
+    setLoggedInUser(logged)
+    return logged
+  }
+
+  const getOrders = async (type) => {
+    const user = await getUserSession();
     switch (type) {
       case "active":
-        if (loggedInUser.role === "user") {
+        if (user.role === "user") {
           retrieveUserOrders();
-        } else if (loggedInUser.role === "cafe") {
+        } else if (user.role === "cafe") {
           retrieveCafeOrders();
         } else {
           retrieveAllOrders();
         };
         break;
       case "past":
-        if (loggedInUser.role === "user") {
+        if (user.role === "user") {
           retrieveUserOrders("past");
-        } else if (loggedInUser.role === "cafe") {
+        } else if (user.role === "cafe") {
           retrieveCafeOrders("past");
         } else {
           retrieveAllOrders("past");
@@ -66,9 +75,10 @@ const OrdersView = (props) => {
   };
 
   const retrieveUserOrders = async (pastOrders) => {
-    let url = `http://localhost:5000/users/${loggedInUser._id}/orders`;
+    const user = await getUserSession();
+    let url = `http://localhost:5000/users/${user._id}/orders`;
     if (pastOrders) {
-      url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
+      url = `http://localhost:5000/users/${user._id}/orders/past`;
     };
     const response = await axios.get(url);
     const userOrders = response.data;
@@ -76,9 +86,10 @@ const OrdersView = (props) => {
   };
 
   const retrieveCafeOrders = async (pastOrders) => {
-    let url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders`;
+    const user = await getUserSession();
+    let url = `http://localhost:5000/cafes/${user.cafe._id}/orders`;
     if (pastOrders) {
-      url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders/past`;
+      url = `http://localhost:5000/cafes/${user.cafe._id}/orders/past`;
     };
 
     axios
@@ -97,7 +108,6 @@ const OrdersView = (props) => {
           <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders} loggedInUser={loggedInUser} />
         </Row>
         <Row className="justify-content-center ">
-
             <h1 className="justify-content-center Cafe-Header-Margin">Past Orders</h1>
               <div className="Cafe-Dashboard-Expand Cafe-Header-Margin" >
                 <BsFillPlusSquareFill onClick={() => getPastOrders(true)} />

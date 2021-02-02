@@ -6,7 +6,7 @@ const CafeDashboardView = (props) => {
   const { loggedInUser } = props;
 
   return (
-    loggedInUser.cafe ?
+    loggedInUser && loggedInUser.cafe ?
     (<>
       <Container>
         <h2>{loggedInUser.cafe.cafe_name}</h2>
