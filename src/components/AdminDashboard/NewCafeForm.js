@@ -25,9 +25,12 @@ const NewCafeForm = (props) => {
   // on initial load
   useEffect(() => {
     if (isEditing) {
-      axios.get(`http://localhost:5000/users/${cafeData.owner}`).then((res) => {
-        setUserData(res.data);
-      });
+      axios
+        .get(`http://localhost:5000/users/${cafeData.owner}`)
+        .then((res) => {
+          setUserData(res.data);
+        })
+        .catch((error) => console.log(error));
     }
   }, []);
 
@@ -68,7 +71,8 @@ const NewCafeForm = (props) => {
   const updateExistingUser = () => {
     axios
       .patch(`http://localhost:5000/users/${userData._id}`, userData)
-      .then((res) => console.log(res.data));
+      .then((res) => console.log(res.data))
+      .catch((error) => console.log(error));
   };
 
   const saveNewUser = () => {
@@ -79,14 +83,18 @@ const NewCafeForm = (props) => {
         const newCafeData = { ...cafeData, owner: cafeId };
         addCafe(newCafeData);
         return newCafeData;
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   const saveNewCafe = (newCafeData) => {
-    return axios.post("http://localhost:5000/cafes", newCafeData).then(() => {
-      setCafeData(initialCafeState);
-      setUserData(initialUserState);
-    });
+    return axios
+      .post("http://localhost:5000/cafes", newCafeData)
+      .then(() => {
+        setCafeData(initialCafeState);
+        setUserData(initialUserState);
+      })
+      .catch((error) => console.log(error));
   };
 
   const cancelEditing = () => {
@@ -97,18 +105,17 @@ const NewCafeForm = (props) => {
 
   const handleFinalSubmit = (e) => {
     e.preventDefault();
-    // console.log(userData);
-    // if (cafeData.cafe_name && cafeData.address) { // add validation that all fields must be entered
-    // console.log(cafeData);
     if (isEditing) {
       // Save updated cafe here
       updateExistingUser();
       updateExistingCafe();
     } else {
       saveNewUser().then((newCafeData) => {
-        saveNewCafe(newCafeData).then(() => {
-          props.history.push("/admin");
-        });
+        saveNewCafe(newCafeData)
+          .then(() => {
+            props.history.push("/admin");
+          })
+          .catch((error) => console.log(error));
       });
     }
   };
