@@ -18,12 +18,14 @@ import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar"
 
 
+
 const App = () => {
   const [ loggedInUser, setLoggedInUser ] = useState(null);
   const [ coffees, setCoffees ] = useState([]);
   const [ userCoffee, setUserCoffee ] = useState({ id: "", name: "", price: 0 });
   const [ userLocation, setUserLocation ] = useState([ -27.468298, 153.0247838 ]);
   const [ cafe, setCafe ] = useState("");
+
 
 
   // Checks session for a logged in user
@@ -48,10 +50,32 @@ const App = () => {
       }
     });
   };
+  
+
+  const homePageConditional = (props) => {
+    if (loggedInUser) {
+        switch (loggedInUser.role) {
+            case 'cafe':
+              return (
+                     <CafeDashboardView {...props} 
+                    loggedInUser={loggedInUser} />
+              )
+            case 'user':
+              return (
+                    <HomeView {...props}
+                      coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> 
+              )
+            case 'admin':
+              return (
+                  <AdminHome {...props}
+                    coffees={coffees} setCoffees={setCoffees} />
+            )
+    }
+    return null
+      }
+  }
 
   return (
-
-
 
     <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
@@ -61,20 +85,21 @@ const App = () => {
 
         <Switch>
           <>
-          <Route exact path="/" render={(props) => (
-            <HomeView {...props}
-              coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> )} />
 
           <Route exact path="/register" render={(props) => (
             <RegisterView {...props}
-              setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser}  /> )} />
+            setLoggedInUser={setLoggedInUser} loggedInUser={loggedInUser}  /> )} />
 
           <Route exact path="/login" render={(props) => (
             <LoginView {...props}
-              setLoggedInUser={setLoggedInUser} /> )} />
+            setLoggedInUser={setLoggedInUser} /> )} />
+          
           
           {loggedInUser ? (
             <>
+
+              <Route exact path="/" render={(props) => (homePageConditional(props))} />
+
               <Route exact path="/map" render={(props) => (
                 <MapView {...props}
                   userCoffee={userCoffee} setUserCoffee={setUserCoffee} userLocation={userLocation} setCafe={setCafe} /> )} />
@@ -114,6 +139,7 @@ const App = () => {
               <Route exact path="/logout">
                 <Redirect to="/login" />
               </Route>
+
             </>
           ) : (
             <h1>PLEASE LOG IN OR SIGN UP</h1>

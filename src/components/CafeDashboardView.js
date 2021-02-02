@@ -1,4 +1,4 @@
-import {React, useState} from "react";
+import {React} from "react";
 import { Container, Row, Col, Input, Button, Form, Table } from 'reactstrap';
 import { BsFillPlusSquareFill } from 'react-icons/bs';
 import { BsDashSquareFill } from 'react-icons/bs';
@@ -18,6 +18,8 @@ const showOrders = () => {
 
 
 const CafeDashboardView = (props) => {
+    // console.log(props)
+
     return (
         <Container> 
             <Row className="justify-content-center margin-add-top">

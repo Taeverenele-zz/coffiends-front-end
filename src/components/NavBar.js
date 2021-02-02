@@ -7,15 +7,17 @@ const NavBar = (props) => {
     
     const {handleLogout, loggedInUser } = props
 
-    const navConditional = () => {
+ 
+
+    const roleConditional = () => {
         if (loggedInUser) {
             switch (loggedInUser.role) {
                 case 'cafe':
                   return (
                       <>
                          <NavItem className="mr-3">
-                            <Link to="/dashboard"><Button >Dashboard</Button></Link>
-                            </NavItem>
+                            <Link to="/menu"><Button >Menu</Button></Link>
+                        </NavItem>
                             <NavItem className="mr-3">
                             <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
                         </NavItem>
@@ -25,6 +27,9 @@ const NavBar = (props) => {
                   return (
                       <>
                         <NavItem className="mr-3">
+                             <Link to="/orders"><Button>Orders</Button></Link>
+                        </NavItem>
+                        <NavItem className="mr-3">
                              <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
                         </NavItem>
                     </>
@@ -32,11 +37,14 @@ const NavBar = (props) => {
                 case 'admin':
                   return (
                     <>
+                    <NavItem className="mr-3">
+                        <Link to="/admin/new_cafe"><Button>Add Cafe</Button></Link>
+                    </NavItem>
+                    <NavItem className="mr-3">
+                        <Link to="/admin/new_coffee"><Button>Add Coffee</Button></Link>
+                    </NavItem>
                       <NavItem className="mr-3">
-                             <Link to="/admin"><Button >Admin Dashboard</Button></Link>
-                      </NavItem>
-                      <NavItem className="mr-3">
-                              <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
+                        <Link to="/logout"><Button onClick={handleLogout}>Log Out</Button></Link>
                       </NavItem>
                   </>
                 )
@@ -54,7 +62,7 @@ const NavBar = (props) => {
                 <h1>COFFIENDS</h1>
             </div>
             <Nav>
-                {navConditional()}
+                {roleConditional()}
             </Nav>
             </Navbar>
         </header>
