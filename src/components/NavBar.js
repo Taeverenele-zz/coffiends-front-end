@@ -62,23 +62,10 @@ const NavBar = (props) => {
     }
     return null;
   };
-
-  const getHomePageForCurrentRole = () => {
-    if (loggedInUser) {
-      switch (loggedInUser.role) {
-        case "cafe":
-          return "/dashboard";
-        case "admin":
-          return "/admin";
-        default:
-          return "/";
-      }
-    }
-  };
   return (
     <header>
       <Navbar color="light" light>
-        <Link to={getHomePageForCurrentRole()}>
+        <Link to="/">
           <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
         </Link>
         <div>
