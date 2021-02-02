@@ -11,7 +11,10 @@ import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import OrdersView from "./components/OrdersView";
+import PaymentCancelView from "./components/PaymentCancelView";
+import PaymentSuccessView from "./components/PaymentSuccessView";
 import RegisterView from "./components/RegisterView";
+import StripeForm from "./components/StripeForm";
 
 const App = () => {
   const [ loggedInUser, setLoggedInUser ] = useState(null);
@@ -47,7 +50,6 @@ const App = () => {
   return (
     <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
-
         <Switch>
           <>
           <Route exact path="/" render={(props) => (
@@ -91,7 +93,15 @@ const App = () => {
               <Route exact path="/coffees" render={(props) => (
                 <CoffeesView {...props}
                   coffees={coffees} /> )} />
-                  
+              
+              <Route exact path="/payment" render={(props) => (
+                <StripeForm {...props}
+                  loggedInUser={loggedInUser} /> )} />
+              
+              <Route exact path="/payment/cancel" render={(props) => (
+                <PaymentCancelView {...props}
+                  loggedInUser={loggedInUser} /> )} />
+
               <Route exact path="/logout">
                 <Redirect to="/login" />
               </Route>
