@@ -1,10 +1,9 @@
 import React, {useState}  from 'react'
 import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table } from "reactstrap";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 
 const AdminLists = (props) => {
 
-  const {cafes, editCafe, deleteCafe,coffees, deleteCoffee} = props;
+  const {cafes, deleteCafe, coffees, setCoffees, deleteCoffee, setCafeData, coffeeData, setCoffeeData } = props;
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");
   const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
 
@@ -16,8 +15,18 @@ const AdminLists = (props) => {
     setCoffeeSearchTerm(e.target.value);
   };
 
+  const editCafe = (cafe) => {
+    setCafeData(cafe);
+    props.history.push('/admin/edit_cafe');
+  };
+  const editCoffee = (coffee) => {
+    console.log(coffee)
+    setCoffeeData(coffee);
+    console.log('nele',coffeeData)
+    props.history.push('/admin/edit_coffee');
+  };
+
   return (
-    <BrowserRouter>
     <Container>
           <Row className="justify-content-center margin-add-top">
             <h1>Admin Dashboard</h1>
@@ -47,7 +56,7 @@ const AdminLists = (props) => {
                       <tr key={cafe._id}>
                         <td>{cafe.cafe_name}</td>
                         <td>
-                          <Link to='/admin/new_cafe'><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
+                          <Button onClick={() => editCafe(cafe)}>Edit</Button>
                         </td>
                         <td>
                           <Button onClick={() => deleteCafe(cafe._id)}>Delete</Button>
@@ -81,7 +90,7 @@ const AdminLists = (props) => {
                       <tr key={coffee._id}>
                         <td>{coffee.name}</td>
                         <td>
-                          <Button>Edit</Button>
+                          <Button onClick={() => editCoffee(coffee)}>Edit</Button>
                         </td>
                         <td>
                           <Button onClick={() => deleteCoffee(coffee._id)}>Delete</Button>
@@ -93,7 +102,6 @@ const AdminLists = (props) => {
             </Col>
           </Row>
         </Container>
-        </BrowserRouter>
   )
 }
 

@@ -84,8 +84,8 @@ const App = () => {
                 <CafeMenuView {...props}
                   loggedInUser={loggedInUser} coffees={coffees} /> )} />
               
-              <Route path="/admin" render={(props) => (
-                <AdminDashBoardView {...props}
+              <Route exact path="/admin" render={(props) => (
+                <AdminHome {...props}
                   coffees={coffees} setCoffees={setCoffees} /> )} />
 
               <Route exact path="/coffees" render={(props) => (
