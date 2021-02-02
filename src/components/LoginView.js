@@ -1,13 +1,25 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { Button, Form, FormGroup, Label, Input,Container, Row } from 'reactstrap';
+import {
+  Button,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Container,
+  Row,
+} from "reactstrap";
 
-const LoginView = (props) => { 
+const LoginView = (props) => {
   const { setLoggedInUser } = props;
-  const [ loginDetails, setLoginDetails ] = useState({ username: "", password: "" });
+  const [loginDetails, setLoginDetails] = useState({
+    username: "",
+    password: "",
+  });
 
   const handleChange = (e) => {
-    setLoginDetails({...loginDetails, [e.target.name]: e.target.value});
+    const { name, value } = e.target;
+    setLoginDetails({ ...loginDetails, [name]: value });
   };
 
   const handleSubmit = async (e) => {
@@ -17,12 +29,12 @@ const LoginView = (props) => {
       method: "POST",
       body: JSON.stringify(loginDetails),
       headers: { "Content-Type": "application/json" },
-      credentials: "include"
+      credentials: "include",
     });
-    if (response.status === 400){
-      alert("Invalid login details")
+    if (response.status === 400) {
+      alert("Invalid login details");
     } else {
-      const userDetails = await response.json()
+      const userDetails = await response.json();
       await setLoggedInUser(userDetails);
 
       if (userDetails.role === "cafe") {
@@ -31,15 +43,15 @@ const LoginView = (props) => {
         props.history.push("/admin");
       } else {
         props.history.push("/");
-      };
+      }
       setLoginDetails({
         username: "",
         password: "",
         user_name: "",
         role: "user",
-        phone: ""
+        phone: "",
       });
-    };
+    }
   };
 
   return (
@@ -51,14 +63,32 @@ const LoginView = (props) => {
         <Form onSubmit={handleSubmit}>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
-              <Label for="exampleEmail" className="mr-sm-2">Email:</Label>
-              <Input type="email" name="username" id="exampleEmail" onChange={handleChange} value={loginDetails.username} placeholder="Email:" />
+              <Label for="exampleEmail" className="mr-sm-2">
+                Email:
+              </Label>
+              <Input
+                type="email"
+                name="username"
+                id="exampleEmail"
+                onChange={handleChange}
+                value={loginDetails.username}
+                placeholder="Email:"
+              />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="examplePassword" className="mr-sm-2">Password:</Label>
-              <Input type="password" name="password" id="examplePassword" onChange={handleChange} value={loginDetails.password} placeholder="Password:" />
+              <Label for="examplePassword" className="mr-sm-2">
+                Password:
+              </Label>
+              <Input
+                type="password"
+                name="password"
+                id="examplePassword"
+                onChange={handleChange}
+                value={loginDetails.password}
+                placeholder="Password:"
+              />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">

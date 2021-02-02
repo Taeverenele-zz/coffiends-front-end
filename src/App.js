@@ -1,16 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import {
-  Navbar,
-  Container,
-  Row,
-  Col,
-  Input,
-  Button,
-  NavItem,
-  Nav,
-  Table,
-} from "reactstrap";
 import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
@@ -20,7 +9,6 @@ import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import OrdersView from "./components/OrdersView";
 import PaymentCancelView from "./components/PaymentCancelView";
-import PaymentSuccessView from "./components/PaymentSuccessView";
 import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
