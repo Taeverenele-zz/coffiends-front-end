@@ -1,31 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
-import { Navbar, Container, Row, Col, Input, Button, NavItem, Nav, Table  } from "reactstrap";
 import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
-import CafesView from "./components/CafesView";
-import CoffeesView from "./components/CoffeesView";
 import HomeView from "./components/HomeView";
 import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import OrdersView from "./components/OrdersView";
 import PaymentCancelView from "./components/PaymentCancelView";
-import PaymentSuccessView from "./components/PaymentSuccessView";
 import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
-import NavBar from "./components/NavBar"
-
+import NavBar from "./components/NavBar";
 
 
 const App = () => {
-  const [ loggedInUser, setLoggedInUser ] = useState(null);
-  const [ coffees, setCoffees ] = useState([]);
-  const [ userCoffee, setUserCoffee ] = useState({ id: "", name: "", price: 0 });
-  const [ userLocation, setUserLocation ] = useState([ -27.468298, 153.0247838 ]);
-  const [ cafe, setCafe ] = useState("");
-
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const [coffees, setCoffees] = useState([]);
+  const [userCoffee, setUserCoffee] = useState({ id: "", name: "", price: 0 });
+  const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
+  const [cafe, setCafe] = useState("");
 
 
   // Checks session for a logged in user
@@ -76,12 +70,11 @@ const App = () => {
   }
 
   return (
-
     <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
-
-      <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout}> </NavBar>
-
+        <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout}>
+          {" "}
+        </NavBar>
 
         <Switch>
           <>

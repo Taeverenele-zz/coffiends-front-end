@@ -1,11 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Navbar,Button, NavItem, Nav } from "reactstrap";
-
+import { Navbar, Button, NavItem, Nav } from "reactstrap";
 
 const NavBar = (props) => {
-    
-    const {handleLogout, loggedInUser } = props
+  const { handleLogout, loggedInUser } = props;
 
  
 
@@ -70,4 +68,4 @@ const NavBar = (props) => {
 }
 
 
-export default NavBar
+export default NavBar;

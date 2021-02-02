@@ -1,27 +1,39 @@
-import React, { useState } from "react";
+import React from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
-
 const NewCoffeeForm = (props) => {
-  const { updateCoffeeArray, coffees, setCoffees, coffeeData, setCoffeeData, initialCoffeeData, isEditing } = props;
-  const [error, setError] = useState('')
+  const {
+    coffees,
+    setCoffees,
+    coffeeData,
+    setCoffeeData,
+    initialCoffeeData,
+    isEditing,
+  } = props;
 
   const handleInputChange = (e) => {
-    setCoffeeData({ ...coffeeData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setCoffeeData({ ...coffeeData, [name]: value });
   };
   const addCoffee = (newCoffee) => {
-
     setCoffees([...coffees, newCoffee]);
-  }
+  };
   const saveNewCoffee = () => {
-    return axios.post("http://localhost:5000/coffees", coffeeData).then(() => {
-      addCoffee(coffeeData)
-      setCoffeeData(initialCoffeeData)
-    })
+    return axios
+      .post("http://localhost:5000/coffees", coffeeData)
+      .then(() => {
+        addCoffee(coffeeData);
+        setCoffeeData(initialCoffeeData);
+      })
+      .catch((error) => console.log(error));
   };
   const updateCoffee = (newCoffee) => {
-    setCoffees(coffees.map((coffee) => (coffee._id == coffeeData._id ? newCoffee : coffee)));
+    setCoffees(
+      coffees.map((coffee) =>
+        coffee._id == coffeeData._id ? newCoffee : coffee
+      )
+    );
   };
 
   const updateExistingCoffee = () => {
@@ -29,28 +41,23 @@ const NewCoffeeForm = (props) => {
       .put(`http://localhost:5000/coffees/${coffeeData._id}`, coffeeData)
       .then((res) => updateCoffee(res.data))
       .catch((error) => console.log(error));
-      props.history.push('/admin');  
+    props.history.push("/admin");
   };
   const cancelEditing = () => {
     setCoffeeData(initialCoffeeData);
-    props.history.push('/admin');
+    props.history.push("/admin");
   };
-  
-  // const validateForm = () => {
-  //   if(coffeeData.name.length < 3) {
-  //     setError('Coffee name must be longer than 2 characters')
-  //   }
-  // }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // validateForm();
-    if(isEditing) {
+    if (isEditing) {
       updateExistingCoffee();
     } else {
-      saveNewCoffee().then(() => {
-        props.history.push('/admin');
-      })
+      saveNewCoffee()
+        .then(() => {
+          props.history.push("/admin");
+        })
+        .catch((error) => console.log(error));
     }
   };
 
@@ -58,7 +65,7 @@ const NewCoffeeForm = (props) => {
     <div>
       <Row>
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-        <h2>{isEditing ? "Edit" : "Add New"} Coffee</h2>
+          <h2>{isEditing ? "Edit" : "Add New"} Coffee</h2>
         </Col>
       </Row>
       <Row className="mt-4">
@@ -73,7 +80,6 @@ const NewCoffeeForm = (props) => {
                 onChange={handleInputChange}
                 required
               ></Input>
-              {/* {errors.name && errors.name.type === 'required' && (<p>Name is required</p>)} */}
             </FormGroup>
             <FormGroup>
               <Label for="description">Description:</Label>
