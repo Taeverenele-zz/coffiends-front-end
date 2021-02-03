@@ -23,23 +23,23 @@ const App = () => {
 
   // Checks session for a logged in user
   useEffect(() => {
-    // fetch("http://localhost:5000/users/check", { credentials: "include" })
-    //   .then((data) => data.json())
-    //   .then((json) => {
-    //     if (json) {
-    //       setLoggedInUser(json);
-    //     }
-    //   });
-    getUserSession();
+    fetch("http://localhost:5000/users/check", { credentials: "include" })
+      .then((data) => data.json())
+      .then((json) => {
+        if (json) {
+          setLoggedInUser(json);
+        }
+      });
+    // getUserSession();
   }, []);
 
-  const getUserSession = async () => {
-    const response = await fetch("http://localhost:5000/users/check", { credentials: "include" })
-    const logged = await response.json();
-    console.log(logged)
-    setLoggedInUser(logged)
-    return logged
-  }
+  // const getUserSession = async () => {
+  //   const response = await fetch("http://localhost:5000/users/check", { credentials: "include" })
+  //   const logged = await response.json();
+  //   // console.log(logged)
+  //   setLoggedInUser(logged)
+  //   return logged
+  // }
 
   const handleLogout = () => {
     fetch("http://localhost:5000/users/logout", {
@@ -54,28 +54,28 @@ const App = () => {
   };
   
 
-  const homePageConditional = (props) => {
-    if (loggedInUser) {
-        switch (loggedInUser.role) {
-            case 'cafe':
-              return (
-                     <CafeDashboardView {...props} 
-                    loggedInUser={loggedInUser} />
-              )
-            case 'user':
-              return (
-                    <HomeView {...props}
-                      coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> 
-              )
-            case 'admin':
-              return (
-                  <AdminHome {...props}
-                    coffees={coffees} setCoffees={setCoffees} />
-            )
-    }
-    return null
-      }
-  }
+  // const homePageConditional = (props) => {
+  //   if (loggedInUser) {
+  //       switch (loggedInUser.role) {
+  //           case 'cafe':
+  //             return (
+  //                    <CafeDashboardView {...props} 
+  //                   loggedInUser={loggedInUser} />
+  //             )
+  //           case 'user':
+  //             return (
+  //                   <HomeView {...props}
+  //                     coffees={coffees} setCoffees={setCoffees} setUserCoffee={setUserCoffee}/> 
+  //             )
+  //           case 'admin':
+  //             return (
+  //                 <AdminHome {...props}
+  //                   coffees={coffees} setCoffees={setCoffees} />
+  //           )
+  //   }
+  //   return null
+  //     }
+  // }
 
   return (
 
@@ -99,7 +99,7 @@ const App = () => {
             {loggedInUser && loggedInUser.role === "cafe" ? (
                <Route exact path="/" render={(props) => (
                 <CafeDashboardView {...props} 
-                  loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
+                  loggedInUser={loggedInUser} /> )} />
             ) : (<></>)}
             {loggedInUser && loggedInUser.role === "admin" ? (
                <Route exact path="/" render={(props) => (
@@ -125,19 +125,19 @@ const App = () => {
 
             <Route exact path="/orders" render={(props) => (
               <OrdersView {...props}
-                loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
+                loggedInUser={loggedInUser} /> )} />
             
             <Route exact path="/dashboard" render={(props) => (
               <CafeDashboardView {...props} 
-                loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
+                loggedInUser={loggedInUser} /> )} />
 
             <Route exact path="/menu" render={(props) => (
               <CafeMenuView {...props}
-                loggedInUser={loggedInUser} getUserSession={getUserSession} /> )} />
+                loggedInUser={loggedInUser} /> )} />
             
-            <Route exact path="/admin" render={(props) => (
+            {/* <Route exact path="/admin" render={(props) => (
               <AdminHome {...props}
-                coffees={coffees} setCoffees={setCoffees} /> )} />
+                coffees={coffees} setCoffees={setCoffees} /> )} /> */}
             
             <Route exact path="/payment" render={(props) => (
               <StripeForm {...props}

@@ -38,9 +38,9 @@ const LoginView = (props) => {
       await setLoggedInUser(userDetails);
 
       if (userDetails.role === "cafe") {
-        props.history.push("/dashboard");
+        props.history.push("/");
       } else if (userDetails.role === "admin") {
-        props.history.push("/admin");
+        props.history.push("/");
       } else {
         props.history.push("/");
       }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import StripeForm from "./StripeForm";
+import { Container, Row, Col, Button, Form, FormGroup, Label } from "reactstrap";
 
 const NewOrderForm = (props) => {
   const { userCoffee, cafe, loggedInUser } = props;
@@ -81,58 +82,75 @@ const NewOrderForm = (props) => {
 
   return (
     <>
-      <button><Link to="/map">Cancel</Link></button>
-      <h3>{cafe.cafe_name}</h3>
-      <h4>{userCoffee.name}</h4>
-      <form>
-        <div>
-          <label>Size: </label>
-          <select value={size} onChange={handleSize}>
-            <option value="Regular">Regular</option>
-            {userCoffee.name === "Espresso" ? (
-              <></>
-            ) : (
-              <>
-                <option value="Small">Small -$0.50</option>
-                <option value="Large">Large +$0.50</option>
-              </>
-            )}
-          </select>
-        </div>
-        {userCoffee.name === "Espresso" || userCoffee.name === "Long Black" ? (
-          <div></div>
-        ) : (
-          <div>
-            <label>Milk:</label>
-            <select value={milk} onChange={handleMilk}>
-              <option value="Regular Milk">Full Cream</option>
-              <option value="Skim Milk">Skim</option>
-              <option value="Soy Milk">Soy</option>
-              <option value="Almond Milk">Almond</option>
-            </select>
-          </div>
-        )}
-        <div>
-          <label>Sugar:</label>
-          <select value={sugar} onChange={handleSugar}>
-            <option value="0">No Sugar</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-          </select>
-        </div>
-        <div>
-          <label>Pickup Time:</label>
-          <select onChange={handlePickupTime}>
-            <option value="0">ASAP!</option>
-            <option value="10">10 mins</option>
-            <option value="20">20 mins</option>
-            <option value="30">30 mins</option>
-          </select>
-        </div>
-      </form>
-      <StripeForm orderDetails={orderDetails} />
+      <Container>
+        <Row className="mt-4">
+          <Col sm="12" md={{ size: 8, offset: 2 }}>
+            <Form>
+              <FormGroup>
+                <h4>Ordering: {userCoffee.name} from {cafe.cafe_name}</h4>
+              </FormGroup>
+              <FormGroup>
+                <Label for="size">Size:</Label>
+                <select name="size" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleSize} >
+                  <option defaultValue=""> -- select coffee size -- </option>
+                  <option value="Regular">Regular</option>
+                  {userCoffee.name === "Espresso" ? (
+                    <></>
+                  ) : (
+                    <>
+                      <option value="Small">Small -$0.50</option>
+                      <option value="Large">Large +$0.50</option>
+                    </>
+                  )}
+                </select>
+              </FormGroup>
+              <FormGroup>
+              {userCoffee.name === "Espresso" || userCoffee.name === "Long Black" ? (
+                <></>
+              ) : (
+                <>
+                  <Label for="milk">Milk:</Label>
+                  <select name="milk" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleMilk} >
+                    <option defaultValue=""> -- select milk type -- </option>
+                    <option value="Regular Milk">Full Cream</option>
+                    <option value="Skim Milk">Skim</option>
+                    <option value="Soy Milk">Soy</option>
+                    <option value="Almond Milk">Almond</option>
+                  </select>
+                </>
+              )}
+              </FormGroup>
+              <FormGroup>
+                <Label for="sugar">Sugar:</Label>
+                <select name="sugar" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleSugar} >
+                  <option defaultValue=""> -- select sugar preference -- </option>
+                  <option value="0">No Sugar</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </FormGroup>
+              <FormGroup>
+                <Label for="pickup">Pickup Time:</Label>
+                <select name="pickup" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handlePickupTime} >
+                  <option defaultValue=""> -- select pickup time -- </option>
+                  <option value="0">ASAP!</option>
+                  <option value="10">10 mins</option>
+                  <option value="20">20 mins</option>
+                  <option value="30">30 mins</option>
+                </select>
+              </FormGroup>
+              <FormGroup>
+                <StripeForm orderDetails={orderDetails} />
+              </FormGroup>
+              <FormGroup>
+                <Link to="/map"><Button color="warning">Cancel</Button></Link>
+              </FormGroup>
+            </Form>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };
