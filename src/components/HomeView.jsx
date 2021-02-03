@@ -36,7 +36,7 @@ const HomeView = (props) => {
   }
 
   return (
-    <div style={{ backgroundColor: "#6E5E5E", overflowX: "hidden" }}>
+    <div className="background">
       <div>
         <Container fluid="true">
           <Row className="justify-content-center">
@@ -50,8 +50,9 @@ const HomeView = (props) => {
                     alt="Card image cap"
                   />
                   <CardBody style={{ width: "230px" }}>
+                  <Row className="justify-content-center" >
                     <CardTitle tag="h5">{coffee.name}</CardTitle>
-                    <CardSubtitle tag="h6" className="mb-2 text-muted">
+                    <CardSubtitle tag="h6" className="mb-2 text-muted text-center">
                       {coffee.description}
                     </CardSubtitle>
                     {/* <p
@@ -59,14 +60,19 @@ const HomeView = (props) => {
                       onClick={() => addUserCoffee(coffee.name, coffee._id)}
                     > */}
                     {/* {coffee.name} -{" "} */}
+                  </Row>
+                  <Row className="justify-content-center">
                     <Link
                       to="/map"
                       onClick={() => addUserCoffee(coffee._id, coffee.name)}
                     >
+                    <div className="text-center" style={{marginTop: "10px"}}>
                       <Button color="primary" size="sm">
                         SEARCH
                       </Button>
+                    </div>
                     </Link>
+                  </Row>
                     {/* </p> */}
                   </CardBody>
                 </Card>

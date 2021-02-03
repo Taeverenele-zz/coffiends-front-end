@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Button, NavItem, Nav } from "reactstrap";
+import { Navbar, Button, NavItem, Nav, Container, Row, Col } from "reactstrap";
 
 const NavBar = (props) => {
   const { handleLogout, loggedInUser } = props;
@@ -23,7 +23,7 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/logout">
-          <Button color="warning" onClick={handleLogout}>
+          <Button color="warning" onClick={handleLogout} size="sm">
             LOG OUT
           </Button>
         </Link>
@@ -34,7 +34,7 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/orders">
-          <Button>ORDERS</Button>
+          <Button size="sm">ORDERS</Button>
         </Link>
       </NavItem>
     </>
@@ -64,23 +64,27 @@ const NavBar = (props) => {
   );
 
   return (
-    <header>
-      <Navbar color="light" light>
-        <Link to="/">
-          <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
-        </Link>
-        <div>
-          <h1>COFFIENDS</h1>
-        </div>
+    <Container fluid={true} className="Remove-padding-margin ">
+       <Navbar className="nav-color">
+        <Col sm={{ size: 'auto' }}>
+          <Link to="/">
+            <img src="logo.png" alt="Logo" style={{ height: "100px", padding:"0", margin:"0" }} />
+          </Link>
+        </Col>
+        <Col sm={{ size: 'auto', offset: "1"}}>
+            <div class="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
+        </Col>
         <Nav>
+          <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
           {!loggedInUser ? loggedOut : <></>}
           {loggedInUser && loggedInUser.role === "user" ? userNav : <></>}
           {loggedInUser && loggedInUser.role === "cafe" ? cafeNav : <></>}
           {loggedInUser && loggedInUser.role === "admin" ? adminNav : <></>}
           {loggedInUser ? activeSession : <></>}
+          </Col>
         </Nav>
       </Navbar>
-    </header>
+    </Container>
   );
 };
 

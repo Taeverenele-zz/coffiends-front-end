@@ -55,7 +55,7 @@ const LoginView = (props) => {
   };
 
   return (
-    <Container>
+    <Container >
       <Row className="justify-content-center margin-add-top">
         <h1>Log In</h1>
       </Row>
