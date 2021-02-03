@@ -63,7 +63,7 @@ const HomeView = (props) => {
                   </Row>
                   <Row className="justify-content-center">
                     <Link
-                      to="/map"
+                      to={`/map/${coffee.name}`}
                       onClick={() => addUserCoffee(coffee._id, coffee.name)}
                     >
                     <div className="text-center" style={{marginTop: "10px"}}>
