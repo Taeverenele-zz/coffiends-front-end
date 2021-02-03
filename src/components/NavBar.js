@@ -77,7 +77,7 @@ const NavBar = (props) => {
           </Link>
         </Col>
         <Col sm={{ size: 'auto', offset: "1"}}>
-            <div class="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
+            <div className="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
         </Col>
         <Nav>
           <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
