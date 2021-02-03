@@ -6,7 +6,7 @@ const initialUserState = {
   username: "",
   password: "",
   user_name: "",
-  role: "user",
+  role: "cafe",
   phone: "",
 };
 
@@ -18,12 +18,16 @@ const NewCafeForm = (props) => {
     isEditing,
     cafes,
     setCafes,
+    loggedInUser
   } = props;
 
   const [userData, setUserData] = useState(initialUserState);
 
   // on initial load
   useEffect(() => {
+    if (!loggedInUser) {
+      props.history.push("/");
+    };
     if (isEditing) {
       axios
         .get(`http://localhost:5000/users/${cafeData.owner}`)
@@ -47,7 +51,7 @@ const NewCafeForm = (props) => {
   };
 
   const updateCafe = (newCafe) => {
-    setCafes(cafes.map((cafe) => (cafe._id == cafeData._id ? newCafe : cafe)));
+    setCafes(cafes.map((cafe) => (cafe._id === cafeData._id ? newCafe : cafe)));
   };
 
   const handleCafeInputChange = (e) => {
@@ -65,7 +69,7 @@ const NewCafeForm = (props) => {
       .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
       .then((res) => updateCafe(res.data))
       .catch((error) => console.log(error));
-    props.history.push("/admin");
+    props.history.push("/");
   };
 
   const updateExistingUser = () => {
@@ -125,7 +129,7 @@ const NewCafeForm = (props) => {
 
   return (
     <div>
-      <Row>
+      <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
           <h2>{isEditing ? "Edit" : "Add New"} Cafe</h2>
         </Col>

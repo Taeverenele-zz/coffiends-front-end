@@ -72,7 +72,6 @@ const LoginView = (props) => {
                 id="exampleEmail"
                 onChange={handleChange}
                 value={loginDetails.username}
-                placeholder="Email:"
               />
             </FormGroup>
           </Row>
@@ -87,12 +86,13 @@ const LoginView = (props) => {
                 id="examplePassword"
                 onChange={handleChange}
                 value={loginDetails.password}
-                placeholder="Password:"
               />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button className="login-form-margin-top" color="success">LOG IN</Button>
+            <Button className="login-form-margin-top" color="success">
+              LOG IN
+            </Button>
           </Row>
         </Form>
       </Row>

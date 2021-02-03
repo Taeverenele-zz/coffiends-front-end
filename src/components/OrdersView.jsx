@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import OrderTable from "./OrderTable";
-import { Container, Row, Col, Input, Button, Form, Table } from 'reactstrap';
+import { Container, Row } from 'reactstrap';
 import { BsFillPlusSquareFill } from 'react-icons/bs';
-import { BsDashSquareFill } from 'react-icons/bs';
 
 const OrdersView = (props) => {
   const { loggedInUser } = props;

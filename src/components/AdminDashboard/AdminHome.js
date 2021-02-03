@@ -1,6 +1,4 @@
-import { React, useState, useEffect } from "react";
-import { Navbar, Button, NavItem, Nav } from "reactstrap";
-import { BrowserRouter, Switch, Route, Link, Redirect } from "react-router-dom";
+import { React, useEffect } from "react";
 import axios from "axios";
 
 import AdminLists from "./AdminLists";
@@ -9,14 +7,11 @@ const AdminHome = (props) => {
   const {
     coffees,
     setCoffees,
-    handleLogout,
     cafes,
     setCafes,
     cafeData,
     setCafeData,
-    coffeeData,
     setCoffeeData,
-    initialCoffeeData,
   } = props;
 
   // Add all coffees and cafes into state
@@ -65,73 +60,9 @@ const AdminHome = (props) => {
         cafeData={cafeData}
         setCafeData={setCafeData}
         deleteCafe={deleteCafe}
-        coffees={coffees}
         setCoffeeData={setCoffeeData}
         deleteCoffee={deleteCoffee}
       />
-      {/* <BrowserRouter>
-        <Switch>
-
-        <Route exact path={match.path + '/new_cafe'} render={(props) => (	
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={false} initialCafeState={initialCafeState} />	
-            )}	
-          />
-
-          <Route exact path={match.path + '/edit_cafe'} render={(props) => (
-              <NewCafeForm {...props} cafes={cafes} cafeData={cafeData} setCafeData={setCafeData} setCafes={setCafes} isEditing={true} initialCafeState={initialCafeState} />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/new_coffee"
-            render={(props) => (
-              <NewCoffeeForm
-                {...props}
-                isEditing={false}
-                coffees={coffees}
-                setCoffees={setCoffees}
-                coffeeData={coffeeData}
-                setCoffeeData={setCoffeeData}
-                initialCoffeeData={initialCoffeeData}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin/edit_coffee"
-            render={(props) => (
-              <NewCoffeeForm
-                {...props}
-                isEditing={true}
-                coffeeData={coffeeData}
-                setCoffeeData={setCoffeeData}
-                initialCoffeeData={initialCoffeeData}
-                coffees={coffees}
-                setCoffees={setCoffees}
-              />
-            )}
-          />
-          <Route
-            exact
-            path="/admin"
-            render={(props) => (
-              <AdminLists
-                {...props}
-                cafes={cafes}
-                deleteCafe={deleteCafe}
-                coffees={coffees}
-                setCoffees={setCoffees}
-                deleteCoffee={deleteCoffee}
-                setCafeData={setCafeData}
-                coffeeData={coffeeData}
-                setCoffeeData={setCoffeeData}
-                initialCoffeeData={initialCoffeeData}
-              />
-            )}
-          />
-          <Redirect to="/admin" />
-        </Switch>
-      </BrowserRouter> */}
     </>
   );
 };

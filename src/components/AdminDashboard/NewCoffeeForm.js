@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import axios from "axios";
 
@@ -10,8 +10,15 @@ const NewCoffeeForm = (props) => {
     setCoffeeData,
     initialCoffeeData,
     isEditing,
+    loggedInUser
   } = props;
 
+  useEffect(() => {
+    if (!loggedInUser) {
+      props.history.push("/")
+    };
+  }, []);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCoffeeData({ ...coffeeData, [name]: value });
@@ -32,10 +39,11 @@ const NewCoffeeForm = (props) => {
     console.log("1", coffees);
     setCoffees(
       coffees.map((coffee) =>
-        coffee._id == coffeeData._id ? newCoffee : coffee
+        coffee._id === coffeeData._id ? newCoffee : coffee
       )
     );
     console.log("2", coffees);
+    setCoffeeData(initialCoffeeData);
   };
 
   const updateExistingCoffee = () => {
@@ -43,7 +51,7 @@ const NewCoffeeForm = (props) => {
       .put(`http://localhost:5000/coffees/${coffeeData._id}`, coffeeData)
       .then((res) => updateCoffee(res.data))
       .catch((error) => console.log(error));
-    props.history.push("/admin");
+    props.history.push("/");
   };
   const cancelEditing = () => {
     setCoffeeData(initialCoffeeData);
@@ -65,7 +73,7 @@ const NewCoffeeForm = (props) => {
 
   return (
     <div>
-      <Row>
+      <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
           <h2>{isEditing ? "Edit" : "Add New"} Coffee</h2>
         </Col>
@@ -77,7 +85,6 @@ const NewCoffeeForm = (props) => {
               <Label for="name">Name:</Label>
               <Input
                 name="name"
-                placeholder="coffee name"
                 value={coffeeData.name}
                 onChange={handleInputChange}
                 required
@@ -87,7 +94,6 @@ const NewCoffeeForm = (props) => {
               <Label for="description">Description:</Label>
               <Input
                 name="description"
-                placeholder="description"
                 value={coffeeData.description}
                 onChange={handleInputChange}
                 required
