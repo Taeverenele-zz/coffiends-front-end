@@ -10,8 +10,10 @@ const CafeMenuView = (props) => {
   const [ newPrice, setNewPrice ] = useState("");
 
   useEffect(() => {
-    getMenuData();
-  }, []);
+    if (loggedInUser) {
+      getMenuData();
+    };
+  }, [loggedInUser]);
 
   const getMenuData = async () => {
     let cafemenuArr = [];
