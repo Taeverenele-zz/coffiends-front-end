@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import AdminHome from "./components/AdminDashboard/AdminHome";
-import CafeDashboardView from "./components/CafeDashboardView.jsx";
+import CafeDashboardView from "./components/CafeDashboardView";
 import CafeMenuView from "./components/CafeMenuView";
 import HomeView from "./components/HomeView";
 import LoginView from "./components/LoginView";
@@ -14,6 +14,7 @@ import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
 import NewCafeForm from "./components/AdminDashboard/NewCafeForm";
 import NewCoffeeForm from "./components/AdminDashboard/NewCoffeeForm";
+import ChangePassword from "./components/ChangePassword";
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -42,12 +43,13 @@ const App = () => {
       .then((json) => {
         if (json) {
           setLoggedInUser(json);
-        };
+        }
       });
-    
+
     navigator.geolocation.getCurrentPosition(
-      position => setUserLocation([position.coords.latitude, position.coords.longitude]),
-      error => console.log(error.message)
+      (position) =>
+        setUserLocation([position.coords.latitude, position.coords.longitude]),
+      (error) => console.log(error.message)
     );
   }, []);
 
@@ -59,7 +61,7 @@ const App = () => {
         setLoggedInUser(false);
       } else {
         console.log(res);
-      };
+      }
     });
   };
 
@@ -172,6 +174,17 @@ const App = () => {
               )}
             />
 
+            <Route
+              exact
+              path="/user/change_password"
+              render={(props) => (
+                <ChangePassword
+                  {...props}
+                  loggedInUser={loggedInUser}
+                  setLoggedInUser={setLoggedInUser}
+                />
+              )}
+            />
             <Route
               exact
               path="/user/edit"

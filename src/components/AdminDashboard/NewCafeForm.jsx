@@ -252,7 +252,7 @@ const NewCafeForm = (props) => {
                   handleCafeInputChange({
                     target: {
                       name: "location",
-                      value: [e.target.value, cafeData.location[1]],
+                      value: [parseFloat(e.target.value), cafeData.location[1]],
                     },
                   })
                 }
@@ -269,7 +269,7 @@ const NewCafeForm = (props) => {
                   handleCafeInputChange({
                     target: {
                       name: "location",
-                      value: [cafeData.location[0], e.target.value],
+                      value: [cafeData.location[0], parseFloat(e.target.value)],
                     },
                   })
                 }

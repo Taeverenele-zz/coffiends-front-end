@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import OrderTable from "./OrderTable";
-import { Container, Row } from 'reactstrap';
-import { BsFillPlusSquareFill } from 'react-icons/bs';
+import { Container, Row } from "reactstrap";
+import { BsFillPlusSquareFill } from "react-icons/bs";
 
 const OrdersView = (props) => {
   const { loggedInUser } = props;
-  const [ orders, setOrders ] = useState([]);
-  const [ pastOrders, setPastOrders ] = useState([]);
-  const [ showPastOrders, setShowPastOrders ] = useState(false);
+  const [orders, setOrders] = useState([]);
+  const [pastOrders, setPastOrders] = useState([]);
+  const [showPastOrders, setShowPastOrders] = useState(false);
 
   useEffect(() => {
     if (loggedInUser) {
       getOrders("active");
-    };
+    }
   }, [loggedInUser]);
 
   const getOrders = (type) => {
@@ -25,7 +25,7 @@ const OrdersView = (props) => {
           retrieveCafeOrders();
         } else {
           retrieveAllOrders();
-        };
+        }
         break;
       case "past":
         if (loggedInUser.role === "user") {
@@ -34,11 +34,11 @@ const OrdersView = (props) => {
           retrieveCafeOrders("past");
         } else {
           retrieveAllOrders("past");
-        };
+        }
         break;
       default:
         break;
-    };
+    }
   };
 
   const getPastOrders = (type) => {
@@ -49,14 +49,14 @@ const OrdersView = (props) => {
       getOrders("past");
     } else {
       setShowPastOrders(false);
-    };
+    }
   };
 
   const retrieveAllOrders = (pastOrders) => {
     let url = "http://localhost:5000/orders";
     if (pastOrders) {
       url = "http://localhost:5000/orders/past";
-    };
+    }
 
     axios
       .get(url)
@@ -70,7 +70,7 @@ const OrdersView = (props) => {
     let url = `http://localhost:5000/users/${loggedInUser._id}/orders`;
     if (pastOrders) {
       url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
-    };
+    }
 
     axios
       .get(url)
@@ -84,7 +84,7 @@ const OrdersView = (props) => {
     let url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders`;
     if (pastOrders) {
       url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders/past`;
-    };
+    }
 
     axios
       .get(url)
@@ -97,22 +97,32 @@ const OrdersView = (props) => {
   return (
     <>
       <Container>
-        <Row className="justify-content-center">  
+        <Row className="justify-content-center">
           <h1>Current Orders</h1>
-          <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders} loggedInUser={loggedInUser} />
+          <OrderTable
+            orders={orders}
+            getOrders={getOrders}
+            getPastOrders={getPastOrders}
+            setOrders={setOrders}
+            loggedInUser={loggedInUser}
+          />
         </Row>
         <Row className="justify-content-center ">
-          <h1 className="justify-content-center Cafe-Header-Margin">Past Orders</h1>
-          <div className="Cafe-Dashboard-Expand Cafe-Header-Margin" >
+          <h1 className="justify-content-center Cafe-Header-Margin">
+            Past Orders
+          </h1>
+          <div className="Cafe-Dashboard-Expand Cafe-Header-Margin">
             <BsFillPlusSquareFill onClick={() => getPastOrders(true)} />
           </div>
         </Row>
         <Row id="Past-Orders">
           {showPastOrders ? (
-              <div>
-                <OrderTable orders={pastOrders} />
-              </div>
-            ) : (<></>)}
+            <div>
+              <OrderTable orders={pastOrders} />
+            </div>
+          ) : (
+            <></>
+          )}
         </Row>
       </Container>
     </>
