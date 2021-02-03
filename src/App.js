@@ -7,6 +7,7 @@ import HomeView from "./components/HomeView";
 import LoginView from "./components/LoginView";
 import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
+import EditUser from "./components/EditUser";
 import OrdersView from "./components/OrdersView";
 import PaymentCancelView from "./components/PaymentCancelView";
 import RegisterView from "./components/RegisterView";
@@ -167,6 +168,17 @@ const App = () => {
               )}
             />
 
+            <Route
+              exact
+              path="/user/edit"
+              render={(props) => (
+                <EditUser
+                  {...props}
+                  loggedInUser={loggedInUser}
+                  setLoggedInUser={setLoggedInUser}
+                />
+              )}
+            />
             <Route
               exact
               path="/orders"

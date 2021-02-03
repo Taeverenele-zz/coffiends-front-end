@@ -67,7 +67,6 @@ const RegisterView = (props) => {
                 id="exampleEmail"
                 onChange={handleChange}
                 value={loginDetails.username}
-                placeholder="Email:"
               />
             </FormGroup>
           </Row>
@@ -82,7 +81,6 @@ const RegisterView = (props) => {
                 id="examplePassword"
                 onChange={handleChange}
                 value={loginDetails.password}
-                placeholder="Password:"
               />
             </FormGroup>
           </Row>
@@ -97,7 +95,6 @@ const RegisterView = (props) => {
                 id="exampleName"
                 onChange={handleChange}
                 value={loginDetails.user_name}
-                placeholder="Name:"
               />
             </FormGroup>
           </Row>
@@ -112,7 +109,6 @@ const RegisterView = (props) => {
                 id="numberExample"
                 onChange={handleChange}
                 value={loginDetails.phone}
-                placeholder="Number:"
               />
             </FormGroup>
           </Row>

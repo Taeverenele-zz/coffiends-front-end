@@ -43,7 +43,7 @@ const NewCoffeeForm = (props) => {
       .put(`http://localhost:5000/coffees/${coffeeData._id}`, coffeeData)
       .then((res) => updateCoffee(res.data))
       .catch((error) => console.log(error));
-    props.history.push("/admin");
+    props.history.push("/");
   };
   const cancelEditing = () => {
     setCoffeeData(initialCoffeeData);
@@ -65,7 +65,7 @@ const NewCoffeeForm = (props) => {
 
   return (
     <div>
-      <Row>
+      <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
           <h2>{isEditing ? "Edit" : "Add New"} Coffee</h2>
         </Col>
@@ -77,7 +77,6 @@ const NewCoffeeForm = (props) => {
               <Label for="name">Name:</Label>
               <Input
                 name="name"
-                placeholder="coffee name"
                 value={coffeeData.name}
                 onChange={handleInputChange}
                 required
@@ -87,7 +86,6 @@ const NewCoffeeForm = (props) => {
               <Label for="description">Description:</Label>
               <Input
                 name="description"
-                placeholder="description"
                 value={coffeeData.description}
                 onChange={handleInputChange}
                 required

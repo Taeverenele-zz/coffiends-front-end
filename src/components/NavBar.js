@@ -33,6 +33,11 @@ const NavBar = (props) => {
   const userNav = (
     <>
       <NavItem className="mr-3">
+        <Link to="/user/edit">
+          <Button>EDIT PROFILE</Button>
+        </Link>
+      </NavItem>
+      <NavItem className="mr-3">
         <Link to="/orders">
           <Button>ORDERS</Button>
         </Link>

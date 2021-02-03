@@ -6,7 +6,7 @@ const initialUserState = {
   username: "",
   password: "",
   user_name: "",
-  role: "user",
+  role: "cafe",
   phone: "",
 };
 
@@ -65,7 +65,7 @@ const NewCafeForm = (props) => {
       .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
       .then((res) => updateCafe(res.data))
       .catch((error) => console.log(error));
-    props.history.push("/admin");
+    props.history.push("/");
   };
 
   const updateExistingUser = () => {
@@ -125,7 +125,7 @@ const NewCafeForm = (props) => {
 
   return (
     <div>
-      <Row>
+      <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
           <h2>{isEditing ? "Edit" : "Add New"} Cafe</h2>
         </Col>
