@@ -58,29 +58,6 @@ const App = () => {
     });
   };
 
-  const homePageConditional = (props) => {
-    if (loggedInUser) {
-      switch (loggedInUser.role) {
-        case "cafe":
-          return <CafeDashboardView {...props} loggedInUser={loggedInUser} />;
-        case "user":
-          return (
-            <HomeView
-              {...props}
-              coffees={coffees}
-              setCoffees={setCoffees}
-              setUserCoffee={setUserCoffee}
-            />
-          );
-        case "admin":
-          return (
-            <AdminHome {...props} coffees={coffees} setCoffees={setCoffees} />
-          );
-      }
-      return null;
-    }
-  };
-
   return (
     <div className="container-fluid Remove-padding-margin ">
       <BrowserRouter>
@@ -90,30 +67,66 @@ const App = () => {
 
         <Switch>
           <>
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <HomeView
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  setUserCoffee={setUserCoffee}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/"
-              render={(props) => (
-                <HomeView
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  setUserCoffee={setUserCoffee}
-                />
-              )}
-            />
+            {!loggedInUser ? (
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <LoginView {...props} setLoggedInUser={setLoggedInUser} />
+                )}
+              />
+            ) : (
+              <></>
+            )}
+            {loggedInUser && loggedInUser.role === "user" ? (
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <HomeView
+                    {...props}
+                    coffees={coffees}
+                    setCoffees={setCoffees}
+                    setUserCoffee={setUserCoffee}
+                  />
+                )}
+              />
+            ) : (
+              <></>
+            )}
+            {loggedInUser && loggedInUser.role === "cafe" ? (
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <CafeDashboardView {...props} loggedInUser={loggedInUser} />
+                )}
+              />
+            ) : (
+              <></>
+            )}
+            {loggedInUser && loggedInUser.role === "admin" ? (
+              <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <AdminHome
+                    {...props}
+                    coffees={coffees}
+                    setCoffees={setCoffees}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    cafeData={cafeData}
+                    setCafeData={setCafeData}
+                    coffeeData={coffeeData}
+                    setCoffeeData={setCoffeeData}
+                    initialCoffeeData={initialCoffeeData}
+                  />
+                )}
+              />
+            ) : (
+              <></>
+            )}
 
             <Route
               exact
@@ -124,14 +137,6 @@ const App = () => {
                   setLoggedInUser={setLoggedInUser}
                   loggedInUser={loggedInUser}
                 />
-              )}
-            />
-
-            <Route
-              exact
-              path="/login"
-              render={(props) => (
-                <LoginView {...props} setLoggedInUser={setLoggedInUser} />
               )}
             />
 
@@ -172,39 +177,12 @@ const App = () => {
 
             <Route
               exact
-              path="/dashboard"
-              render={(props) => (
-                <CafeDashboardView {...props} loggedInUser={loggedInUser} />
-              )}
-            />
-
-            <Route
-              exact
               path="/menu"
               render={(props) => (
                 <CafeMenuView
                   {...props}
                   loggedInUser={loggedInUser}
                   coffees={coffees}
-                />
-              )}
-            />
-
-            <Route
-              exact
-              path="/admin"
-              render={(props) => (
-                <AdminHome
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  cafes={cafes}
-                  setCafes={setCafes}
-                  cafeData={cafeData}
-                  setCafeData={setCafeData}
-                  coffeeData={coffeeData}
-                  setCoffeeData={setCoffeeData}
-                  initialCoffeeData={initialCoffeeData}
                 />
               )}
             />
@@ -288,7 +266,7 @@ const App = () => {
             />
 
             <Route exact path="/logout">
-              <Redirect to="/login" />
+              <Redirect to="/" />
             </Route>
           </>
         </Switch>

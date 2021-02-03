@@ -47,7 +47,7 @@ const NewCoffeeForm = (props) => {
   };
   const cancelEditing = () => {
     setCoffeeData(initialCoffeeData);
-    props.history.push("/admin");
+    props.history.push("/");
   };
 
   const handleSubmit = (e) => {
@@ -57,7 +57,7 @@ const NewCoffeeForm = (props) => {
     } else {
       saveNewCoffee()
         .then(() => {
-          props.history.push("/admin");
+          props.history.push("/");
         })
         .catch((error) => console.log(error));
     }

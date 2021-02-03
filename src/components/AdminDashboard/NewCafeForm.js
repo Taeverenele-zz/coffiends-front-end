@@ -101,7 +101,7 @@ const NewCafeForm = (props) => {
   const cancelEditing = () => {
     setCafeData(initialCafeData);
     setUserData(initialUserState);
-    props.history.push("/admin");
+    props.history.push("/");
   };
 
   const handleFinalSubmit = (e) => {
@@ -116,7 +116,7 @@ const NewCafeForm = (props) => {
         console.log("test", newCafeData);
         saveNewCafe(newCafeData)
           .then(() => {
-            props.history.push("/admin");
+            props.history.push("/");
           })
           .catch((error) => console.log(error));
       });
