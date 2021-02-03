@@ -29,8 +29,10 @@ function MapView(props) {
     };
     time = `${hr}:${min}`
 
+    let loc = []
+    userLocation ? loc = userLocation : loc = [ -27.468298,153.0225951 ]
     const postBody = {
-      location: userLocation,
+      location: loc,
       time: time,
       coffee: coff,
     };

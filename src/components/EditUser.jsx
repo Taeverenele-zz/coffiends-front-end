@@ -4,7 +4,6 @@ import axios from "axios";
 
 const EditUser = (props) => {
   const { loggedInUser, setLoggedInUser } = props;
-  console.log(loggedInUser);
   const updateExistingUser = () => {
     axios
       .patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
