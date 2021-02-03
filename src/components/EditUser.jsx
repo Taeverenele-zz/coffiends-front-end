@@ -28,6 +28,13 @@ const EditUser = (props) => {
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
               <h2>Edit Profile</h2>
+              <Button
+                onClick={() => {
+                  props.history.push("/user/change_password");
+                }}
+              >
+                Change Password
+              </Button>
             </Col>
           </Row>
           <Row className="mt-4">
