@@ -18,12 +18,16 @@ const NewCafeForm = (props) => {
     isEditing,
     cafes,
     setCafes,
+    loggedInUser
   } = props;
 
   const [userData, setUserData] = useState(initialUserState);
 
   // on initial load
   useEffect(() => {
+    if (!loggedInUser) {
+      props.history.push("/");
+    };
     if (isEditing) {
       axios
         .get(`http://localhost:5000/users/${cafeData.owner}`)
@@ -47,7 +51,7 @@ const NewCafeForm = (props) => {
   };
 
   const updateCafe = (newCafe) => {
-    setCafes(cafes.map((cafe) => (cafe._id == cafeData._id ? newCafe : cafe)));
+    setCafes(cafes.map((cafe) => (cafe._id === cafeData._id ? newCafe : cafe)));
   };
 
   const handleCafeInputChange = (e) => {

@@ -9,7 +9,6 @@ import MapView from "./components/MapView";
 import NewOrderForm from "./components/NewOrderForm";
 import EditUser from "./components/EditUser";
 import OrdersView from "./components/OrdersView";
-import PaymentCancelView from "./components/PaymentCancelView";
 import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
@@ -20,7 +19,7 @@ const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
   const [coffees, setCoffees] = useState([]);
   const [userCoffee, setUserCoffee] = useState({ id: "", name: "", price: 0 });
-  const [userLocation, setUserLocation] = useState([-27.468298, 153.0247838]);
+  const [userLocation, setUserLocation] = useState(null);
   const [cafe, setCafe] = useState("");
   const [cafes, setCafes] = useState([]);
   const initialCafeData = {
@@ -43,19 +42,24 @@ const App = () => {
       .then((json) => {
         if (json) {
           setLoggedInUser(json);
-        }
+        };
       });
+    
+    navigator.geolocation.getCurrentPosition(
+      position => setUserLocation([position.coords.latitude, position.coords.longitude]),
+      error => console.log(error.message)
+    );
   }, []);
 
   const handleLogout = () => {
     fetch("http://localhost:5000/users/logout", {
       credentials: "include",
     }).then((res) => {
-      if (res.status == 200) {
+      if (res.status === 200) {
         setLoggedInUser(false);
       } else {
         console.log(res);
-      }
+      };
     });
   };
 
@@ -143,7 +147,7 @@ const App = () => {
 
             <Route
               exact
-              path="/map"
+              path="/map/:coff"
               render={(props) => (
                 <MapView
                   {...props}
@@ -211,6 +215,7 @@ const App = () => {
                   cafeData={cafeData}
                   setCafeData={setCafeData}
                   initialCafeData={initialCafeData}
+                  loggedInUser={loggedInUser}
                 />
               )}
             />
@@ -227,6 +232,7 @@ const App = () => {
                   cafeData={cafeData}
                   setCafeData={setCafeData}
                   initialCafeData={initialCafeData}
+                  loggedInUser={loggedInUser}
                 />
               )}
             />
@@ -242,6 +248,7 @@ const App = () => {
                   coffeeData={coffeeData}
                   setCoffeeData={setCoffeeData}
                   initialCoffeeData={initialCoffeeData}
+                  loggedInUser={loggedInUser}
                 />
               )}
             />
@@ -257,6 +264,7 @@ const App = () => {
                   coffeeData={coffeeData}
                   setCoffeeData={setCoffeeData}
                   initialCoffeeData={initialCoffeeData}
+                  loggedInUser={loggedInUser}
                 />
               )}
             />
@@ -266,14 +274,6 @@ const App = () => {
               path="/payment"
               render={(props) => (
                 <StripeForm {...props} loggedInUser={loggedInUser} />
-              )}
-            />
-
-            <Route
-              exact
-              path="/payment/cancel"
-              render={(props) => (
-                <PaymentCancelView {...props} loggedInUser={loggedInUser} />
               )}
             />
 
