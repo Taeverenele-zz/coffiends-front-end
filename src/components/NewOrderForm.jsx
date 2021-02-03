@@ -9,33 +9,42 @@ const NewOrderForm = (props) => {
   const [ milk, setMilk ] = useState("Regular Milk");
   const [ sugar, setSugar ] = useState(0);
 
-  const [ orderDetails, setOrderDetails ] = useState({
-      cafe: cafe._id,
-      user: loggedInUser._id,
-      coffee: userCoffee.name,
-      size: "Regular",
-      milk: "Regular",
-      sugar: 0,
-      pickup_time: "",
-      total: userCoffee.price,
-      email: loggedInUser.username,
-  });
+  const [ orderDetails, setOrderDetails ] = useState(null);
 
   useEffect(() => {
-    let time = new Date().getTime();
-    let date = new Date(time);
-    let hr = String(date.getHours());
-    let min = String(date.getMinutes());
-    if (hr.length < 2) {
-      hr = "0" + hr;
-    };
-    if (min.length < 2) {
-      min = "0" + min;
-    };
-    if (userCoffee.name === "Espresso" || userCoffee.name === "Long Black") {
-      setOrderDetails({ ...orderDetails, milk: "No milk" })
-    };
-    setOrderDetails({ ...orderDetails, pickup_time: `${hr}:${min}` });
+    if (!loggedInUser) {
+      props.history.push("/");
+    } else {
+      let time = new Date().getTime();
+      let date = new Date(time);
+      let hr = String(date.getHours());
+      let min = String(date.getMinutes());
+      if (hr.length < 2) {
+        hr = "0" + hr;
+      };
+      if (min.length < 2) {
+        min = "0" + min;
+      };
+
+      let defMilk = ""
+      if (userCoffee.name === "Espresso" || userCoffee.name === "Long Black") {
+        defMilk = "No milk"
+      } else {
+        defMilk = "Regular"
+      };
+
+      setOrderDetails({
+        cafe: cafe._id,
+        user: loggedInUser._id,
+        coffee: userCoffee.name,
+        size: "Regular",
+        milk: defMilk,
+        sugar: 0,
+        pickup_time: `${hr}:${min}`,
+        total: userCoffee.price,
+        email: loggedInUser.username,
+      })
+    }
   }, []);
 
   const handleSize = (event) => {
@@ -82,6 +91,9 @@ const NewOrderForm = (props) => {
 
   return (
     <>
+      {!orderDetails ? (<></>) : (
+
+      
       <Container>
         <Row className="mt-4">
           <Col sm="12" md={{ size: 8, offset: 2 }}>
@@ -91,7 +103,7 @@ const NewOrderForm = (props) => {
               </FormGroup>
               <FormGroup>
                 <Label for="size">Size:</Label>
-                <select name="size" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleSize} >
+                <select name="size" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleSize} value={size} >
                   <option defaultValue=""> -- select coffee size -- </option>
                   <option value="Regular">Regular</option>
                   {userCoffee.name === "Espresso" ? (
@@ -110,7 +122,7 @@ const NewOrderForm = (props) => {
               ) : (
                 <>
                   <Label for="milk">Milk:</Label>
-                  <select name="milk" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleMilk} >
+                  <select name="milk" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleMilk} value={milk} >
                     <option defaultValue=""> -- select milk type -- </option>
                     <option value="Regular Milk">Full Cream</option>
                     <option value="Skim Milk">Skim</option>
@@ -122,7 +134,7 @@ const NewOrderForm = (props) => {
               </FormGroup>
               <FormGroup>
                 <Label for="sugar">Sugar:</Label>
-                <select name="sugar" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleSugar} >
+                <select name="sugar" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleSugar} value={sugar} >
                   <option defaultValue=""> -- select sugar preference -- </option>
                   <option value="0">No Sugar</option>
                   <option value="1">1</option>
@@ -145,12 +157,13 @@ const NewOrderForm = (props) => {
                 <StripeForm orderDetails={orderDetails} />
               </FormGroup>
               <FormGroup>
-                <Link to="/map"><Button color="warning">Cancel</Button></Link>
+                <Link to="/"><Button color="warning">Cancel</Button></Link>
               </FormGroup>
             </Form>
           </Col>
         </Row>
       </Container>
+      )}
     </>
   );
 };

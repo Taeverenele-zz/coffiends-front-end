@@ -4,32 +4,25 @@ import axios from "axios";
 import {
   Container,
   Row,
-  Col,
   Card,
   Button,
   CardImg,
   CardTitle,
-  CardText,
   CardDeck,
   CardSubtitle,
   CardBody,
 } from "reactstrap";
-import logo from "../assets/Logo.png";
 import coffeeImg from "../assets/coffee.svg";
 
 const HomeView = (props) => {
-  const { coffees, setCoffees, setUserCoffee, loggedInUser } = props;
+  const { coffees, setCoffees, setUserCoffee } = props;
 
   useEffect(() => {
-    getAllCoffees();
-  }, []);
-
-  const getAllCoffees = () => {
     axios
       .get("http://localhost:5000/coffees/", coffees)
       .then((res) => setCoffees(res.data))
       .catch((err) => console.log(err));
-  };
+  }, []);
 
   function addUserCoffee(id, name) {
     setUserCoffee({ id, name });
@@ -54,20 +47,14 @@ const HomeView = (props) => {
                     <CardSubtitle tag="h6" className="mb-2 text-muted">
                       {coffee.description}
                     </CardSubtitle>
-                    {/* <p
-                      key={coffee._id}
-                      onClick={() => addUserCoffee(coffee.name, coffee._id)}
-                    > */}
-                    {/* {coffee.name} -{" "} */}
                     <Link
-                      to="/map"
+                      to={`/map/${coffee.name}`}
                       onClick={() => addUserCoffee(coffee._id, coffee.name)}
                     >
                       <Button color="primary" size="sm">
                         SEARCH
                       </Button>
                     </Link>
-                    {/* </p> */}
                   </CardBody>
                 </Card>
               </CardDeck>
@@ -75,103 +62,6 @@ const HomeView = (props) => {
           </Row>
         </Container>
       </div>
-
-      {/* <div>
-        <CardDeck style={{margin: "10px" }}>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This card has supporting text below as a natural lead-in to
-                additional content.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-        </CardDeck>
-      </div>
-      <div style={{ marginTop: "20px" }}>
-        <CardDeck style={{ margin: "10px" }}>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This card has supporting text below as a natural lead-in to
-                additional content.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-        </CardDeck>
-      </div> */}
     </div>
   );
 };
