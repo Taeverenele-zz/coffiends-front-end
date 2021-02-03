@@ -84,7 +84,7 @@ const AdminLists = (props) => {
           <Table className="margin-add-top">
             <thead>
               <tr>
-                <th>Cafe Name</th>
+                <th>Coffee Name</th>
                 <th></th>
                 <th></th>
               </tr>
