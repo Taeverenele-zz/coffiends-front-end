@@ -55,6 +55,7 @@ const CafeMenuView = (props) => {
 
     response = await axios.put(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`, { menu: cafeMenu });
     const newMenuThing = await response.data;
+    console.log(newMenuThing);
 
     setNewCoffee("");
     setNewPrice("");

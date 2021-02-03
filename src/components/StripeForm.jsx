@@ -7,7 +7,7 @@ import { Button } from "reactstrap";
 const stripePromise = loadStripe("pk_test_51Hgk6gIGs09UrnPWVrb4HCyxyNcSgdz98ayMvMtR9zXuUOOJJqyb60xsd6ZkuKXIvoiUaiLp64nO3mtpnI9VONwi006bYqT3jh");
 
 const ProductDisplay = ({ handleClick, orderPrice }) => (
-  <Button color="info" onClick={handleClick}>${orderPrice.toFixed(2)} - CHECKOUT NOW</Button>
+    <Button color="info" onClick={handleClick}>${orderPrice.toFixed(2)} - CHECKOUT NOW</Button>
 );
 
 const StripeForm = (props) => {
