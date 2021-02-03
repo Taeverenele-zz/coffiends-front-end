@@ -11,10 +11,11 @@ const OrdersView = (props) => {
   const [ pastOrders, setPastOrders ] = useState([]);
   const [ showPastOrders, setShowPastOrders ] = useState(false);
 
-
   useEffect(() => {
-    getOrders("active");
-  }, []);
+    if (loggedInUser) {
+      getOrders("active");
+    };
+  }, [loggedInUser]);
 
   const getOrders = (type) => {
     switch (type) {
@@ -57,12 +58,13 @@ const OrdersView = (props) => {
     if (pastOrders) {
       url = "http://localhost:5000/orders/past";
     };
+
     axios
       .get(url)
       .then((res) => {
         pastOrders ? setPastOrders(res.data) : setOrders(res.data);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   };
 
   const retrieveUserOrders = async (pastOrders) => {
@@ -70,12 +72,16 @@ const OrdersView = (props) => {
     if (pastOrders) {
       url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
     };
-    const response = await axios.get(url);
-    const userOrders = response.data;
-    pastOrders ? setPastOrders(userOrders) : setOrders(userOrders);
+
+    axios
+      .get(url)
+      .then((res) => {
+        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
-  const retrieveCafeOrders = async (pastOrders) => {
+  const retrieveCafeOrders = (pastOrders) => {
     let url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders`;
     if (pastOrders) {
       url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders/past`;
@@ -86,7 +92,7 @@ const OrdersView = (props) => {
       .then((res) => {
         pastOrders ? setPastOrders(res.data) : setOrders(res.data);
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -97,10 +103,9 @@ const OrdersView = (props) => {
           <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders} loggedInUser={loggedInUser} />
         </Row>
         <Row className="justify-content-center ">
-
-            <h1 className="justify-content-center Cafe-Header-Margin">Past Orders</h1>
-              <div className="Cafe-Dashboard-Expand Cafe-Header-Margin" >
-                <BsFillPlusSquareFill onClick={() => getPastOrders(true)} />
+          <h1 className="justify-content-center Cafe-Header-Margin">Past Orders</h1>
+          <div className="Cafe-Dashboard-Expand Cafe-Header-Margin" >
+            <BsFillPlusSquareFill onClick={() => getPastOrders(true)} />
           </div>
         </Row>
         <Row id="Past-Orders">
@@ -110,7 +115,6 @@ const OrdersView = (props) => {
               </div>
             ) : (<></>)}
         </Row>
-       
       </Container>
     </>
   );
