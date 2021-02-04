@@ -1,134 +1,110 @@
-import React, { useState, useEffect } from "react";
-import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-
-const initialUserState = {
-  username: "",
-  password: "",
-  user_name: "",
-  role: "cafe",
-  phone: "",
-};
+import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import StateContext from "../../utils/store";
 
 const NewCafeForm = (props) => {
-  const {
-    setCafeData,
-    cafeData,
-    initialCafeData,
-    isEditing,
-    cafes,
-    setCafes,
-    loggedInUser
-  } = props;
+  const { isEditing } = props;
+
+  const initialUserState = {
+    username: "",
+    password: "",
+    user_name: "",
+    role: "cafe",
+    phone: "",
+  };
 
   const [userData, setUserData] = useState(initialUserState);
 
-  // on initial load
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser, cafeData } = store;
+
   useEffect(() => {
     if (!loggedInUser) {
       props.history.push("/");
     };
-    if (isEditing) {
-      axios
-        .get(`http://localhost:5000/users/${cafeData.owner}`)
+    if (cafeData) {
+      axios.get(`http://localhost:5000/users/${cafeData.owner}`)
         .then((res) => {
           setUserData(res.data);
         })
         .catch((error) => console.log(error));
-    }
+    } else {
+      dispatch({
+        type: "setCafeData",
+        data: {
+          cafe_name: "",
+          address: "",
+          operating_hours: [],
+          location: []
+        }
+      });
+    };
   }, []);
-
-  // every time isEditing changes
-  useEffect(() => {
-    if (!isEditing) {
-      setUserData(initialUserState);
-      setCafeData(initialCafeData);
-    }
-  }, [isEditing]);
-
-  const addCafe = (newCafe) => {
-    setCafes([...cafes, newCafe]);
-  };
-
-  const updateCafe = (newCafe) => {
-    setCafes(cafes.map((cafe) => (cafe._id === cafeData._id ? newCafe : cafe)));
-  };
 
   const handleCafeInputChange = (e) => {
     const { name, value } = e.target;
-    setCafeData({ ...cafeData, [name]: value });
+    dispatch({
+      type: "setCafeData",
+      data: { ...cafeData, [name]: value }
+    });
   };
 
   const handleUserInputChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
-
+  
+  const updateExistingUser = () => {
+    axios.patch(`http://localhost:5000/users/${userData._id}`, userData)
+    .catch((error) => console.log(error));
+  };
+  
   const updateExistingCafe = () => {
-    axios
-      .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
-      .then((res) => updateCafe(res.data))
+    axios.put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
       .catch((error) => console.log(error));
+    
     props.history.push("/");
   };
-
-  const updateExistingUser = () => {
-    axios
-      .patch(`http://localhost:5000/users/${userData._id}`, userData)
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error));
-  };
-
+  
   const saveNewUser = () => {
-    return axios
-      .post("http://localhost:5000/users/register", userData)
+    return axios.post("http://localhost:5000/users/register", userData)
       .then((res) => {
-        console.log(userData);
         const cafeId = res.data._id;
         const newCafeData = { ...cafeData, owner: cafeId };
-        addCafe(newCafeData);
         return newCafeData;
       })
       .catch((error) => console.log(error));
   };
 
   const saveNewCafe = (newCafeData) => {
-    return axios
-      .post("http://localhost:5000/cafes", newCafeData)
-      .then(() => {
-        setCafeData(initialCafeData);
-        setUserData(initialUserState);
-      })
+    return axios.post("http://localhost:5000/cafes", newCafeData)
       .catch((error) => console.log(error));
   };
 
-  const cancelEditing = () => {
-    setCafeData(initialCafeData);
-    setUserData(initialUserState);
-    props.history.push("/");
-  };
-
   const handleFinalSubmit = (e) => {
-    console.log(isEditing);
     e.preventDefault();
     if (isEditing) {
-      // Save updated cafe here
       updateExistingUser();
       updateExistingCafe();
     } else {
-      saveNewUser().then((newCafeData) => {
-        console.log("test", newCafeData);
-        saveNewCafe(newCafeData)
-          .then(() => {
-            props.history.push("/");
-          })
-          .catch((error) => console.log(error));
+      saveNewUser()
+        .then((newCafeData) => {
+          saveNewCafe(newCafeData)
+            .then(() => {
+              props.history.push("/");
+            })
+            .catch((error) => console.log(error));
       });
-    }
+    };
   };
 
   return (
     <div>
+      {!cafeData ? (<></>) : (
+
+      <>
       <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
           <h2>{isEditing ? "Edit" : "Add New"} Cafe</h2>
@@ -276,10 +252,12 @@ const NewCafeForm = (props) => {
               ></Input>
             </FormGroup>
             <Button>Submit</Button>
-            <Button onClick={cancelEditing}>Cancel</Button>
+            <Link to="/"><Button>Cancel</Button></Link>
           </Form>
         </Col>
       </Row>
+      </>
+      )}
     </div>
   );
 };

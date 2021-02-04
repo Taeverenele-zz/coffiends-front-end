@@ -10,6 +10,11 @@ const stateReducer = (state, action) => {
         ...state,
         userLocation: action.data
       };
+    case "getAllCafes":
+      return {
+        ...state,
+        allCafes: action.data
+      };
     case "getAllCoffees":
       return {
         ...state,
@@ -24,6 +29,26 @@ const stateReducer = (state, action) => {
       return {
         ...state,
         orderCafe: action.data
+      };
+    case "setCafeData":
+      return {
+        ...state,
+        cafeData: action.data
+      };
+      case "setCoffeeData":
+      return {
+        ...state,
+        coffeeData: action.data
+      };
+      case "setInitialCafeData":
+      return {
+        ...state,
+        initialCafeData: action.data
+      };
+      case "setInitialCoffeeData":
+      return {
+        ...state,
+        setInitialCoffeeData: action.data
       };
     default:
       return state;

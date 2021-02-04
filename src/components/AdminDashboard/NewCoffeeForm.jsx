@@ -1,6 +1,7 @@
-import React, { useEffect } from "react";
-import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import React, { useContext, useEffect } from "react";
 import axios from "axios";
+import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import StateContext from "../../utils/store";
 
 const NewCoffeeForm = (props) => {
   const {
@@ -12,6 +13,9 @@ const NewCoffeeForm = (props) => {
     isEditing,
     loggedInUser
   } = props;
+
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser, cafeData } = store;
 
   useEffect(() => {
     if (!loggedInUser) {

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useEffect, useReducer } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import stateReducer from "./utils/stateReducer"
 import StateContext from "./utils/store";
-import AdminHome from "./components/AdminDashboard/AdminHome";
+// import AdminHome from "./components/AdminDashboard/AdminHome";
+import AdminLists from "./components/AdminDashboard/AdminLists";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import HomeView from "./components/HomeView";
@@ -13,32 +14,30 @@ import NewOrderForm from "./components/NewOrderForm";
 import EditUser from "./components/EditUser";
 import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
-import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
 import NewCafeForm from "./components/AdminDashboard/NewCafeForm";
 import NewCoffeeForm from "./components/AdminDashboard/NewCoffeeForm";
 
 const App = () => {
-  const [cafes, setCafes] = useState([]);
-  const initialCafeData = {
-    cafe_name: "",
-    address: "",
-    operating_hours: [],
-    location: [],
-  };
-  const [cafeData, setCafeData] = useState(initialCafeData);
-  const initialCoffeeData = {
-    name: "",
-    description: "",
-  };
-  const [coffeeData, setCoffeeData] = useState(initialCoffeeData);
-
   const initialState = {
     loggedInUser: null,
     userLocation: [ -27.468298, 153.0247838 ],
+    allCafes: null,
     allCoffees: null,
     userCoffee: null,
-    orderCafe: null
+    orderCafe: null,
+    cafeData: null,
+    coffeeData: null,
+    // initalCafeData: {
+    //   cafe_name: "",
+    //   address: "",
+    //   operating_hours: [],
+    //   location: [],
+    // },
+    // initalCoffeeData: {
+    //   name: "",
+    //   description: "",
+    // }
   };
   const [ store, dispatch ] = useReducer(stateReducer, initialState);
 
@@ -55,15 +54,14 @@ const App = () => {
         };
       });
 
-  axios.get("http://localhost:5000/coffees/")
-  .then((res) => {
-    dispatch({
-      type: "getAllCoffees",
-      data: res.data
-    });
-  })
-  .catch((err) => console.log(err));
-
+    axios.get("http://localhost:5000/coffees/")
+      .then((res) => {
+        dispatch({
+          type: "getAllCoffees",
+          data: res.data
+        });
+      })
+      .catch((err) => console.log(err));
     
     // navigator.geolocation.getCurrentPosition(
     //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
@@ -73,7 +71,7 @@ const App = () => {
 
   const handleLogout = () => {
     fetch("http://localhost:5000/users/logout", { credentials: "include" })
-      .then((res) => {
+      .then(() => {
           dispatch({
             type: "setLoggedInUser",
             data: null
@@ -84,7 +82,7 @@ const App = () => {
 
   return (
     <div className="container-fluid Remove-padding-margin ">
-      <StateContext.Provider value={{store, dispatch}}>
+      <StateContext.Provider value={{ store, dispatch }}>
       <BrowserRouter>
           <NavBar handleLogout={handleLogout} />
           <Switch>
@@ -105,17 +103,7 @@ const App = () => {
                 <></>
               )}
               {store.loggedInUser && store.loggedInUser.role === "admin" ? (
-                <Route exact path="/" render={(props) => (
-                  <AdminHome {...props}
-                    // coffees={coffees}
-                    // setCoffees={setCoffees}
-                    cafes={cafes}
-                    setCafes={setCafes}
-                    cafeData={cafeData}
-                    setCafeData={setCafeData}
-                    coffeeData={coffeeData}
-                    setCoffeeData={setCoffeeData}
-                    initialCoffeeData={initialCoffeeData} /> )} />
+                <Route exact path="/" component={AdminLists} />
               ) : (
                 <></>
               )}
@@ -130,17 +118,7 @@ const App = () => {
 
               <Route exact path="/orders" component={OrdersView} />
 
-              <Route
-                exact
-                path="/menu"
-                render={(props) => (
-                  <CafeMenuView
-                    {...props}
-                    loggedInUser={store.loggedInUser}
-                    // coffees={coffees}
-                  />
-                )}
-              />
+              <Route exact path="/menu" component={CafeMenuView} />
 
               <Route
                 exact
@@ -149,12 +127,12 @@ const App = () => {
                   <NewCafeForm
                     {...props}
                     isEditing={false}
-                    cafes={cafes}
-                    setCafes={setCafes}
-                    cafeData={cafeData}
-                    setCafeData={setCafeData}
-                    initialCafeData={initialCafeData}
-                    loggedInUser={store.loggedInUser}
+                    // cafes={cafes}
+                    // setCafes={setCafes}
+                    // cafeData={cafeData}
+                    // setCafeData={setCafeData}
+                    // initialCafeData={initialCafeData}
+                    // loggedInUser={store.loggedInUser}
                   />
                 )}
               />
@@ -166,12 +144,12 @@ const App = () => {
                   <NewCafeForm
                     {...props}
                     isEditing={true}
-                    cafes={cafes}
-                    setCafes={setCafes}
-                    cafeData={cafeData}
-                    setCafeData={setCafeData}
-                    initialCafeData={initialCafeData}
-                    loggedInUser={store.loggedInUser}
+                    // cafes={cafes}
+                    // setCafes={setCafes}
+                    // cafeData={cafeData}
+                    // setCafeData={setCafeData}
+                    // initialCafeData={initialCafeData}
+                    // loggedInUser={store.loggedInUser}
                   />
                 )}
               />
@@ -184,10 +162,10 @@ const App = () => {
                     // coffees={coffees}
                     // setCoffees={setCoffees}
                     isEditing={false}
-                    coffeeData={coffeeData}
-                    setCoffeeData={setCoffeeData}
-                    initialCoffeeData={initialCoffeeData}
-                    loggedInUser={store.loggedInUser}
+                    // coffeeData={coffeeData}
+                    // setCoffeeData={setCoffeeData}
+                    // initialCoffeeData={initialCoffeeData}
+                    // loggedInUser={store.loggedInUser}
                   />
                 )}
               />
@@ -200,25 +178,16 @@ const App = () => {
                     // coffees={coffees}
                     // setCoffees={setCoffees}
                     isEditing={true}
-                    coffeeData={coffeeData}
-                    setCoffeeData={setCoffeeData}
-                    initialCoffeeData={initialCoffeeData}
-                    loggedInUser={store.loggedInUser}
+                    // coffeeData={coffeeData}
+                    // setCoffeeData={setCoffeeData}
+                    // initialCoffeeData={initialCoffeeData}
+                    // loggedInUser={store.loggedInUser}
                   />
                 )}
               />
 
-              <Route
-                exact
-                path="/payment"
-                render={(props) => (
-                  <StripeForm {...props} loggedInUser={store.loggedInUser} />
-                )}
-              />
-
               <Route exact path="/logout">
-                <Redirect to="/" />
-              </Route>
+                <Redirect to="/" /></Route>
             </>
           </Switch>
         </BrowserRouter>
