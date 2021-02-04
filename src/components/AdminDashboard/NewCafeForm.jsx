@@ -77,7 +77,7 @@ const NewCafeForm = (props) => {
     if (action === "edit") {
       axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`, userData)
         .catch((error) => console.log(error));  
-      axios.put(`${process.env.BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
+      axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
         .catch((error) => console.log(error));
       
       props.history.push("/");

@@ -47,7 +47,7 @@ const AdminLists = () => {
 
   return (
     <Container>
-      {!allCafes ? (<></>) : (
+      {!allCafes || !allCoffees ? (<></>) : (
         <>
           <Row className="justify-content-center margin-add-top">
             <h1>Admin Dashboard</h1>
