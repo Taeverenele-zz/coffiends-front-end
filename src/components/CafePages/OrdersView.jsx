@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import OrderTable from "./OrderTable";
+import OrderTable from "../OrderTable";
 import { Container, Row } from "reactstrap";
 import { BsFillPlusSquareFill } from "react-icons/bs";
 

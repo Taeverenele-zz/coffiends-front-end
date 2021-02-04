@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import StripeForm from "./StripeForm";
+import StripeForm from "../StripeForm";
 import {
   Container,
   Row,

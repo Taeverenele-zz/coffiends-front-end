@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import AdminHome from "./components/AdminDashboard/AdminHome";
-import CafeDashboardView from "./components/CafeDashboardView";
-import CafeMenuView from "./components/CafeMenuView";
-import HomeView from "./components/HomeView";
+import CafeDashboardView from "./components/CafePages/CafeDashboardView";
+import CafeMenuView from "./components/CafePages/CafeMenuView";
+import HomeView from "./components/UserPages/HomeView";
 import LoginView from "./components/LoginView";
-import MapView from "./components/MapView";
-import NewOrderForm from "./components/NewOrderForm";
-import EditUser from "./components/EditUser";
-import OrdersView from "./components/OrdersView";
+import MapView from "./components/UserPages/MapView";
+import NewOrderForm from "./components/UserPages/NewOrderForm";
+import EditUser from "./components/UserPages/EditUser";
+import OrdersView from "./components/CafePages/OrdersView";
 import RegisterView from "./components/RegisterView";
 import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
 import NewCafeForm from "./components/AdminDashboard/NewCafeForm";
 import NewCoffeeForm from "./components/AdminDashboard/NewCoffeeForm";
-import ChangePassword from "./components/ChangePassword";
+import ChangePassword from "./components/UserPages/ChangePassword";
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
