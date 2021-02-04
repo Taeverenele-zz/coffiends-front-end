@@ -13,13 +13,13 @@ const AdminLists = () => {
   const { allCoffees, allCafes } = store;
 
   useEffect(() => {
-    axios.get("http://localhost:5000/cafes/")
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/`)
       .then((res) => { dispatch({ type: "getAllCafes", data: res.data }) })
       .catch((error) => console.log(error));
     
     dispatch({ type: "setCafeData", data: null });
     
-    axios.get("http://localhost:5000/coffees/")
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`)
       .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
       .catch((err) => console.log(err));
     
@@ -27,13 +27,13 @@ const AdminLists = () => {
   }, [ dispatch, reload ]);
 
   const deleteCafe = (id) => {
-    axios.delete(`http://localhost:5000/cafes/${id}`)
+    axios.delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${id}`)
       .then(() => { reload ? setReload(false) : setReload(true) })
       .catch((error) => console.log(error));
   };
 
   const deleteCoffee = (id) => {
-    axios.delete(`http://localhost:5000/coffees/${id}`)
+    axios.delete(`${process.env.REACT_APP_BACK_END_URL}/coffees/${id}`)
       .then(() => { reload ? setReload(false) : setReload(true) })
       .catch((error) => console.log(error));
   };

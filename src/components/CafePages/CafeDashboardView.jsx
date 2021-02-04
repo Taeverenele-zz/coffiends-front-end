@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Container } from "reactstrap";
-import StateContext from "../utils/store";
-import OrdersView from "./OrdersView";
+import StateContext from "../../utils/store";
+import OrdersView from "..//OrdersView";
 
 const CafeDashboardView = () => {
   const { store } = useContext(StateContext);

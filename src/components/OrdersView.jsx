@@ -56,9 +56,9 @@ const OrdersView = () => {
   };
 
   const retrieveAllOrders = (pastOrders) => {
-    let url = "http://localhost:5000/orders";
+    let url = `${process.env.REACT_APP_BACK_END_URL}/orders`;
     if (pastOrders) {
-      url = "http://localhost:5000/orders/past";
+      url = `${process.env.REACT_APP_BACK_END_URL}/orders/past`;
     }
 
     axios
@@ -70,9 +70,9 @@ const OrdersView = () => {
   };
 
   const retrieveUserOrders = async (pastOrders) => {
-    let url = `http://localhost:5000/users/${loggedInUser._id}/orders`;
+    let url = `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/orders`;
     if (pastOrders) {
-      url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
+      url = `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/orders/past`;
     };
 
     axios
@@ -84,9 +84,9 @@ const OrdersView = () => {
   };
 
   const retrieveCafeOrders = (pastOrders) => {
-    let url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders`;
+    let url = `${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/orders`;
     if (pastOrders) {
-      url = `http://localhost:5000/cafes/${loggedInUser.cafe._id}/orders/past`;
+      url = `${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/orders/past`;
     }
 
     axios

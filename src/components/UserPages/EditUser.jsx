@@ -1,11 +1,11 @@
 import React, { useContext } from "react";
-import StateContext from "../utils/store";
 import axios from "axios";
 import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import StateContext from "../../utils/store";
 
 const EditUser = (props) => {
   const { store, dispatch } = useContext(StateContext);
-  const { loggedInUser } = store
+  const { loggedInUser } = store;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +18,7 @@ const EditUser = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
+    axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
       .then(() => props.history.push("/"))
       .catch((error) => console.log(error));
   };

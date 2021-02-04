@@ -15,7 +15,7 @@ const LoginView = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response = await fetch("http://localhost:5000/users/login", {
+    let response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/users/login`, {
       method: "POST",
       body: JSON.stringify(loginDetails),
       headers: { "Content-Type": "application/json" },

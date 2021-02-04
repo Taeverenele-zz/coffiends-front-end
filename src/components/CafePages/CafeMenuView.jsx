@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Row, Col, Input, Button, Table, Form, FormGroup } from "reactstrap";
-import StateContext from "../utils/store";
+import StateContext from "../../utils/store";
 
 const CafeMenuView = () => {
   const [ menu, setMenu ] = useState([]);
@@ -21,13 +21,13 @@ const CafeMenuView = () => {
   const getMenuData = async () => {
     const cafeMenuArr = [];
  
-    let response = await axios.get(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`);
+    let response = await axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`);
     const currentMenu = await response.data;
     setMenu(currentMenu);
     
     await currentMenu.forEach(element => {cafeMenuArr.push(element.coffee._id)});
 
-    response = await axios.post("http://localhost:5000/coffees/available", { menu: cafeMenuArr, coffees: allCoffees });
+    response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/coffees/available`, { menu: cafeMenuArr, coffees: allCoffees });
     const availableCoffees = await response.data;
     setCoffees(availableCoffees);
   };
@@ -49,13 +49,13 @@ const CafeMenuView = () => {
       cafe: loggedInUser.cafe._id
     };
 
-    const response = await axios.post("http://localhost:5000/menuitems", newMenuItem);
+    const response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/menuitems`, newMenuItem);
     const newItem = await response.data;
 
     const cafeMenu = await loggedInUser.cafe.menu
     cafeMenu.push(newItem._id)
 
-    await axios.put(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`, { menu: cafeMenu });
+    await axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { menu: cafeMenu });
 
     setNewCoffee("");
     setNewPrice("");
@@ -63,11 +63,11 @@ const CafeMenuView = () => {
   };
 
   const handleDelete = async (menuitem) => {
-    await axios.delete(`http://localhost:5000/menuitems/${menuitem._id}`);
+    await axios.delete(`${process.env.REACT_APP_BACK_END_URL}/menuitems/${menuitem._id}`);
 
     const updatedCafeMenu = loggedInUser.cafe.menu.filter((id) => id !== menuitem._id)
 
-    await axios.put(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`, { menu: updatedCafeMenu });
+    await axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { menu: updatedCafeMenu });
 
     getMenuData();
   };

@@ -1,5 +1,10 @@
 const stateReducer = (state, action) => {
   switch (action.type) {
+    case "setFlashMessage":
+      return {
+        ...state,
+        flashMessage: action.data
+      };
     case "setLoggedInUser":
       return {
         ...state,

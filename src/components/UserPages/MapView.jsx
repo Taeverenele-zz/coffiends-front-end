@@ -3,9 +3,9 @@ import { Link, useParams } from "react-router-dom";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import axios from "axios";
 import { Button, Container } from "reactstrap";
-import StateContext from "../utils/store";
-import setTimeString from "../utils/setTimeString";
-import "../App.css";
+import StateContext from "../../utils/store";
+import setTimeString from "../../utils/setTimeString";
+import "../../App.css";
 
 function MapView() {
   const { coffee } = useParams();
@@ -23,7 +23,7 @@ function MapView() {
         coffee: coffee
       };
 
-      axios.post("http://localhost:5000/map/", postBody)
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/map`, postBody)
         .then((res) => setCafesData(res.data))
         .catch((err) => console.log(err))
       };

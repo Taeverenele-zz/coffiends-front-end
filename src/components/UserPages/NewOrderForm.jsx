@@ -2,8 +2,8 @@ import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import StripeForm from "./StripeForm";
 import { Container, Row, Col, Button, Form, FormGroup, Label } from "reactstrap";
-import StateContext from "../utils/store";
-import setTimeString from "../utils/setTimeString";
+import StateContext from "../../utils/store";
+import setTimeString from "../../utils/setTimeString";
 
 const NewOrderForm = (props) => {
   const [ size, setSize ] = useState("Regular");

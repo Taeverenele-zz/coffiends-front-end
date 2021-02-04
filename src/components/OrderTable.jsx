@@ -11,7 +11,7 @@ const OrderTable = (props) => {
 
   const completeOrder = (id) => {
     axios
-      .put(`http://localhost:5000/orders/${id}`)
+      .put(`${process.env.REACT_APP_BACK_END_URL}/orders/${id}`)
       .then(() => {
         getOrders("active");
         getPastOrders(false);

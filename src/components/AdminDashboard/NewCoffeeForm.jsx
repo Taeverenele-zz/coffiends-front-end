@@ -34,11 +34,11 @@ const NewCoffeeForm = (props) => {
     e.preventDefault();
 
     if (action === "edit") {
-      axios.put(`http://localhost:5000/coffees/${coffeeData._id}`, coffeeData)
+      axios.put(`${process.env.REACT_APP_BACK_END_URL}/coffees/${coffeeData._id}`, coffeeData)
         .then(() => props.history.push("/"))
         .catch((error) => console.log(error));
     } else {
-      axios.post("http://localhost:5000/coffees", coffeeData)
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/coffees`, coffeeData)
         .then(() => props.history.push("/"))
         .catch((error) => console.log(error));
     };
