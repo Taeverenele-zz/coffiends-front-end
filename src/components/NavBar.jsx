@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav, Container, Row, Col } from "reactstrap";
+import logo from "../assets/newLogo.svg"
 
 const NavBar = (props) => {
   const { handleLogout, loggedInUser } = props;
@@ -23,7 +24,7 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/logout">
-          <Button color="warning" onClick={handleLogout} size="sm">
+          <Button outline onClick={handleLogout} className="button-color" size="sm" >
             LOG OUT
           </Button>
         </Link>
@@ -34,12 +35,12 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/user/edit">
-          <Button>EDIT PROFILE</Button>
+          <Button outline size="sm" className="button-color" >EDIT PROFILE</Button>
         </Link>
       </NavItem>
-      <NavItem className="mr-3">
+      <NavItem  className="mr-3">
         <Link to="/orders">
-          <Button size="sm">ORDERS</Button>
+          <Button outline size="sm" className="button-color">ORDERS</Button>
         </Link>
       </NavItem>
     </>
@@ -73,7 +74,7 @@ const NavBar = (props) => {
        <Navbar className="nav-color">
         <Col sm={{ size: 'auto' }}>
           <Link to="/">
-            <img src="logo.png" alt="Logo" style={{ height: "100px", padding:"0", margin:"0" }} />
+            <img src={logo} alt="Logo" className="logo-styles" />
           </Link>
         </Col>
         <Col sm={{ size: 'auto', offset: "1"}}>

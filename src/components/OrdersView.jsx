@@ -96,9 +96,11 @@ const OrdersView = (props) => {
 
   return (
     <>
-      <Container>
+      <Container fluid="true" className="background full-height" >
         <Row className="justify-content-center">
-          <h1>Current Orders</h1>
+          <h1 className="heading-colors margin-add-top">Current Orders</h1>
+        </Row>
+        <Row>
           <OrderTable
             orders={orders}
             getOrders={getOrders}
@@ -108,16 +110,16 @@ const OrdersView = (props) => {
           />
         </Row>
         <Row className="justify-content-center ">
-          <h1 className="justify-content-center Cafe-Header-Margin">
+          <h1 className="heading-colors Cafe-Header-Margin">
             Past Orders
           </h1>
-          <div className="Cafe-Dashboard-Expand Cafe-Header-Margin">
+          <div className="Cafe-Dashboard-Expand Cafe-Header-Margin ">
             <BsFillPlusSquareFill onClick={() => getPastOrders(true)} />
           </div>
         </Row>
-        <Row id="Past-Orders">
+        <Row id="Past-Orders" className="justify-content-center">
           {showPastOrders ? (
-            <div>
+            <div >
               <OrderTable orders={pastOrders} />
             </div>
           ) : (

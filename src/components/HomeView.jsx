@@ -35,33 +35,30 @@ const HomeView = (props) => {
     setUserCoffee({ id, name });
   }
 
+
+
   return (
-    <div className="background">
+    <div className="background full-height ">
       <div>
-        <Container fluid="true">
-          <Row className="justify-content-center">
+        <Container fluid="true" className="card-margin-add" >
+          <Row className="justify-content-center  Admin-Dashboard-Center ">
             {coffees.map((coffee, index) => (
-              <CardDeck key={index} style={{ margin: "30px" }}>
-                <Card key={coffee._id}>
+              <CardDeck key={index} style={{ margin: "30px" }} className=" flip-card ">
+                <Card key={coffee._id} className="flip-card-inner card-rm-background" style={{height: "200px", width: "200px"}} >
+                  <div className="flip-card-front">
                   <CardImg
                     top
                     width="100%"
                     src={coffeeImg}
                     alt="Card image cap"
+                    style={{marginBottom: "45px"}}
                   />
-                  <CardBody style={{ width: "230px" }}>
-                  <Row className="justify-content-center" >
-                    <CardTitle tag="h5">{coffee.name}</CardTitle>
-                    <CardSubtitle tag="h6" className="mb-2 text-muted text-center">
+                    <CardTitle tag="h5" className="card-text-color">{coffee.name}</CardTitle>
+                  </div>
+                  <CardBody  className="flip-card-back  ">
+                    <CardSubtitle tag="h6" className="mb-2 card-desc text-center" style={{marginTop: "40px"}}>
                       {coffee.description}
                     </CardSubtitle>
-                    {/* <p
-                      key={coffee._id}
-                      onClick={() => addUserCoffee(coffee.name, coffee._id)}
-                    > */}
-                    {/* {coffee.name} -{" "} */}
-                  </Row>
-                  <Row className="justify-content-center">
                     <Link
                       to={`/map/${coffee.name}`}
                       onClick={() => addUserCoffee(coffee._id, coffee.name)}
@@ -72,112 +69,14 @@ const HomeView = (props) => {
                       </Button>
                     </div>
                     </Link>
-                  </Row>
-                    {/* </p> */}
                   </CardBody>
+                
                 </Card>
               </CardDeck>
             ))}
           </Row>
         </Container>
       </div>
-
-      {/* <div>
-        <CardDeck style={{margin: "10px" }}>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This card has supporting text below as a natural lead-in to
-                additional content.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-        </CardDeck>
-      </div>
-      <div style={{ marginTop: "20px" }}>
-        <CardDeck style={{ margin: "10px" }}>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This content is a little bit
-                longer.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This card has supporting text below as a natural lead-in to
-                additional content.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-          <Card>
-            <CardImg top width="100%" src={coffee} alt="Card image cap" />
-            <CardBody>
-              <CardTitle tag="h5">Card title</CardTitle>
-              <CardSubtitle tag="h6" className="mb-2 text-muted">
-                Card subtitle
-              </CardSubtitle>
-              <CardText>
-                This is a wider card with supporting text below as a natural
-                lead-in to additional content. This card has even longer content
-                than the first to show that equal height action.
-              </CardText>
-              <Button>Button</Button>
-            </CardBody>
-          </Card>
-        </CardDeck>
-      </div> */}
     </div>
   );
 };

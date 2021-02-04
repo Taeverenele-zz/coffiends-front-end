@@ -1,5 +1,5 @@
 import React from "react";
-import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import { Form, FormGroup, Input, Label, Row, Col, Button, Container } from "reactstrap";
 import axios from "axios";
 
 const EditUser = (props) => {
@@ -25,10 +25,12 @@ const EditUser = (props) => {
     <>
       {loggedInUser ? (
         <>
-          <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-              <h2>Edit Profile</h2>
+        <Container fluid="true" className="background full-height ">
+          <Row className="mt-4 ">
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center margin-add-top ">
+              <h2 className="heading-colors">Edit Profile</h2>
               <Button
+              className="button-color"
                 onClick={() => {
                   props.history.push("/user/change_password");
                 }}
@@ -37,43 +39,55 @@ const EditUser = (props) => {
               </Button>
             </Col>
           </Row>
-          <Row className="mt-4">
+          <Row className="mt-4 justify-content-center">
             <Col sm="12" md={{ size: 6, offset: 3 }}>
-              <Form onSubmit={handleSubmit}>
+              <Form onSubmit={handleSubmit} className="edit-form-form">
                 <FormGroup>
-                  <Label for="user_name">User Name:</Label>
+                  <div className="text-center">
+                    <Label for="user_name" className="border-color justify-content-center">User Name:</Label>
+                  </div>
                   <Input
                     type="text"
                     name="user_name"
                     value={loggedInUser.user_name}
                     onChange={handleInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="username">Email:</Label>
+                <div className="text-center">
+                  <Label for="username" className="border-color">Email:</Label>
+                </div>
                   <Input
                     type="email"
                     name="username"
                     value={loggedInUser.username}
                     onChange={handleInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="phone">Phone:</Label>
+                <div className="text-center">
+                  <Label for="phone" className="border-color">Phone:</Label>
+                </div>
                   <Input
                     type="phone"
                     name="phone"
                     value={loggedInUser.phone}
                     onChange={handleInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
-                <Button>Submit</Button>
+                <div className="text-center">
+                  <Button className="button-color">Submit</Button>
+                </div>
               </Form>
             </Col>
           </Row>
+        </Container>
         </>
       ) : (
         <></>
