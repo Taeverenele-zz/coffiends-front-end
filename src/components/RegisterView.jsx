@@ -27,12 +27,15 @@ const RegisterView = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response = await fetch("http://localhost:5000/users/register", {
-      method: "POST",
-      body: JSON.stringify(loginDetails),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+    let response = await fetch(
+      `${process.env.REACT_APP_BACK_END_URL}/users/register`,
+      {
+        method: "POST",
+        body: JSON.stringify(loginDetails),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
     const userDetails = await response.json();
     if (userDetails.message) {
       alert(userDetails.message);

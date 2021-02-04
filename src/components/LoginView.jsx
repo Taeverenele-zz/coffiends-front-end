@@ -25,12 +25,15 @@ const LoginView = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response = await fetch("http://localhost:5000/users/login", {
-      method: "POST",
-      body: JSON.stringify(loginDetails),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+    let response = await fetch(
+      `${process.env.REACT_APP_BACK_END_URL}/users/login`,
+      {
+        method: "POST",
+        body: JSON.stringify(loginDetails),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
     if (response.status === 400) {
       alert("Invalid login details");
     } else {

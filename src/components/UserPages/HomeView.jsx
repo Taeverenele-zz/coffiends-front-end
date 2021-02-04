@@ -19,7 +19,7 @@ const HomeView = (props) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/coffees/", coffees)
+      .get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`, coffees)
       .then((res) => setCoffees(res.data))
       .catch((err) => console.log(err));
   }, []);

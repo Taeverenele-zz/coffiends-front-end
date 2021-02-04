@@ -30,7 +30,7 @@ const NewCafeForm = (props) => {
     }
     if (isEditing) {
       axios
-        .get(`http://localhost:5000/users/${cafeData.owner}`)
+        .get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeData.owner}`)
         .then((res) => {
           setUserData(res.data);
           console.log(userData);
@@ -67,7 +67,10 @@ const NewCafeForm = (props) => {
 
   const updateExistingCafe = () => {
     axios
-      .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
+      .put(
+        `${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`,
+        cafeData
+      )
       .then((res) => updateCafe(res.data))
       .catch((error) => console.log(error));
     props.history.push("/");
@@ -75,14 +78,17 @@ const NewCafeForm = (props) => {
 
   const updateExistingUser = () => {
     axios
-      .patch(`http://localhost:5000/users/${userData._id}`, userData)
+      .patch(
+        `${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`,
+        userData
+      )
       .then((res) => console.log(res.data))
       .catch((error) => console.log(error));
   };
 
   const saveNewUser = () => {
     return axios
-      .post("http://localhost:5000/users/register", userData)
+      .post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
       .then((res) => {
         console.log(userData);
         const cafeId = res.data._id;
@@ -95,7 +101,7 @@ const NewCafeForm = (props) => {
 
   const saveNewCafe = (newCafeData) => {
     return axios
-      .post("http://localhost:5000/cafes", newCafeData)
+      .post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
       .then(() => {
         setCafeData(initialCafeData);
         setUserData(initialUserState);

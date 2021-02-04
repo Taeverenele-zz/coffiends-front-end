@@ -10,15 +10,15 @@ const NewCoffeeForm = (props) => {
     setCoffeeData,
     initialCoffeeData,
     isEditing,
-    loggedInUser
+    loggedInUser,
   } = props;
 
   useEffect(() => {
     if (!loggedInUser) {
-      props.history.push("/")
-    };
+      props.history.push("/");
+    }
   }, []);
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setCoffeeData({ ...coffeeData, [name]: value });
@@ -28,7 +28,7 @@ const NewCoffeeForm = (props) => {
   };
   const saveNewCoffee = () => {
     return axios
-      .post("http://localhost:5000/coffees", coffeeData)
+      .post(`${process.env.REACT_APP_BACK_END_URL}/coffees`, coffeeData)
       .then(() => {
         addCoffee(coffeeData);
         setCoffeeData(initialCoffeeData);
@@ -48,7 +48,10 @@ const NewCoffeeForm = (props) => {
 
   const updateExistingCoffee = () => {
     axios
-      .put(`http://localhost:5000/coffees/${coffeeData._id}`, coffeeData)
+      .put(
+        `${process.env.REACT_APP_BACK_END_URL}/coffees/${coffeeData._id}`,
+        coffeeData
+      )
       .then((res) => updateCoffee(res.data))
       .catch((error) => console.log(error));
     props.history.push("/");

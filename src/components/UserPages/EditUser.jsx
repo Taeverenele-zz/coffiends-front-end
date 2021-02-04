@@ -6,7 +6,10 @@ const EditUser = (props) => {
   const { loggedInUser, setLoggedInUser } = props;
   const updateExistingUser = () => {
     axios
-      .patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
+      .patch(
+        `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`,
+        loggedInUser
+      )
       .then((res) => console.log(res.data))
       .catch((error) => console.log(error));
   };

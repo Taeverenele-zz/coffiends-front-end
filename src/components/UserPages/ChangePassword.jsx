@@ -45,7 +45,7 @@ const ChangePassword = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.patch(
-      `http://localhost:5000/users/${loggedInUser._id}/change_password`,
+      `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/change_password`,
       formData
     );
     if (response.status === 200) {

@@ -23,7 +23,7 @@ const AdminHome = (props) => {
   // Get all cafes from database
   const getAllCafes = () => {
     axios
-      .get("http://localhost:5000/cafes/", cafes)
+      .get(`${process.env.REACT_APP_BACK_END_URL}/cafes/`, cafes)
       .then((res) => {
         setCafes(res.data);
       })
@@ -32,7 +32,7 @@ const AdminHome = (props) => {
 
   const deleteCafe = (id) => {
     axios
-      .delete(`http://localhost:5000/cafes/${id}`, cafes)
+      .delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${id}`, cafes)
       .then((res) => setCafes(cafes.filter((cafe) => cafe._id !== id)))
       .catch((error) => console.log(error));
   };
@@ -40,13 +40,13 @@ const AdminHome = (props) => {
   // Get all coffees from the database
   const getAllCoffees = () => {
     axios
-      .get("http://localhost:5000/coffees/", coffees)
+      .get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`, coffees)
       .then((res) => setCoffees(res.data))
       .catch((error) => console.log(error));
   };
   const deleteCoffee = (id) => {
     axios
-      .delete(`http://localhost:5000/coffees/${id}`, coffees)
+      .delete(`${process.env.REACT_APP_BACK_END_URL}/coffees/${id}`, coffees)
       .then((res) => setCoffees(coffees.filter((coffee) => coffee._id !== id)))
       .catch((error) => console.log(error));
   };

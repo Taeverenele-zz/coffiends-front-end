@@ -42,7 +42,9 @@ const App = () => {
   const onDismiss = () => setVisible(false);
   // Checks session for a logged in user
   useEffect(() => {
-    fetch("http://localhost:5000/users/check", { credentials: "include" })
+    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/check`, {
+      credentials: "include",
+    })
       .then((data) => data.json())
       .then((json) => {
         if (json) {
@@ -58,7 +60,7 @@ const App = () => {
   }, []);
 
   const handleLogout = () => {
-    fetch("http://localhost:5000/users/logout", {
+    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, {
       credentials: "include",
     }).then((res) => {
       if (res.status === 200) {

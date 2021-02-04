@@ -38,7 +38,7 @@ function MapView(props) {
     };
 
     axios
-      .post("http://localhost:5000/map/", postBody)
+      .post(`${process.env.REACT_APP_BACK_END_URL}/map/`, postBody)
       .then((res) => setCafesData(res.data))
       .catch((err) => console.log(err));
   };
