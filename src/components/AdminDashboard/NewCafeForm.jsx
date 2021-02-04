@@ -6,13 +6,13 @@ import StateContext from "../../utils/store";
 
 const NewCafeForm = (props) => {
   const { action } = useParams();
-  
-  const [ userData, setUserData ] = useState({
+
+  const [userData, setUserData] = useState({
     username: "",
     password: "",
     user_name: "",
     role: "cafe",
-    phone: ""
+    phone: "",
   });
 
   const { store, dispatch } = useContext(StateContext);
@@ -21,9 +21,10 @@ const NewCafeForm = (props) => {
   useEffect(() => {
     if (!loggedInUser) {
       props.history.push("/");
-    };
+    }
     if (cafeData && action === "edit") {
-      axios.get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeData.owner}`)
+      axios
+        .get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeData.owner}`)
         .then((res) => {
           setUserData(res.data);
         })
@@ -35,24 +36,24 @@ const NewCafeForm = (props) => {
           cafe_name: "",
           address: "",
           operating_hours: [],
-          location: []
-        }
+          location: [],
+        },
       });
       setUserData({
         username: "",
         password: "",
         user_name: "",
         role: "cafe",
-        phone: ""
+        phone: "",
       });
-    };
+    }
   }, [action]);
 
   const handleCafeInputChange = (e) => {
     const { name, value } = e.target;
     dispatch({
       type: "setCafeData",
-      data: { ...cafeData, [name]: value }
+      data: { ...cafeData, [name]: value },
     });
   };
 
@@ -60,9 +61,10 @@ const NewCafeForm = (props) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
-  
+
   const saveNewUser = () => {
-    return axios.post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
+    return axios
+      .post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
       .then((res) => {
         const cafeId = res.data._id;
         const newCafeData = { ...cafeData, owner: cafeId };
@@ -75,26 +77,37 @@ const NewCafeForm = (props) => {
     e.preventDefault();
 
     if (action === "edit") {
-      axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`, userData)
-        .catch((error) => console.log(error));  
-      axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
+      axios
+        .patch(
+          `${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`,
+          userData
+        )
         .catch((error) => console.log(error));
-      
+      axios
+        .put(
+          `${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`,
+          cafeData
+        )
+        .catch((error) => console.log(error));
+
       props.history.push("/");
     } else {
       saveNewUser()
         .then((newCafeData) => {
-          axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
+          axios
+            .post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
             .then(() => props.history.push("/"))
             .catch((error) => console.log(error));
         })
         .catch((error) => console.log(error));
-    };
+    }
   };
 
   return (
     <div>
-      {!cafeData ? (<></>) : (
+      {!cafeData ? (
+        <></>
+      ) : (
         <>
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
@@ -109,7 +122,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="text"
                     name="cafe_name"
-                    value={cafeData.cafe_name}
+                    value={cafeData.cafe_name || ""}
                     onChange={handleCafeInputChange}
                     required
                   ></Input>
@@ -119,7 +132,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="text"
                     name="user_name"
-                    value={userData.user_name}
+                    value={userData.user_name || ""}
                     onChange={handleUserInputChange}
                     required
                   ></Input>
@@ -129,7 +142,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="email"
                     name="username"
-                    value={userData.username}
+                    value={userData.username || ""}
                     onChange={handleUserInputChange}
                     required
                   ></Input>
@@ -139,7 +152,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="password"
                     name="password"
-                    value={userData.password}
+                    value={userData.password || ""}
                     onChange={handleUserInputChange}
                     required
                   ></Input>
@@ -159,7 +172,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="text"
                     name="phone"
-                    value={userData.phone}
+                    value={userData.phone || ""}
                     onChange={handleUserInputChange}
                     required
                   ></Input>
@@ -169,7 +182,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="text"
                     name="address"
-                    value={cafeData.address}
+                    value={cafeData.address || ""}
                     onChange={handleCafeInputChange}
                     required
                   ></Input>
@@ -219,7 +232,10 @@ const NewCafeForm = (props) => {
                       handleCafeInputChange({
                         target: {
                           name: "location",
-                          value: [parseFloat(e.target.value), cafeData.location[1]],
+                          value: [
+                            parseFloat(e.target.value),
+                            cafeData.location[1],
+                          ],
                         },
                       })
                     }
@@ -236,14 +252,19 @@ const NewCafeForm = (props) => {
                       handleCafeInputChange({
                         target: {
                           name: "location",
-                          value: [cafeData.location[0], parseFloat(e.target.value)],
+                          value: [
+                            cafeData.location[0],
+                            parseFloat(e.target.value),
+                          ],
                         },
                       })
                     }
                   ></Input>
                 </FormGroup>
                 <Button>Submit</Button>
-                <Link to="/"><Button>Cancel</Button></Link>
+                <Link to="/">
+                  <Button>Cancel</Button>
+                </Link>
               </Form>
             </Col>
           </Row>
