@@ -12,7 +12,7 @@ import {
   CardSubtitle,
   CardBody,
 } from "reactstrap";
-import coffeeImg from "../assets/coffee.svg";
+import coffeeImg from "../../assets/coffee.svg";
 
 const HomeView = (props) => {
   const { coffees, setCoffees, setUserCoffee } = props;
