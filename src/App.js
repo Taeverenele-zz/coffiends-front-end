@@ -22,7 +22,8 @@ const App = () => {
   const initialState = {
     flashMessage: null,
     loggedInUser: null,
-    userLocation: [ -27.468298, 153.0247838 ],
+    // userLocation: [ -27.468298, 153.0247838 ],
+    userLocation: [ -27.4700319, 153.1602705 ],
     allCafes: null,
     allCoffees: null,
     userCoffee: null,
@@ -44,7 +45,7 @@ const App = () => {
       });
     
     // navigator.geolocation.getCurrentPosition(
-    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
+    //   position => dispatch({ type: "setUserLocation", data: [position.coords.latitude, position.coords.longitude] }),
     //   error => console.log(error.message)
     // );
   }, []);

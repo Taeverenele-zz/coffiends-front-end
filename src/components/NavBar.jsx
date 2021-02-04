@@ -6,7 +6,7 @@ import StateContext from "../utils/store";
 const NavBar = (props) => {
   const { handleLogout } = props;
   
-  const { store, dispatch } = useContext(StateContext);
+  const { store } = useContext(StateContext);
   const { loggedInUser } = store;
 
   const loggedOut = (
