@@ -7,47 +7,34 @@ import StateContext from "../../utils/store";
 const AdminLists = () => {
   const [cafeSearchTerm, setCafeSearchTerm] = useState("");
   const [coffeeSearchTerm, setCoffeeSearchTerm] = useState("");
+  const [ reload, setReload ] = useState(false);
 
   const { store, dispatch } = useContext(StateContext);
   const { allCoffees, allCafes } = store;
 
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/cafes/")
-      .then((res) => {
-        dispatch({
-          type: "getAllCafes",
-          data: res.data
-        });
-      })
+    axios.get("http://localhost:5000/cafes/")
+      .then((res) => { dispatch({ type: "getAllCafes", data: res.data }) })
       .catch((error) => console.log(error));
-    dispatch({
-      type: "setCafeData",
-      data: null
-    });
-  }, [ dispatch ]);
+    
+    dispatch({ type: "setCafeData", data: null });
+    
+    axios.get("http://localhost:5000/coffees/")
+      .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
+      .catch((err) => console.log(err));
+    
+    dispatch({ type: "setCoffeeData", data: null });
+  }, [ dispatch, reload ]);
 
   const deleteCafe = (id) => {
-    axios
-      .delete(`http://localhost:5000/cafes/${id}`)
-      .then(() => {
-        dispatch({
-          type: "getAllCafes",
-          data: allCafes.filter((cafe) => cafe._id !== id)
-        });
-      })
+    axios.delete(`http://localhost:5000/cafes/${id}`)
+      .then(() => { reload ? setReload(false) : setReload(true) })
       .catch((error) => console.log(error));
   };
 
   const deleteCoffee = (id) => {
-    axios
-      .delete(`http://localhost:5000/coffees/${id}`)
-      .then(() => {
-        dispatch({
-          type: "getAllCoffees",
-          data: allCoffees.filter((coffee) => coffee._id !== id)
-        });
-      })
+    axios.delete(`http://localhost:5000/coffees/${id}`)
+      .then(() => { reload ? setReload(false) : setReload(true) })
       .catch((error) => console.log(error));
   };
 
@@ -56,23 +43,6 @@ const AdminLists = () => {
   };
   const handleCoffeeSearchTermChange = (e) => {
     setCoffeeSearchTerm(e.target.value);
-  };
-
-  const editCafe = (cafe) => {
-    dispatch({
-      type: "setCafeData",
-      data: cafe
-    });
-    // setCafeData(cafe);
-    // props.history.push("/admin/edit_cafe");
-  };
-  const editCoffee = (coffee) => {
-    dispatch({
-      type: "setCoffeeData",
-      data: coffee
-    });
-    // setCoffeeData(coffee);
-    // props.history.push("/admin/edit_coffee");
   };
 
   return (
@@ -105,7 +75,7 @@ const AdminLists = () => {
                       <tr key={cafe._id}>
                         <td style={{ width: "70%" }}>{cafe.cafe_name}</td>
                         <td>
-                          <Link to="/admin/edit_cafe"><Button onClick={() => editCafe(cafe)}>Edit</Button></Link>
+                          <Link to="/admin/cafe/edit"><Button onClick={() => dispatch({ type: "setCafeData", data: cafe })}>Edit</Button></Link>
                         </td>
                         <td>
                           <Button onClick={() => deleteCafe(cafe._id)}>
@@ -139,7 +109,7 @@ const AdminLists = () => {
                       <tr key={coffee._id}>
                         <td style={{ width: "70%" }}>{coffee.name}</td>
                         <td>
-                          <Link to="/admin/edit_coffee"><Button onClick={() => editCoffee(coffee)}>Edit</Button></Link>
+                          <Link to="/admin/coffee/edit"><Button onClick={() => dispatch({ type: "setCoffeeData", data: coffee })}>Edit</Button></Link>
                         </td>
                         <td>
                           <Button onClick={() => deleteCoffee(coffee._id)}>

@@ -4,7 +4,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import axios from "axios";
 import { Button, Container } from "reactstrap";
 import StateContext from "../utils/store";
-import { setTimeString } from "../utils/repeatedFunctions";
+import setTimeString from "../utils/setTimeString";
 import "../App.css";
 
 function MapView() {

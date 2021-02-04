@@ -40,16 +40,6 @@ const stateReducer = (state, action) => {
         ...state,
         coffeeData: action.data
       };
-      case "setInitialCafeData":
-      return {
-        ...state,
-        initialCafeData: action.data
-      };
-      case "setInitialCoffeeData":
-      return {
-        ...state,
-        setInitialCoffeeData: action.data
-      };
     default:
       return state;
   };

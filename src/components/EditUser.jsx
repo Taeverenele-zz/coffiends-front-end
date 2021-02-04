@@ -7,13 +7,6 @@ const EditUser = (props) => {
   const { store, dispatch } = useContext(StateContext);
   const { loggedInUser } = store
 
-  const updateExistingUser = () => {
-    axios
-      .patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error));
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     dispatch({
@@ -24,8 +17,10 @@ const EditUser = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateExistingUser();
-    props.history.push("/");
+
+    axios.patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
+      .then(() => props.history.push("/"))
+      .catch((error) => console.log(error));
   };
   
   return (

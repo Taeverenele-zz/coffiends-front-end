@@ -59,12 +59,12 @@ const NavBar = (props) => {
   const adminNav = (
     <>
       <NavItem className="mr-3">
-        <Link to="/admin/new_cafe">
+        <Link to="/admin/cafe/new">
           <Button>ADD CAFE</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">
-        <Link to="/admin/new_coffee">
+        <Link to="/admin/coffee/new">
           <Button>ADD COFFEE</Button>
         </Link>
       </NavItem>

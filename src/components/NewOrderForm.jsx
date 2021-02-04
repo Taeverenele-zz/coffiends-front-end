@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import StripeForm from "./StripeForm";
 import { Container, Row, Col, Button, Form, FormGroup, Label } from "reactstrap";
 import StateContext from "../utils/store";
-import { setTimeString } from "../utils/repeatedFunctions";
+import setTimeString from "../utils/setTimeString";
 
 const NewOrderForm = (props) => {
   const [ size, setSize ] = useState("Regular");
@@ -78,7 +78,7 @@ const NewOrderForm = (props) => {
                 <FormGroup>
                   <Label for="size">Size:</Label>
                   <select name="size" onChange={handleSize} value={size} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
-                    <option defaultValue="">SIZE</option>
+                    <option disabled>SIZE</option>
                     <option value="Regular">Regular</option>
                     {userCoffee.name === "Espresso" ? (<></>) : (
                       <>
@@ -93,7 +93,7 @@ const NewOrderForm = (props) => {
                     <>
                       <Label for="milk">Milk:</Label>
                       <select name="milk" onChange={handleMilk} value={milk} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
-                        <option defaultValue="">MILK</option>
+                        <option disabled>MILK</option>
                         <option value="Regular">Full Cream</option>
                         <option value="Skim Milk">Skim</option>
                         <option value="Soy Milk">Soy</option>
@@ -105,7 +105,7 @@ const NewOrderForm = (props) => {
                 <FormGroup>
                   <Label for="sugar">Sugar:</Label>
                   <select name="sugar" onChange={handleSugar} value={sugar} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
-                    <option defaultValue="">SUGARS</option>
+                    <option disabled>SUGARS</option>
                     <option value="0">No Sugar</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -116,7 +116,7 @@ const NewOrderForm = (props) => {
                 <FormGroup>
                   <Label for="pickup">Pickup Time:</Label>
                   <select name="pickup" onChange={handlePickupTime} value="0" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
-                    <option defaultValue="">PICKUP TIME</option>
+                    <option disabled>PICKUP TIME</option>
                     <option value="0">ASAP</option>
                     <option value="10">10 mins</option>
                     <option value="20">20 mins</option>

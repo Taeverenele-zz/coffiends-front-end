@@ -3,8 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import stateReducer from "./utils/stateReducer"
 import StateContext from "./utils/store";
-// import AdminHome from "./components/AdminDashboard/AdminHome";
-import AdminLists from "./components/AdminDashboard/AdminLists";
+import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
 import HomeView from "./components/HomeView";
@@ -27,18 +26,9 @@ const App = () => {
     userCoffee: null,
     orderCafe: null,
     cafeData: null,
-    coffeeData: null,
-    // initalCafeData: {
-    //   cafe_name: "",
-    //   address: "",
-    //   operating_hours: [],
-    //   location: [],
-    // },
-    // initalCoffeeData: {
-    //   name: "",
-    //   description: "",
-    // }
+    coffeeData: null
   };
+
   const [ store, dispatch ] = useReducer(stateReducer, initialState);
 
   // Checks session for a logged in user, gets coffees, sets user location
@@ -89,24 +79,19 @@ const App = () => {
             <>
               {!store.loggedInUser ? (
                 <Route exact path="/" component={LoginView} />
-              ) : (
-                <></>
-              )}
+              ) : ( <></> )}
+
               {store.loggedInUser && store.loggedInUser.role === "user" ? (
                 <Route exact path="/" component={HomeView} />
-              ) : (
-                <></>
-              )}
+              ) : ( <></> )}
+
               {store.loggedInUser && store.loggedInUser.role === "cafe" ? (
                 <Route exact path="/" component={CafeDashboardView} />
-              ) : (
-                <></>
-              )}
+              ) : ( <></> )}
+
               {store.loggedInUser && store.loggedInUser.role === "admin" ? (
-                <Route exact path="/" component={AdminLists} />
-              ) : (
-                <></>
-              )}
+                <Route exact path="/" component={AdminHome} />
+              ) : ( <></> )}
 
               <Route exact path="/register" component={RegisterView} />
 
@@ -120,71 +105,9 @@ const App = () => {
 
               <Route exact path="/menu" component={CafeMenuView} />
 
-              <Route
-                exact
-                path="/admin/new_cafe"
-                render={(props) => (
-                  <NewCafeForm
-                    {...props}
-                    isEditing={false}
-                    // cafes={cafes}
-                    // setCafes={setCafes}
-                    // cafeData={cafeData}
-                    // setCafeData={setCafeData}
-                    // initialCafeData={initialCafeData}
-                    // loggedInUser={store.loggedInUser}
-                  />
-                )}
-              />
+              <Route exact path="/admin/cafe/:action" component={NewCafeForm} />
 
-              <Route
-                exact
-                path="/admin/edit_cafe"
-                render={(props) => (
-                  <NewCafeForm
-                    {...props}
-                    isEditing={true}
-                    // cafes={cafes}
-                    // setCafes={setCafes}
-                    // cafeData={cafeData}
-                    // setCafeData={setCafeData}
-                    // initialCafeData={initialCafeData}
-                    // loggedInUser={store.loggedInUser}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/admin/new_coffee"
-                render={(props) => (
-                  <NewCoffeeForm
-                    {...props}
-                    // coffees={coffees}
-                    // setCoffees={setCoffees}
-                    isEditing={false}
-                    // coffeeData={coffeeData}
-                    // setCoffeeData={setCoffeeData}
-                    // initialCoffeeData={initialCoffeeData}
-                    // loggedInUser={store.loggedInUser}
-                  />
-                )}
-              />
-              <Route
-                exact
-                path="/admin/edit_coffee"
-                render={(props) => (
-                  <NewCoffeeForm
-                    {...props}
-                    // coffees={coffees}
-                    // setCoffees={setCoffees}
-                    isEditing={true}
-                    // coffeeData={coffeeData}
-                    // setCoffeeData={setCoffeeData}
-                    // initialCoffeeData={initialCoffeeData}
-                    // loggedInUser={store.loggedInUser}
-                  />
-                )}
-              />
+              <Route exact path="/admin/coffee/:action" component={NewCoffeeForm} />
 
               <Route exact path="/logout">
                 <Redirect to="/" /></Route>
