@@ -1,135 +1,86 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import StripeForm from "./StripeForm";
-import {
-  Container,
-  Row,
-  Col,
-  Button,
-  Form,
-  FormGroup,
-  Label,
-} from "reactstrap";
+import { Container, Row, Col, Button, Form, FormGroup, Label } from "reactstrap";
+import StateContext from "../utils/store";
+import setTimeString from "../utils/setTimeString";
 
 const NewOrderForm = (props) => {
-  const { userCoffee, cafe, loggedInUser } = props;
-  const [size, setSize] = useState("Regular");
-  const [milk, setMilk] = useState("Regular Milk");
-  const [sugar, setSugar] = useState(0);
+  const [ size, setSize ] = useState("Regular");
+  const [ milk, setMilk ] = useState("Regular");
+  const [ sugar, setSugar ] = useState(0);
+  const [ orderDetails, setOrderDetails ] = useState(null);
 
-  const [orderDetails, setOrderDetails] = useState(null);
+  const { store } = useContext(StateContext);
+  const { loggedInUser, userCoffee, orderCafe } = store
 
   useEffect(() => {
     if (!loggedInUser) {
       props.history.push("/");
     } else {
-      let time = new Date().getTime();
-      let date = new Date(time);
-      let hr = String(date.getHours());
-      let min = String(date.getMinutes());
-      if (hr.length < 2) {
-        hr = "0" + hr;
-      }
-      if (min.length < 2) {
-        min = "0" + min;
-      }
-
-      let defMilk = "";
-      if (userCoffee.name === "Espresso" || userCoffee.name === "Long Black") {
-        defMilk = "No milk";
-      } else {
-        defMilk = "Regular";
-      }
-
       setOrderDetails({
-        cafe: cafe._id,
+        cafe: orderCafe._id,
         user: loggedInUser._id,
         coffee: userCoffee.name,
         size: "Regular",
-        milk: defMilk,
+        milk: "Regular",
         sugar: 0,
-        pickup_time: `${hr}:${min}`,
+        pickup_time: setTimeString(),
         total: userCoffee.price,
         email: loggedInUser.username,
       });
     }
-  }, []);
+  }, [ loggedInUser, orderCafe, userCoffee, props ]);
 
-  const handleSize = (event) => {
-    setSize(event.target.value);
-    if (event.target.value === "Large") {
+  const handleSize = (e) => {
+    setSize(e.target.value);
+    if (e.target.value === "Large") {
       setOrderDetails({ ...orderDetails, total: userCoffee.price + 0.5 });
-    } else if (event.target.value === "Small") {
+    } else if (e.target.value === "Small") {
       setOrderDetails({ ...orderDetails, total: userCoffee.price - 0.5 });
-    } else if (event.target.value === "Regular") {
+    } else {
       setOrderDetails({ ...orderDetails, total: userCoffee.price });
     }
   };
 
-  const handleMilk = (event) => {
-    setMilk(event.target.value);
-    setOrderDetails({ ...orderDetails, milk: event.target.value });
+  const handleMilk = (e) => {
+    setMilk(e.target.value);
+    setOrderDetails({ ...orderDetails, milk: e.target.value });
   };
 
-  const handleSugar = (event) => {
-    setSugar(event.target.value);
-    setOrderDetails({ ...orderDetails, sugar: event.target.value });
+  const handleSugar = (e) => {
+    setSugar(e.target.value);
+    setOrderDetails({ ...orderDetails, sugar: e.target.value });
   };
 
-  const handlePickupTime = (event) => {
+  const handlePickupTime = (e) => {
     let time = new Date().getTime();
-    if (event.target.value === "10") {
+    if (e.target.value === "10") {
       time = time + 600000;
-    } else if (event.target.value === "20") {
+    } else if (e.target.value === "20") {
       time = time + 1200000;
-    } else if (event.target.value === "30") {
+    } else if (e.target.value === "30") {
       time = time + 1800000;
-    }
-    let date = new Date(time);
-    let hr = String(date.getHours());
-    let min = String(date.getMinutes());
-    if (hr.length < 2) {
-      hr = "0" + hr;
-    }
-    if (min.length < 2) {
-      min = "0" + min;
-    }
-    setOrderDetails({ ...orderDetails, pickup_time: `${hr}:${min}` });
+    };
+    setOrderDetails({ ...orderDetails, pickup_time: setTimeString(time) });
   };
 
   return (
     <>
-      {!orderDetails ? (
-        <></>
-      ) : (
+      {!orderDetails ? (<></>) : (
         <Container>
           <Row className="mt-4">
             <Col sm="12" md={{ size: 8, offset: 2 }}>
               <Form>
                 <FormGroup>
-                  <h4>
-                    Ordering: {userCoffee.name} from {cafe.cafe_name}
-                  </h4>
+                  <h4>Ordering: {userCoffee.name} from {orderCafe.cafe_name}</h4>
                 </FormGroup>
                 <FormGroup>
                   <Label for="size">Size:</Label>
-                  <select
-                    name="size"
-                    style={{
-                      height: "40px",
-                      width: "100%",
-                      padding: "5px",
-                      border: "1px solid #ced4da",
-                      borderRadius: ".25rem",
-                    }}
-                    onChange={handleSize}
-                    value={size}
-                  >
-                    <option defaultValue=""> -- select coffee size -- </option>
+                  <select name="size" onChange={handleSize} value={size} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                    <option disabled>SIZE</option>
                     <option value="Regular">Regular</option>
-                    {userCoffee.name === "Espresso" ? (
-                      <></>
-                    ) : (
+                    {userCoffee.name === "Espresso" ? (<></>) : (
                       <>
                         <option value="Small">Small -$0.50</option>
                         <option value="Large">Large +$0.50</option>
@@ -138,29 +89,12 @@ const NewOrderForm = (props) => {
                   </select>
                 </FormGroup>
                 <FormGroup>
-                  {userCoffee.name === "Espresso" ||
-                  userCoffee.name === "Long Black" ? (
-                    <></>
-                  ) : (
+                  {userCoffee.name === "Espresso" || userCoffee.name === "Long Black" ? (<></>) : (
                     <>
                       <Label for="milk">Milk:</Label>
-                      <select
-                        name="milk"
-                        style={{
-                          height: "40px",
-                          width: "100%",
-                          padding: "5px",
-                          border: "1px solid #ced4da",
-                          borderRadius: ".25rem",
-                        }}
-                        onChange={handleMilk}
-                        value={milk}
-                      >
-                        <option defaultValue="">
-                          {" "}
-                          -- select milk type --{" "}
-                        </option>
-                        <option value="Regular Milk">Full Cream</option>
+                      <select name="milk" onChange={handleMilk} value={milk} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                        <option disabled>MILK</option>
+                        <option value="Regular">Full Cream</option>
                         <option value="Skim Milk">Skim</option>
                         <option value="Soy Milk">Soy</option>
                         <option value="Almond Milk">Almond</option>
@@ -170,22 +104,8 @@ const NewOrderForm = (props) => {
                 </FormGroup>
                 <FormGroup>
                   <Label for="sugar">Sugar:</Label>
-                  <select
-                    name="sugar"
-                    style={{
-                      height: "40px",
-                      width: "100%",
-                      padding: "5px",
-                      border: "1px solid #ced4da",
-                      borderRadius: ".25rem",
-                    }}
-                    onChange={handleSugar}
-                    value={sugar}
-                  >
-                    <option defaultValue="">
-                      {" "}
-                      -- select sugar preference --{" "}
-                    </option>
+                  <select name="sugar" onChange={handleSugar} value={sugar} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                    <option disabled>SUGARS</option>
                     <option value="0">No Sugar</option>
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -195,19 +115,9 @@ const NewOrderForm = (props) => {
                 </FormGroup>
                 <FormGroup>
                   <Label for="pickup">Pickup Time:</Label>
-                  <select
-                    name="pickup"
-                    style={{
-                      height: "40px",
-                      width: "100%",
-                      padding: "5px",
-                      border: "1px solid #ced4da",
-                      borderRadius: ".25rem",
-                    }}
-                    onChange={handlePickupTime}
-                  >
-                    <option defaultValue=""> -- select pickup time -- </option>
-                    <option value="0">ASAP!</option>
+                  <select name="pickup" onChange={handlePickupTime} value="0" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                    <option disabled>PICKUP TIME</option>
+                    <option value="0">ASAP</option>
                     <option value="10">10 mins</option>
                     <option value="20">20 mins</option>
                     <option value="30">30 mins</option>
@@ -217,9 +127,7 @@ const NewOrderForm = (props) => {
                   <StripeForm orderDetails={orderDetails} />
                 </FormGroup>
                 <FormGroup>
-                  <Link to="/">
-                    <Button color="warning">Cancel</Button>
-                  </Link>
+                  <Link to="/"><Button color="warning">Cancel</Button></Link>
                 </FormGroup>
               </Form>
             </Col>

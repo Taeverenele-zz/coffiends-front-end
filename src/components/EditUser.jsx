@@ -1,26 +1,28 @@
-import React from "react";
-import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import React, { useContext } from "react";
+import StateContext from "../utils/store";
 import axios from "axios";
+import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
 
 const EditUser = (props) => {
-  const { loggedInUser, setLoggedInUser } = props;
-  const updateExistingUser = () => {
-    axios
-      .patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error));
-  };
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser } = store
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setLoggedInUser({ ...loggedInUser, [name]: value });
+    dispatch({
+      type: "setLoggedInUser",
+      data: { ...loggedInUser, [name]: value }
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateExistingUser();
-    props.history.push("/");
+
+    axios.patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
+      .then(() => props.history.push("/"))
+      .catch((error) => console.log(error));
   };
+  
   return (
     <>
       {loggedInUser ? (
@@ -28,6 +30,13 @@ const EditUser = (props) => {
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
               <h2>Edit Profile</h2>
+              <Button
+                onClick={() => {
+                  props.history.push("/user/change_password");
+                }}
+              >
+                Change Password
+              </Button>
             </Col>
           </Row>
           <Row className="mt-4">
