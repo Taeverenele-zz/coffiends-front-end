@@ -1,18 +1,39 @@
-import React, { useState } from "react";
-import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import React, { useState, useEffect } from "react";
+import {
+  Form,
+  FormGroup,
+  Input,
+  Label,
+  Row,
+  Col,
+  Button,
+  InputGroupAddon,
+} from "reactstrap";
 import axios from "axios";
 
 const ChangePassword = (props) => {
-  const { loggedInUser } = props;
-  const [flashMessage, setFlashMessage] = useState("");
-  const userId = loggedInUser._id;
-  let initialFormState = {
-    user_id: userId,
+  const {
+    loggedInUser,
+    flashMessage,
+    setFlashMessage,
+    visible,
+    setVisible,
+  } = props;
+
+  const initialFormState = {
+    user_id: "",
     password: "",
     new_password: "",
   };
   const [formData, setFormData] = useState(initialFormState);
 
+  useEffect(() => {
+    if (!loggedInUser) {
+      props.history.push("/user/edit");
+    } else {
+      setFormData({ ...formData, user_id: loggedInUser._id });
+    }
+  }, []);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -28,19 +49,36 @@ const ChangePassword = (props) => {
       formData
     );
     if (response.status === 200) {
-      setFlashMessage("Password changed successfully");
-    } else if (response.status === 409) {
-      alert("Something went wrong, try again");
+      setFlashMessage("Password successfully changed");
+      setVisible(true);
+      setFormData(initialFormState);
+      props.history.push("/");
+    } else {
+      setFlashMessage("Incorrect current password");
+      setVisible(true);
     }
+  };
+  const togglePasswordView = (e) => {
+    const inputs = document.querySelectorAll(".input");
+    inputs.forEach((input) => {
+      if (e.target.id === "current_password_btn") {
+        if (input.name === "password" && input.type === "password") {
+          input.type = "text";
+        } else {
+          input.type = "password";
+        }
+      } else {
+        if (input.name === "new_password" && input.type === "password") {
+          input.type = "text";
+        } else {
+          input.type = "password";
+        }
+      }
+    });
   };
 
   return (
     <>
-      <Row className="mt-4">
-        <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-          {flashMessage}
-        </Col>
-      </Row>
       <Row className="mt-4">
         <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
           <h2>Change Password</h2>
@@ -51,23 +89,35 @@ const ChangePassword = (props) => {
           <Form onSubmit={handleSubmit}>
             <FormGroup>
               <Label for="password">Current Password:</Label>
-              <Input
-                type="text"
-                name="password"
-                value={formData.current_password}
-                onChange={handleInputChange}
-                required
-              ></Input>
+              <InputGroupAddon addonType="append">
+                <Input
+                  className="input"
+                  type="password"
+                  name="password"
+                  value={formData.current_password}
+                  onChange={handleInputChange}
+                  required
+                ></Input>
+                <Button id="current_password_btn" onClick={togglePasswordView}>
+                  View
+                </Button>
+              </InputGroupAddon>
             </FormGroup>
             <FormGroup>
               <Label for="new_password">New Password:</Label>
-              <Input
-                type="text"
-                name="new_password"
-                value={formData.new_password}
-                onChange={handleInputChange}
-                required
-              ></Input>
+              <InputGroupAddon addonType="append">
+                <Input
+                  className="input"
+                  type="text"
+                  name="new_password"
+                  value={formData.new_password}
+                  onChange={handleInputChange}
+                  required
+                ></Input>
+                <Button id="new_password_btn" onClick={togglePasswordView}>
+                  View
+                </Button>
+              </InputGroupAddon>
             </FormGroup>
             <Button>Submit</Button>
           </Form>

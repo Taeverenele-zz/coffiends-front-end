@@ -15,6 +15,7 @@ import NavBar from "./components/NavBar";
 import NewCafeForm from "./components/AdminDashboard/NewCafeForm";
 import NewCoffeeForm from "./components/AdminDashboard/NewCoffeeForm";
 import ChangePassword from "./components/UserPages/ChangePassword";
+import { Row, Col, Alert } from "reactstrap";
 
 const App = () => {
   const [loggedInUser, setLoggedInUser] = useState(null);
@@ -36,6 +37,9 @@ const App = () => {
   };
   const [coffeeData, setCoffeeData] = useState(initialCoffeeData);
 
+  const [flashMessage, setFlashMessage] = useState("");
+  const [visible, setVisible] = useState(false);
+  const onDismiss = () => setVisible(false);
   // Checks session for a logged in user
   useEffect(() => {
     fetch("http://localhost:5000/users/check", { credentials: "include" })
@@ -71,6 +75,13 @@ const App = () => {
         <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout}>
           {" "}
         </NavBar>
+        <Row className="mt-4">
+          <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
+            <Alert color="success" isOpen={visible} toggle={onDismiss}>
+              {flashMessage}
+            </Alert>
+          </Col>
+        </Row>
 
         <Switch>
           <>
@@ -182,6 +193,10 @@ const App = () => {
                   {...props}
                   loggedInUser={loggedInUser}
                   setLoggedInUser={setLoggedInUser}
+                  flashMessage={flashMessage}
+                  setFlashMessage={setFlashMessage}
+                  visible={visible}
+                  setVisible={setVisible}
                 />
               )}
             />
