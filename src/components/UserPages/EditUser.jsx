@@ -1,26 +1,30 @@
 import React from "react";
 import { Form, FormGroup, Input, Label, Row, Col, Button, Container } from "reactstrap";
+import React, { useContext } from "react";
 import axios from "axios";
+import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import StateContext from "../../utils/store";
 
 const EditUser = (props) => {
-  const { loggedInUser, setLoggedInUser } = props;
-  const updateExistingUser = () => {
-    axios
-      .patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error));
-  };
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser } = store;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setLoggedInUser({ ...loggedInUser, [name]: value });
+    dispatch({
+      type: "setLoggedInUser",
+      data: { ...loggedInUser, [name]: value }
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    updateExistingUser();
-    props.history.push("/");
+
+    axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
+      .then(() => props.history.push("/"))
+      .catch((error) => console.log(error));
   };
+  
   return (
     <>
       {loggedInUser ? (

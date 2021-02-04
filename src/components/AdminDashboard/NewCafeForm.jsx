@@ -1,63 +1,60 @@
-import React, { useState, useEffect } from "react";
-import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import React, { useContext, useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-
-const initialUserState = {
-  username: "",
-  password: "",
-  user_name: "",
-  role: "cafe",
-  phone: "",
-};
+import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
+import StateContext from "../../utils/store";
 
 const NewCafeForm = (props) => {
-  const {
-    setCafeData,
-    cafeData,
-    initialCafeData,
-    isEditing,
-    cafes,
-    setCafes,
-    loggedInUser,
-  } = props;
+  const { action } = useParams();
 
-  const [userData, setUserData] = useState(initialUserState);
+  const [userData, setUserData] = useState({
+    username: "",
+    password: "",
+    user_name: "",
+    role: "cafe",
+    phone: "",
+  });
 
-  // on initial load
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser, cafeData } = store;
+
   useEffect(() => {
     if (!loggedInUser) {
       props.history.push("/");
     }
-    if (isEditing) {
+    if (cafeData && action === "edit") {
       axios
-        .get(`http://localhost:5000/users/${cafeData.owner}`)
+        .get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeData.owner}`)
         .then((res) => {
           setUserData(res.data);
-          console.log(userData);
         })
         .catch((error) => console.log(error));
+    } else {
+      dispatch({
+        type: "setCafeData",
+        data: {
+          cafe_name: "",
+          address: "",
+          operating_hours: [],
+          location: [],
+        },
+      });
+      setUserData({
+        username: "",
+        password: "",
+        user_name: "",
+        role: "cafe",
+        phone: "",
+      });
     }
-  }, []);
-
-  // every time isEditing changes
-  useEffect(() => {
-    if (!isEditing) {
-      setUserData(initialUserState);
-      setCafeData(initialCafeData);
-    }
-  }, [isEditing]);
-
-  const addCafe = (newCafe) => {
-    setCafes([...cafes, newCafe]);
-  };
-
-  const updateCafe = (newCafe) => {
-    setCafes(cafes.map((cafe) => (cafe._id === cafeData._id ? newCafe : cafe)));
-  };
+  }, [action]);
 
   const handleCafeInputChange = (e) => {
     const { name, value } = e.target;
-    setCafeData({ ...cafeData, [name]: value });
+    dispatch({
+      type: "setCafeData",
+      data: { ...cafeData, [name]: value },
+    });
   };
 
   const handleUserInputChange = (e) => {
@@ -65,222 +62,214 @@ const NewCafeForm = (props) => {
     setUserData({ ...userData, [name]: value });
   };
 
-  const updateExistingCafe = () => {
-    axios
-      .put(`http://localhost:5000/cafes/${cafeData._id}`, cafeData)
-      .then((res) => updateCafe(res.data))
-      .catch((error) => console.log(error));
-    props.history.push("/");
-  };
-
-  const updateExistingUser = () => {
-    axios
-      .patch(`http://localhost:5000/users/${userData._id}`, userData)
-      .then((res) => console.log(res.data))
-      .catch((error) => console.log(error));
-  };
-
   const saveNewUser = () => {
     return axios
-      .post("http://localhost:5000/users/register", userData)
+      .post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
       .then((res) => {
-        console.log(userData);
         const cafeId = res.data._id;
         const newCafeData = { ...cafeData, owner: cafeId };
-        addCafe(newCafeData);
         return newCafeData;
       })
       .catch((error) => console.log(error));
   };
 
-  const saveNewCafe = (newCafeData) => {
-    return axios
-      .post("http://localhost:5000/cafes", newCafeData)
-      .then(() => {
-        setCafeData(initialCafeData);
-        setUserData(initialUserState);
-      })
-      .catch((error) => console.log(error));
-  };
-
-  const cancelEditing = () => {
-    setCafeData(initialCafeData);
-    setUserData(initialUserState);
-    props.history.push("/");
-  };
-
   const handleFinalSubmit = (e) => {
-    console.log(isEditing);
     e.preventDefault();
-    if (isEditing) {
-      // Save updated cafe here
-      updateExistingUser();
-      updateExistingCafe();
+
+    if (action === "edit") {
+      axios
+        .patch(
+          `${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`,
+          userData
+        )
+        .catch((error) => console.log(error));
+      axios
+        .put(
+          `${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`,
+          cafeData
+        )
+        .catch((error) => console.log(error));
+
+      props.history.push("/");
     } else {
-      saveNewUser().then((newCafeData) => {
-        console.log("test", newCafeData);
-        saveNewCafe(newCafeData)
-          .then(() => {
-            props.history.push("/");
-          })
-          .catch((error) => console.log(error));
-      });
+      saveNewUser()
+        .then((newCafeData) => {
+          axios
+            .post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
+            .then(() => props.history.push("/"))
+            .catch((error) => console.log(error));
+        })
+        .catch((error) => console.log(error));
     }
   };
 
   return (
     <div>
-      <Row className="mt-4">
-        <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-          <h2>{isEditing ? "Edit" : "Add New"} Cafe</h2>
-        </Col>
-      </Row>
-      <Row className="mt-4">
-        <Col sm="12" md={{ size: 6, offset: 3 }}>
-          <Form onSubmit={handleFinalSubmit}>
-            <FormGroup>
-              <Label for="cafe_name">Cafe name:</Label>
-              <Input
-                type="text"
-                name="cafe_name"
-                value={cafeData.cafe_name}
-                onChange={handleCafeInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="user_name">Owner:</Label>
-              <Input
-                type="text"
-                name="user_name"
-                value={userData.user_name}
-                onChange={handleUserInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="username">Email:</Label>
-              <Input
-                type="email"
-                name="username"
-                value={userData.username}
-                onChange={handleUserInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="password">Password:</Label>
-              <Input
-                type="password"
-                name="password"
-                value={userData.password}
-                onChange={handleUserInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="role">Role:</Label>
-              <Input
-                type="text"
-                name="role"
-                value={userData.role}
-                onChange={handleUserInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="phone">Phone:</Label>
-              <Input
-                type="text"
-                name="phone"
-                value={userData.phone}
-                onChange={handleUserInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="address">Address:</Label>
-              <Input
-                type="text"
-                name="address"
-                value={cafeData.address}
-                onChange={handleCafeInputChange}
-                required
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="opening">Opening time:</Label>
-              <Input
-                type="text"
-                name="operating_hours[0]"
-                required
-                value={cafeData.operating_hours[0] || ""}
-                onChange={(e) =>
-                  handleCafeInputChange({
-                    target: {
-                      name: "operating_hours",
-                      value: [e.target.value, cafeData.operating_hours[1]],
-                    },
-                  })
-                }
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="closing">Closing time:</Label>
-              <Input
-                type="text"
-                name="operating_hours[1]"
-                required
-                value={cafeData.operating_hours[1] || ""}
-                onChange={(e) =>
-                  handleCafeInputChange({
-                    target: {
-                      name: "operating_hours",
-                      value: [cafeData.operating_hours[0], e.target.value],
-                    },
-                  })
-                }
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="latitude">Latitude:</Label>
-              <Input
-                type="text"
-                name="location[0]"
-                required
-                value={cafeData.location[0] || ""}
-                onChange={(e) =>
-                  handleCafeInputChange({
-                    target: {
-                      name: "location",
-                      value: [parseFloat(e.target.value), cafeData.location[1]],
-                    },
-                  })
-                }
-              ></Input>
-            </FormGroup>
-            <FormGroup>
-              <Label for="longitude">Longitude:</Label>
-              <Input
-                type="text"
-                name="location[1]"
-                required
-                value={cafeData.location[1] || ""}
-                onChange={(e) =>
-                  handleCafeInputChange({
-                    target: {
-                      name: "location",
-                      value: [cafeData.location[0], parseFloat(e.target.value)],
-                    },
-                  })
-                }
-              ></Input>
-            </FormGroup>
-            <Button>Submit</Button>
-            <Button onClick={cancelEditing}>Cancel</Button>
-          </Form>
-        </Col>
-      </Row>
+      {!cafeData ? (
+        <></>
+      ) : (
+        <>
+          <Row className="mt-4">
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
+              <h2>{action === "edit" ? "Edit" : "Add New"} Cafe</h2>
+            </Col>
+          </Row>
+          <Row className="mt-4">
+            <Col sm="12" md={{ size: 6, offset: 3 }}>
+              <Form onSubmit={handleFinalSubmit}>
+                <FormGroup>
+                  <Label for="cafe_name">Cafe name:</Label>
+                  <Input
+                    type="text"
+                    name="cafe_name"
+                    value={cafeData.cafe_name || ""}
+                    onChange={handleCafeInputChange}
+                    required
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="user_name">Owner:</Label>
+                  <Input
+                    type="text"
+                    name="user_name"
+                    value={userData.user_name || ""}
+                    onChange={handleUserInputChange}
+                    required
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="username">Email:</Label>
+                  <Input
+                    type="email"
+                    name="username"
+                    value={userData.username || ""}
+                    onChange={handleUserInputChange}
+                    required
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="password">Password:</Label>
+                  <Input
+                    type="password"
+                    name="password"
+                    value={userData.password || ""}
+                    onChange={handleUserInputChange}
+                    required
+                  ></Input>
+                </FormGroup>
+                {/* <FormGroup>
+                  <Label for="role">Role:</Label>
+                  <Input
+                    type="text"
+                    name="role"
+                    value={userData.role}
+                    onChange={handleUserInputChange}
+                    required
+                  ></Input>
+                </FormGroup> */}
+                <FormGroup>
+                  <Label for="phone">Phone:</Label>
+                  <Input
+                    type="text"
+                    name="phone"
+                    value={userData.phone || ""}
+                    onChange={handleUserInputChange}
+                    required
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="address">Address:</Label>
+                  <Input
+                    type="text"
+                    name="address"
+                    value={cafeData.address || ""}
+                    onChange={handleCafeInputChange}
+                    required
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="opening">Opening time:</Label>
+                  <Input
+                    type="text"
+                    name="operating_hours[0]"
+                    required
+                    value={cafeData.operating_hours[0] || ""}
+                    onChange={(e) =>
+                      handleCafeInputChange({
+                        target: {
+                          name: "operating_hours",
+                          value: [e.target.value, cafeData.operating_hours[1]],
+                        },
+                      })
+                    }
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="closing">Closing time:</Label>
+                  <Input
+                    type="text"
+                    name="operating_hours[1]"
+                    required
+                    value={cafeData.operating_hours[1] || ""}
+                    onChange={(e) =>
+                      handleCafeInputChange({
+                        target: {
+                          name: "operating_hours",
+                          value: [cafeData.operating_hours[0], e.target.value],
+                        },
+                      })
+                    }
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="latitude">Latitude:</Label>
+                  <Input
+                    type="text"
+                    name="location[0]"
+                    required
+                    value={cafeData.location[0] || ""}
+                    onChange={(e) =>
+                      handleCafeInputChange({
+                        target: {
+                          name: "location",
+                          value: [
+                            parseFloat(e.target.value),
+                            cafeData.location[1],
+                          ],
+                        },
+                      })
+                    }
+                  ></Input>
+                </FormGroup>
+                <FormGroup>
+                  <Label for="longitude">Longitude:</Label>
+                  <Input
+                    type="text"
+                    name="location[1]"
+                    required
+                    value={cafeData.location[1] || ""}
+                    onChange={(e) =>
+                      handleCafeInputChange({
+                        target: {
+                          name: "location",
+                          value: [
+                            cafeData.location[0],
+                            parseFloat(e.target.value),
+                          ],
+                        },
+                      })
+                    }
+                  ></Input>
+                </FormGroup>
+                <Button>Submit</Button>
+                <Link to="/">
+                  <Button>Cancel</Button>
+                </Link>
+              </Form>
+            </Col>
+          </Row>
+        </>
+      )}
     </div>
   );
 };

@@ -1,301 +1,110 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useReducer } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import stateReducer from "./utils/stateReducer"
+import StateContext from "./utils/store";
 import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafePages/CafeDashboardView";
 import CafeMenuView from "./components/CafePages/CafeMenuView";
+import ChangePassword from "./components/UserPages/ChangePassword";
+import EditUser from "./components/UserPages/EditUser";
+import FlashMessageView from "./components/FlashMessage";
 import HomeView from "./components/UserPages/HomeView";
 import LoginView from "./components/LoginView";
 import MapView from "./components/UserPages/MapView";
-import NewOrderForm from "./components/UserPages/NewOrderForm";
-import EditUser from "./components/UserPages/EditUser";
-import OrdersView from "./components/CafePages/OrdersView";
-import RegisterView from "./components/RegisterView";
-import StripeForm from "./components/StripeForm";
 import NavBar from "./components/NavBar";
 import NewCafeForm from "./components/AdminDashboard/NewCafeForm";
 import NewCoffeeForm from "./components/AdminDashboard/NewCoffeeForm";
-import ChangePassword from "./components/UserPages/ChangePassword";
+import NewOrderForm from "./components/UserPages/NewOrderForm";
+import OrdersView from "./components/OrdersView";
+import RegisterView from "./components/RegisterView";
 
 const App = () => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [coffees, setCoffees] = useState([]);
-  const [userCoffee, setUserCoffee] = useState({ id: "", name: "", price: 0 });
-  const [userLocation, setUserLocation] = useState(null);
-  const [cafe, setCafe] = useState("");
-  const [cafes, setCafes] = useState([]);
-  const initialCafeData = {
-    cafe_name: "",
-    address: "",
-    operating_hours: [],
-    location: [],
+  const initialState = {
+    flashMessage: null,
+    loggedInUser: null,
+    userLocation: [ -27.468298, 153.0247838 ],
+    allCafes: null,
+    allCoffees: null,
+    userCoffee: null,
+    orderCafe: null,
+    cafeData: null,
+    coffeeData: null
   };
-  const [cafeData, setCafeData] = useState(initialCafeData);
-  const initialCoffeeData = {
-    name: "",
-    description: "",
-  };
-  const [coffeeData, setCoffeeData] = useState(initialCoffeeData);
 
-  // Checks session for a logged in user
+  const [ store, dispatch ] = useReducer(stateReducer, initialState);
+  const { loggedInUser } = store;
+
   useEffect(() => {
-    fetch("http://localhost:5000/users/check", { credentials: "include" })
-      .then((data) => data.json())
-      .then((json) => {
-        if (json) {
-          setLoggedInUser(json);
-        }
+    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/check`, { credentials: "include" })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          dispatch({ type: "setLoggedInUser", data: data });
+        };
       });
-
-    navigator.geolocation.getCurrentPosition(
-      (position) =>
-        setUserLocation([position.coords.latitude, position.coords.longitude]),
-      (error) => console.log(error.message)
-    );
+    
+    // navigator.geolocation.getCurrentPosition(
+    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
+    //   error => console.log(error.message)
+    // );
   }, []);
 
   const handleLogout = () => {
-    fetch("http://localhost:5000/users/logout", {
-      credentials: "include",
-    }).then((res) => {
-      if (res.status === 200) {
-        setLoggedInUser(false);
-      } else {
-        console.log(res);
-      }
-    });
+    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, { credentials: "include" })
+      .then(() => {
+          dispatch({ type: "setLoggedInUser", data: null });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <div className="container-fluid Remove-padding-margin ">
+      <StateContext.Provider value={{ store, dispatch }}>
       <BrowserRouter>
-        <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout}>
-          {" "}
-        </NavBar>
+          <NavBar handleLogout={handleLogout} />
+          <FlashMessageView />
+          <Switch>
+            <>
+              {!loggedInUser ? (
+                <Route exact path="/" component={LoginView} />
+              ) : ( <></> )}
 
-        <Switch>
-          <>
-            {!loggedInUser ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <LoginView {...props} setLoggedInUser={setLoggedInUser} />
-                )}
-              />
-            ) : (
-              <></>
-            )}
-            {loggedInUser && loggedInUser.role === "user" ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <HomeView
-                    {...props}
-                    coffees={coffees}
-                    setCoffees={setCoffees}
-                    setUserCoffee={setUserCoffee}
-                  />
-                )}
-              />
-            ) : (
-              <></>
-            )}
-            {loggedInUser && loggedInUser.role === "cafe" ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <CafeDashboardView {...props} loggedInUser={loggedInUser} />
-                )}
-              />
-            ) : (
-              <></>
-            )}
-            {loggedInUser && loggedInUser.role === "admin" ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <AdminHome
-                    {...props}
-                    coffees={coffees}
-                    setCoffees={setCoffees}
-                    cafes={cafes}
-                    setCafes={setCafes}
-                    cafeData={cafeData}
-                    setCafeData={setCafeData}
-                    coffeeData={coffeeData}
-                    setCoffeeData={setCoffeeData}
-                    initialCoffeeData={initialCoffeeData}
-                  />
-                )}
-              />
-            ) : (
-              <></>
-            )}
+              {loggedInUser && loggedInUser.role === "user" ? (
+                <Route exact path="/" component={HomeView} />
+              ) : ( <></> )}
 
-            <Route
-              exact
-              path="/register"
-              render={(props) => (
-                <RegisterView
-                  {...props}
-                  setLoggedInUser={setLoggedInUser}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
+              {loggedInUser && loggedInUser.role === "cafe" ? (
+                <Route exact path="/" component={CafeDashboardView} />
+              ) : ( <></> )}
 
-            <Route
-              exact
-              path="/map/:coff"
-              render={(props) => (
-                <MapView
-                  {...props}
-                  userCoffee={userCoffee}
-                  setUserCoffee={setUserCoffee}
-                  userLocation={userLocation}
-                  setCafe={setCafe}
-                />
-              )}
-            />
+              {loggedInUser && loggedInUser.role === "admin" ? (
+                <Route exact path="/" component={AdminHome} />
+              ) : ( <></> )}
 
-            <Route
-              exact
-              path="/orders/new"
-              render={(props) => (
-                <NewOrderForm
-                  {...props}
-                  userCoffee={userCoffee}
-                  cafe={cafe}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
+              <Route exact path="/register" component={RegisterView} />
 
-            <Route
-              exact
-              path="/user/change_password"
-              render={(props) => (
-                <ChangePassword
-                  {...props}
-                  loggedInUser={loggedInUser}
-                  setLoggedInUser={setLoggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/user/edit"
-              render={(props) => (
-                <EditUser
-                  {...props}
-                  loggedInUser={loggedInUser}
-                  setLoggedInUser={setLoggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/orders"
-              render={(props) => (
-                <OrdersView {...props} loggedInUser={loggedInUser} />
-              )}
-            />
+              <Route exact path="/map/:coffee" component={MapView} />
 
-            <Route
-              exact
-              path="/menu"
-              render={(props) => (
-                <CafeMenuView
-                  {...props}
-                  loggedInUser={loggedInUser}
-                  coffees={coffees}
-                />
-              )}
-            />
+              <Route exact path="/orders/new" component={NewOrderForm} />
 
-            <Route
-              exact
-              path="/admin/new_cafe"
-              render={(props) => (
-                <NewCafeForm
-                  {...props}
-                  isEditing={false}
-                  cafes={cafes}
-                  setCafes={setCafes}
-                  cafeData={cafeData}
-                  setCafeData={setCafeData}
-                  initialCafeData={initialCafeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
+              <Route exact path="/user/edit" component={EditUser} />
 
-            <Route
-              exact
-              path="/admin/edit_cafe"
-              render={(props) => (
-                <NewCafeForm
-                  {...props}
-                  isEditing={true}
-                  cafes={cafes}
-                  setCafes={setCafes}
-                  cafeData={cafeData}
-                  setCafeData={setCafeData}
-                  initialCafeData={initialCafeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/new_coffee"
-              render={(props) => (
-                <NewCoffeeForm
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  isEditing={false}
-                  coffeeData={coffeeData}
-                  setCoffeeData={setCoffeeData}
-                  initialCoffeeData={initialCoffeeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/edit_coffee"
-              render={(props) => (
-                <NewCoffeeForm
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  isEditing={true}
-                  coffeeData={coffeeData}
-                  setCoffeeData={setCoffeeData}
-                  initialCoffeeData={initialCoffeeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
+              <Route exact path="/user/change_password" component={ChangePassword} />
 
-            <Route
-              exact
-              path="/payment"
-              render={(props) => (
-                <StripeForm {...props} loggedInUser={loggedInUser} />
-              )}
-            />
+              <Route exact path="/orders" component={OrdersView} />
 
-            <Route exact path="/logout">
-              <Redirect to="/" />
-            </Route>
-          </>
-        </Switch>
-      </BrowserRouter>
+              <Route exact path="/menu" component={CafeMenuView} />
+
+              <Route exact path="/admin/cafe/:action" component={NewCafeForm} />
+
+              <Route exact path="/admin/coffee/:action" component={NewCoffeeForm} />
+
+              <Route exact path="/logout">
+                <Redirect to="/" /></Route>
+            </>
+          </Switch>
+        </BrowserRouter>
+      </StateContext.Provider>
     </div>
   );
 };
