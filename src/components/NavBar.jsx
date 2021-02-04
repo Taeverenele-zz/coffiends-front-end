@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav, Container, Row, Col } from "reactstrap";
-import logo from "../assets/newLogo.svg"
-import { Navbar, Button, NavItem, Nav } from "reactstrap";
 import StateContext from "../utils/store";
 
 const NavBar = (props) => {
@@ -75,13 +73,13 @@ const NavBar = (props) => {
   );
 
   return (
-    <header>
-      <Navbar color="light" light>
+    <Container fluid="true" className="Remove-padding-margin">
+      <Navbar className="nav-color">
         <Link to="/">
-          <img src="Logo.png" alt="Logo" style={{ height: "50px" }} />
+          <img src="newLogo.svg" alt="Logo" className="logo-styles" />
         </Link>
         <div>
-          <h1>COFFIENDS</h1>
+           <div className="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
         </div>
         <Nav>
           <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
@@ -93,7 +91,7 @@ const NavBar = (props) => {
           </Col>
         </Nav>
       </Navbar>
-    </header>
+    </Container>
   );
 };
 

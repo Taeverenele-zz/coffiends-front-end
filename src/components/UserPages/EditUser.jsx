@@ -1,8 +1,6 @@
-import React from "react";
 import { Form, FormGroup, Input, Label, Row, Col, Button, Container } from "reactstrap";
 import React, { useContext } from "react";
 import axios from "axios";
-import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
 import StateContext from "../../utils/store";
 
 const EditUser = (props) => {

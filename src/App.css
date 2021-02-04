@@ -24,6 +24,12 @@
   overflow-x: hidden;
 }
 
+.table-background {
+  background-color: orange ;
+  color: white !important;
+  text-shadow: 1px 1px black;
+}
+
 
 .table-border-color{
   color: #DDDCDC !important;

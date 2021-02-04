@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import { Form, FormGroup, Input, Label, Row, Col, Button, Container } from "reactstrap";
 import StateContext from "../../utils/store";
 
 const ChangePassword = (props) => {
@@ -36,7 +36,7 @@ const ChangePassword = (props) => {
   };
 
   return (
-    <>
+    <Container fluid="true" className="background full-height">
       {!formData ? (<></>) : (
         <>
           {/* <Row className="mt-4">
@@ -45,40 +45,42 @@ const ChangePassword = (props) => {
             </Col>
           </Row> */}
           <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-              <h2>Change Password</h2>
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center ">
+              <h2 className="heading-colors">Change Password</h2>
             </Col>
           </Row>
-          <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }}>
-              <Form onSubmit={handleSubmit}>
+          <Row className="mt-4 text-center ">
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
+              <Form onSubmit={handleSubmit} className="edit-form-form">
                 <FormGroup>
-                  <Label for="password">Current Password:</Label>
+                  <Label for="password" className="border-color">Current Password:</Label>
                   <Input
                     type="password"
                     name="password"
                     value={formData.password}
                     onChange={handleInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="new_password">New Password:</Label>
+                  <Label for="new_password" className="border-color">New Password:</Label>
                   <Input
                     type="password"
                     name="new_password"
                     value={formData.new_password}
                     onChange={handleInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
-                <Button>Submit</Button>
+                <Button className="button-color">Submit</Button>
               </Form>
             </Col>
           </Row>
         </>
       )}
-    </>
+    </Container>
   );
 };
 

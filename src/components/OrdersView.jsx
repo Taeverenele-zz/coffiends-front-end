@@ -104,15 +104,7 @@ const OrdersView = () => {
           <h1 className="heading-colors margin-add-top">Current Orders</h1>
         </Row>
         <Row>
-          <OrderTable
-            orders={orders}
-            getOrders={getOrders}
-            getPastOrders={getPastOrders}
-            setOrders={setOrders}
-            loggedInUser={loggedInUser}
-          />
-          <h1>Current Orders</h1>
-          <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders} />
+          <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders}  />
         </Row>
         <Row className="justify-content-center ">
           <h1 className="heading-colors Cafe-Header-Margin">
