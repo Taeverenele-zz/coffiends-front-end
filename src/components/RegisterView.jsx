@@ -1,22 +1,15 @@
-import React, { useState } from "react";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Container,
-  Row,
-} from "reactstrap";
+import React, { useContext, useState } from "react";
+import { Button, Form, FormGroup, Label, Input, Container, Row } from "reactstrap";
+import StateContext from "../utils/store";
 
 const RegisterView = (props) => {
-  const { setLoggedInUser } = props;
-  const [loginDetails, setLoginDetails] = useState({
+  const { dispatch } = useContext(StateContext);
+  const [ loginDetails, setLoginDetails ] = useState({
     username: "",
     password: "",
     user_name: "",
     role: "user",
-    phone: "",
+    phone: ""
   });
 
   const handleChange = (e) => {
@@ -27,17 +20,21 @@ const RegisterView = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let response = await fetch("http://localhost:5000/users/register", {
+    let response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/users/register`, {
       method: "POST",
       body: JSON.stringify(loginDetails),
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      credentials: "include"
     });
     const userDetails = await response.json();
     if (userDetails.message) {
       alert(userDetails.message);
     } else if (userDetails._id) {
-      await setLoggedInUser(userDetails);
+      await dispatch({
+        type: "setLoggedInUser",
+        data: userDetails
+      });
+      
       setLoginDetails({
         username: "",
         password: "",
@@ -45,6 +42,7 @@ const RegisterView = (props) => {
         role: "user",
         phone: "",
       });
+
       props.history.push("/");
     }
   };

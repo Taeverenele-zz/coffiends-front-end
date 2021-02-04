@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav } from "reactstrap";
+import StateContext from "../utils/store";
 
 const NavBar = (props) => {
-  const { handleLogout, loggedInUser } = props;
+  const { handleLogout } = props;
+  
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser } = store;
 
   const loggedOut = (
     <>
@@ -56,12 +60,12 @@ const NavBar = (props) => {
   const adminNav = (
     <>
       <NavItem className="mr-3">
-        <Link to="/admin/new_cafe">
+        <Link to="/admin/cafe/new">
           <Button>ADD CAFE</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">
-        <Link to="/admin/new_coffee">
+        <Link to="/admin/coffee/new">
           <Button>ADD COFFEE</Button>
         </Link>
       </NavItem>
@@ -72,7 +76,7 @@ const NavBar = (props) => {
     <header>
       <Navbar color="light" light>
         <Link to="/">
-          <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
+          <img src="Logo.png" alt="Logo" style={{ height: "50px" }} />
         </Link>
         <div>
           <h1>COFFIENDS</h1>

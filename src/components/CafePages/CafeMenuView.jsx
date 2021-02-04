@@ -1,33 +1,35 @@
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Container, Row, Col, Input, Button, Table, Form, FormGroup } from "reactstrap";
+import StateContext from "../../utils/store";
 
-const CafeMenuView = (props) => {
-  const { loggedInUser } = props;
+const CafeMenuView = () => {
   const [ menu, setMenu ] = useState([]);
   const [ coffees, setCoffees ] = useState([]);
   const [ newCoffee, setNewCoffee ] = useState("");
   const [ newPrice, setNewPrice ] = useState("");
 
+  const { store } = useContext(StateContext);
+  const { loggedInUser, allCoffees } = store;
+
   useEffect(() => {
     if (loggedInUser) {
       getMenuData();
     };
-  }, [loggedInUser]);
+  }, [ loggedInUser ]);
 
   const getMenuData = async () => {
-    let cafemenuArr = [];
-    let response = await axios.get(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`);
+    const cafeMenuArr = [];
+ 
+    let response = await axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`);
     const currentMenu = await response.data;
-    setMenu(response.data);
-    await currentMenu.forEach(element => {cafemenuArr.push(element.coffee._id)});
+    setMenu(currentMenu);
+    
+    await currentMenu.forEach(element => {cafeMenuArr.push(element.coffee._id)});
 
-    response = await axios.get("http://localhost:5000/coffees");
-    const allCoffees = await response.data;
-
-    response = await axios.post("http://localhost:5000/coffees/available", { menu: cafemenuArr, coffees: allCoffees });
-    const availCoffs = await response.data;
-    setCoffees(availCoffs);
+    response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/coffees/available`, { menu: cafeMenuArr, coffees: allCoffees });
+    const availableCoffees = await response.data;
+    setCoffees(availableCoffees);
   };
 
   const handleCoffeeSelect = (e) => {
@@ -47,15 +49,13 @@ const CafeMenuView = (props) => {
       cafe: loggedInUser.cafe._id
     };
 
-    let response = await axios.post("http://localhost:5000/menuitems", newMenuItem);
+    const response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/menuitems`, newMenuItem);
     const newItem = await response.data;
 
-    let cafeMenu = await loggedInUser.cafe.menu
+    const cafeMenu = await loggedInUser.cafe.menu
     cafeMenu.push(newItem._id)
 
-    response = await axios.put(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`, { menu: cafeMenu });
-    const newMenuThing = await response.data;
-    console.log(newMenuThing);
+    await axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { menu: cafeMenu });
 
     setNewCoffee("");
     setNewPrice("");
@@ -63,15 +63,12 @@ const CafeMenuView = (props) => {
   };
 
   const handleDelete = async (menuitem) => {
-    let response = await axios.delete(`http://localhost:5000/menuitems/${menuitem._id}`);
-    const delResp = await response.data;
-    console.log(delResp);
+    await axios.delete(`${process.env.REACT_APP_BACK_END_URL}/menuitems/${menuitem._id}`);
 
-    let updatedCafeMenu = loggedInUser.cafe.menu.filter((id) => id !== menuitem._id)
+    const updatedCafeMenu = loggedInUser.cafe.menu.filter((id) => id !== menuitem._id)
 
-    response = await axios.put(`http://localhost:5000/cafes/${loggedInUser.cafe._id}/menu`, { menu: updatedCafeMenu });
-    const newMenuThing = await response.data;
-    console.log(newMenuThing);
+    await axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { menu: updatedCafeMenu });
+
     getMenuData();
   };
 
@@ -117,7 +114,7 @@ const CafeMenuView = (props) => {
                 <Form onSubmit={handleSubmit}>
                   <FormGroup>
                     <select style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleCoffeeSelect} value={newCoffee.name} >
-                    <option defaultValue=""> -- select coffee -- </option>
+                    <option disabled>COFFEE</option>
                       {coffees.map((coffee) => 
                         <option key={coffee._id} value={coffee._id}>{coffee.name}</option>
                       )}
