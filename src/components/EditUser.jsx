@@ -1,9 +1,12 @@
-import React from "react";
-import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
+import React, { useContext } from "react";
+import StateContext from "../utils/store";
 import axios from "axios";
+import { Form, FormGroup, Input, Label, Row, Col, Button } from "reactstrap";
 
 const EditUser = (props) => {
-  const { loggedInUser, setLoggedInUser } = props;
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser } = store
+
   const updateExistingUser = () => {
     axios
       .patch(`http://localhost:5000/users/${loggedInUser._id}`, loggedInUser)
@@ -13,7 +16,10 @@ const EditUser = (props) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setLoggedInUser({ ...loggedInUser, [name]: value });
+    dispatch({
+      type: "setLoggedInUser",
+      data: { ...loggedInUser, [name]: value }
+    });
   };
 
   const handleSubmit = (e) => {
@@ -21,6 +27,7 @@ const EditUser = (props) => {
     updateExistingUser();
     props.history.push("/");
   };
+  
   return (
     <>
       {loggedInUser ? (

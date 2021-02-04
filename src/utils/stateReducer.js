@@ -1,12 +1,33 @@
-export default (state, action) => {
+const stateReducer = (state, action) => {
   switch (action.type) {
-    case "setLoggedUserDetails": {
-        return {
-            ...state,
-            loggedUserDetails: action.data
-        };
-    };
+    case "setLoggedInUser":
+      return {
+        ...state,
+        loggedInUser: action.data
+      };
+    case "setUserLocation":
+      return {
+        ...state,
+        userLocation: action.data
+      };
+    case "getAllCoffees":
+      return {
+        ...state,
+        allCoffees: action.data
+      };
+    case "setUserCoffee":
+      return {
+        ...state,
+        userCoffee: action.data
+      };
+    case "setOrderCafe":
+      return {
+        ...state,
+        orderCafe: action.data
+      };
     default:
-        return state;
+      return state;
   };
 };
+
+export default stateReducer;

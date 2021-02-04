@@ -1,21 +1,11 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  Button,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Container,
-  Row,
-} from "reactstrap";
+import { Button, Form, FormGroup, Label, Input, Container, Row } from "reactstrap";
+import StateContext from "../utils/store";
 
 const LoginView = (props) => {
-  const { setLoggedInUser } = props;
-  const [loginDetails, setLoginDetails] = useState({
-    username: "",
-    password: "",
-  });
+  const [ loginDetails, setLoginDetails ] = useState({ username: "", password: "" });
+  const { dispatch } = useContext(StateContext);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,15 +25,11 @@ const LoginView = (props) => {
       alert("Invalid login details");
     } else {
       const userDetails = await response.json();
-      await setLoggedInUser(userDetails);
+      await dispatch({
+        type: "setLoggedInUser",
+        data: userDetails
+      });
 
-      if (userDetails.role === "cafe") {
-        props.history.push("/");
-      } else if (userDetails.role === "admin") {
-        props.history.push("/");
-      } else {
-        props.history.push("/");
-      }
       setLoginDetails({
         username: "",
         password: "",
@@ -51,7 +37,9 @@ const LoginView = (props) => {
         role: "user",
         phone: "",
       });
-    }
+
+      props.history.push("/");
+    };
   };
 
   return (

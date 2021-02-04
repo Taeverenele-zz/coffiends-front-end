@@ -3,7 +3,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import { Button } from "reactstrap";
 
-// Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
 const stripePromise = loadStripe("pk_test_51Hgk6gIGs09UrnPWVrb4HCyxyNcSgdz98ayMvMtR9zXuUOOJJqyb60xsd6ZkuKXIvoiUaiLp64nO3mtpnI9VONwi006bYqT3jh");
 
 const ProductDisplay = ({ handleClick, orderPrice }) => (
@@ -11,7 +10,7 @@ const ProductDisplay = ({ handleClick, orderPrice }) => (
 );
 
 const StripeForm = (props) => {
-  const { orderDetails, } = props;
+  const { orderDetails } = props;
 
   const handleClick = async (event) => {
     const stripe = await stripePromise;

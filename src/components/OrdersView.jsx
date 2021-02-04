@@ -1,20 +1,23 @@
-import { useState, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import OrderTable from "./OrderTable";
 import { Container, Row } from "reactstrap";
 import { BsFillPlusSquareFill } from "react-icons/bs";
+import OrderTable from "./OrderTable";
+import StateContext from "../utils/store";
 
-const OrdersView = (props) => {
-  const { loggedInUser } = props;
-  const [orders, setOrders] = useState([]);
-  const [pastOrders, setPastOrders] = useState([]);
-  const [showPastOrders, setShowPastOrders] = useState(false);
+const OrdersView = () => {
+  const [ orders, setOrders ] = useState([]);
+  const [ pastOrders, setPastOrders ] = useState([]);
+  const [ showPastOrders, setShowPastOrders ] = useState(false);
+
+  const { store } = useContext(StateContext);
+  const { loggedInUser } = store;
 
   useEffect(() => {
     if (loggedInUser) {
       getOrders("active");
     }
-  }, [loggedInUser]);
+  }, [ loggedInUser ]);
 
   const getOrders = (type) => {
     switch (type) {
@@ -70,7 +73,7 @@ const OrdersView = (props) => {
     let url = `http://localhost:5000/users/${loggedInUser._id}/orders`;
     if (pastOrders) {
       url = `http://localhost:5000/users/${loggedInUser._id}/orders/past`;
-    }
+    };
 
     axios
       .get(url)
@@ -99,13 +102,7 @@ const OrdersView = (props) => {
       <Container>
         <Row className="justify-content-center">
           <h1>Current Orders</h1>
-          <OrderTable
-            orders={orders}
-            getOrders={getOrders}
-            getPastOrders={getPastOrders}
-            setOrders={setOrders}
-            loggedInUser={loggedInUser}
-          />
+          <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders} />
         </Row>
         <Row className="justify-content-center ">
           <h1 className="justify-content-center Cafe-Header-Margin">
@@ -120,9 +117,7 @@ const OrdersView = (props) => {
             <div>
               <OrderTable orders={pastOrders} />
             </div>
-          ) : (
-            <></>
-          )}
+          ) : (<></>)}
         </Row>
       </Container>
     </>

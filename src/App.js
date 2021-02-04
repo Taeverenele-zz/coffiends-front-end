@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useReducer } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
+import axios from "axios";
+import stateReducer from "./utils/stateReducer"
+import StateContext from "./utils/store";
 import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafeDashboardView.jsx";
 import CafeMenuView from "./components/CafeMenuView";
@@ -16,11 +19,6 @@ import NewCafeForm from "./components/AdminDashboard/NewCafeForm";
 import NewCoffeeForm from "./components/AdminDashboard/NewCoffeeForm";
 
 const App = () => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const [coffees, setCoffees] = useState([]);
-  const [userCoffee, setUserCoffee] = useState({ id: "", name: "", price: 0 });
-  const [userLocation, setUserLocation] = useState(null);
-  const [cafe, setCafe] = useState("");
   const [cafes, setCafes] = useState([]);
   const initialCafeData = {
     cafe_name: "",
@@ -35,254 +33,196 @@ const App = () => {
   };
   const [coffeeData, setCoffeeData] = useState(initialCoffeeData);
 
-  // Checks session for a logged in user
+  const initialState = {
+    loggedInUser: null,
+    userLocation: [ -27.468298, 153.0247838 ],
+    allCoffees: null,
+    userCoffee: null,
+    orderCafe: null
+  };
+  const [ store, dispatch ] = useReducer(stateReducer, initialState);
+
+  // Checks session for a logged in user, gets coffees, sets user location
   useEffect(() => {
     fetch("http://localhost:5000/users/check", { credentials: "include" })
-      .then((data) => data.json())
-      .then((json) => {
-        if (json) {
-          setLoggedInUser(json);
+      .then((res) => res.json())
+      .then((data) => {
+        if (data) {
+          dispatch({
+            type: "setLoggedInUser",
+            data: data
+          });
         };
       });
+
+  axios.get("http://localhost:5000/coffees/")
+  .then((res) => {
+    dispatch({
+      type: "getAllCoffees",
+      data: res.data
+    });
+  })
+  .catch((err) => console.log(err));
+
     
-    navigator.geolocation.getCurrentPosition(
-      position => setUserLocation([position.coords.latitude, position.coords.longitude]),
-      error => console.log(error.message)
-    );
+    // navigator.geolocation.getCurrentPosition(
+    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
+    //   error => console.log(error.message)
+    // );
   }, []);
 
   const handleLogout = () => {
-    fetch("http://localhost:5000/users/logout", {
-      credentials: "include",
-    }).then((res) => {
-      if (res.status === 200) {
-        setLoggedInUser(false);
-      } else {
-        console.log(res);
-      };
-    });
+    fetch("http://localhost:5000/users/logout", { credentials: "include" })
+      .then((res) => {
+          dispatch({
+            type: "setLoggedInUser",
+            data: null
+          });
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
     <div className="container-fluid Remove-padding-margin ">
+      <StateContext.Provider value={{store, dispatch}}>
       <BrowserRouter>
-        <NavBar loggedInUser={loggedInUser} handleLogout={handleLogout}>
-          {" "}
-        </NavBar>
-
-        <Switch>
-          <>
-            {!loggedInUser ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <LoginView {...props} setLoggedInUser={setLoggedInUser} />
-                )}
-              />
-            ) : (
-              <></>
-            )}
-            {loggedInUser && loggedInUser.role === "user" ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <HomeView
-                    {...props}
-                    coffees={coffees}
-                    setCoffees={setCoffees}
-                    setUserCoffee={setUserCoffee}
-                  />
-                )}
-              />
-            ) : (
-              <></>
-            )}
-            {loggedInUser && loggedInUser.role === "cafe" ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <CafeDashboardView {...props} loggedInUser={loggedInUser} />
-                )}
-              />
-            ) : (
-              <></>
-            )}
-            {loggedInUser && loggedInUser.role === "admin" ? (
-              <Route
-                exact
-                path="/"
-                render={(props) => (
-                  <AdminHome
-                    {...props}
-                    coffees={coffees}
-                    setCoffees={setCoffees}
+          <NavBar handleLogout={handleLogout} />
+          <Switch>
+            <>
+              {!store.loggedInUser ? (
+                <Route exact path="/" component={LoginView} />
+              ) : (
+                <></>
+              )}
+              {store.loggedInUser && store.loggedInUser.role === "user" ? (
+                <Route exact path="/" component={HomeView} />
+              ) : (
+                <></>
+              )}
+              {store.loggedInUser && store.loggedInUser.role === "cafe" ? (
+                <Route exact path="/" component={CafeDashboardView} />
+              ) : (
+                <></>
+              )}
+              {store.loggedInUser && store.loggedInUser.role === "admin" ? (
+                <Route exact path="/" render={(props) => (
+                  <AdminHome {...props}
+                    // coffees={coffees}
+                    // setCoffees={setCoffees}
                     cafes={cafes}
                     setCafes={setCafes}
                     cafeData={cafeData}
                     setCafeData={setCafeData}
                     coffeeData={coffeeData}
                     setCoffeeData={setCoffeeData}
-                    initialCoffeeData={initialCoffeeData}
+                    initialCoffeeData={initialCoffeeData} /> )} />
+              ) : (
+                <></>
+              )}
+
+              <Route exact path="/register" component={RegisterView} />
+
+              <Route exact path="/map/:coffee" component={MapView} />
+
+              <Route exact path="/orders/new" component={NewOrderForm} />
+
+              <Route exact path="/user/edit" component={EditUser} />
+
+              <Route exact path="/orders" component={OrdersView} />
+
+              <Route
+                exact
+                path="/menu"
+                render={(props) => (
+                  <CafeMenuView
+                    {...props}
+                    loggedInUser={store.loggedInUser}
+                    // coffees={coffees}
                   />
                 )}
               />
-            ) : (
-              <></>
-            )}
 
-            <Route
-              exact
-              path="/register"
-              render={(props) => (
-                <RegisterView
-                  {...props}
-                  setLoggedInUser={setLoggedInUser}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
+              <Route
+                exact
+                path="/admin/new_cafe"
+                render={(props) => (
+                  <NewCafeForm
+                    {...props}
+                    isEditing={false}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    cafeData={cafeData}
+                    setCafeData={setCafeData}
+                    initialCafeData={initialCafeData}
+                    loggedInUser={store.loggedInUser}
+                  />
+                )}
+              />
 
-            <Route
-              exact
-              path="/map/:coff"
-              render={(props) => (
-                <MapView
-                  {...props}
-                  userCoffee={userCoffee}
-                  setUserCoffee={setUserCoffee}
-                  userLocation={userLocation}
-                  setCafe={setCafe}
-                />
-              )}
-            />
+              <Route
+                exact
+                path="/admin/edit_cafe"
+                render={(props) => (
+                  <NewCafeForm
+                    {...props}
+                    isEditing={true}
+                    cafes={cafes}
+                    setCafes={setCafes}
+                    cafeData={cafeData}
+                    setCafeData={setCafeData}
+                    initialCafeData={initialCafeData}
+                    loggedInUser={store.loggedInUser}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin/new_coffee"
+                render={(props) => (
+                  <NewCoffeeForm
+                    {...props}
+                    // coffees={coffees}
+                    // setCoffees={setCoffees}
+                    isEditing={false}
+                    coffeeData={coffeeData}
+                    setCoffeeData={setCoffeeData}
+                    initialCoffeeData={initialCoffeeData}
+                    loggedInUser={store.loggedInUser}
+                  />
+                )}
+              />
+              <Route
+                exact
+                path="/admin/edit_coffee"
+                render={(props) => (
+                  <NewCoffeeForm
+                    {...props}
+                    // coffees={coffees}
+                    // setCoffees={setCoffees}
+                    isEditing={true}
+                    coffeeData={coffeeData}
+                    setCoffeeData={setCoffeeData}
+                    initialCoffeeData={initialCoffeeData}
+                    loggedInUser={store.loggedInUser}
+                  />
+                )}
+              />
 
-            <Route
-              exact
-              path="/orders/new"
-              render={(props) => (
-                <NewOrderForm
-                  {...props}
-                  userCoffee={userCoffee}
-                  cafe={cafe}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
+              <Route
+                exact
+                path="/payment"
+                render={(props) => (
+                  <StripeForm {...props} loggedInUser={store.loggedInUser} />
+                )}
+              />
 
-            <Route
-              exact
-              path="/user/edit"
-              render={(props) => (
-                <EditUser
-                  {...props}
-                  loggedInUser={loggedInUser}
-                  setLoggedInUser={setLoggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/orders"
-              render={(props) => (
-                <OrdersView {...props} loggedInUser={loggedInUser} />
-              )}
-            />
-
-            <Route
-              exact
-              path="/menu"
-              render={(props) => (
-                <CafeMenuView
-                  {...props}
-                  loggedInUser={loggedInUser}
-                  coffees={coffees}
-                />
-              )}
-            />
-
-            <Route
-              exact
-              path="/admin/new_cafe"
-              render={(props) => (
-                <NewCafeForm
-                  {...props}
-                  isEditing={false}
-                  cafes={cafes}
-                  setCafes={setCafes}
-                  cafeData={cafeData}
-                  setCafeData={setCafeData}
-                  initialCafeData={initialCafeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
-
-            <Route
-              exact
-              path="/admin/edit_cafe"
-              render={(props) => (
-                <NewCafeForm
-                  {...props}
-                  isEditing={true}
-                  cafes={cafes}
-                  setCafes={setCafes}
-                  cafeData={cafeData}
-                  setCafeData={setCafeData}
-                  initialCafeData={initialCafeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/new_coffee"
-              render={(props) => (
-                <NewCoffeeForm
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  isEditing={false}
-                  coffeeData={coffeeData}
-                  setCoffeeData={setCoffeeData}
-                  initialCoffeeData={initialCoffeeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
-            <Route
-              exact
-              path="/admin/edit_coffee"
-              render={(props) => (
-                <NewCoffeeForm
-                  {...props}
-                  coffees={coffees}
-                  setCoffees={setCoffees}
-                  isEditing={true}
-                  coffeeData={coffeeData}
-                  setCoffeeData={setCoffeeData}
-                  initialCoffeeData={initialCoffeeData}
-                  loggedInUser={loggedInUser}
-                />
-              )}
-            />
-
-            <Route
-              exact
-              path="/payment"
-              render={(props) => (
-                <StripeForm {...props} loggedInUser={loggedInUser} />
-              )}
-            />
-
-            <Route exact path="/logout">
-              <Redirect to="/" />
-            </Route>
-          </>
-        </Switch>
-      </BrowserRouter>
+              <Route exact path="/logout">
+                <Redirect to="/" />
+              </Route>
+            </>
+          </Switch>
+        </BrowserRouter>
+      </StateContext.Provider>
     </div>
   );
 };

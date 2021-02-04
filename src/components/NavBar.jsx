@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav } from "reactstrap";
+import StateContext from "../utils/store";
 
 const NavBar = (props) => {
-  const { handleLogout, loggedInUser } = props;
+  const { handleLogout } = props;
+  const { store } = useContext(StateContext);
+  const { loggedInUser } = store;
 
   const loggedOut = (
     <>
@@ -72,7 +75,7 @@ const NavBar = (props) => {
     <header>
       <Navbar color="light" light>
         <Link to="/">
-          <img src="logo.png" alt="Logo" style={{ height: "50px" }} />
+          <img src="Logo.png" alt="Logo" style={{ height: "50px" }} />
         </Link>
         <div>
           <h1>COFFIENDS</h1>
