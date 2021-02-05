@@ -43,15 +43,15 @@ const LoginView = (props) => {
   };
 
   return (
-    <Container>
+    <Container fluid="true" className="full-height background" >
       <Row className="justify-content-center margin-add-top">
-        <h1>Log In</h1>
+        <h1 className="heading-colors">Log In</h1>
       </Row>
       <Row className="justify-content-center">
         <Form onSubmit={handleSubmit}>
           <Row>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
-              <Label for="exampleEmail" className="mr-sm-2">
+            <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin text-center ">
+              <Label for="exampleEmail" className="mr-sm-2 border-color">
                 Email:
               </Label>
               <Input
@@ -59,13 +59,15 @@ const LoginView = (props) => {
                 name="username"
                 id="exampleEmail"
                 onChange={handleChange}
+                className="fill-boxes"
+
                 value={loginDetails.username}
               />
             </FormGroup>
           </Row>
           <Row>
-            <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="examplePassword" className="mr-sm-2">
+            <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin text-center">
+              <Label for="examplePassword" className="mr-sm-2 border-color">
                 Password:
               </Label>
               <Input
@@ -73,23 +75,24 @@ const LoginView = (props) => {
                 name="password"
                 id="examplePassword"
                 onChange={handleChange}
+                className="fill-boxes"
                 value={loginDetails.password}
               />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button className="login-form-margin-top" color="success">
+            <Button className="login-form-margin-top button-color">
               LOG IN
             </Button>
           </Row>
         </Form>
       </Row>
       <br />
-      <Row className="login-form-margin-top justify-content-center">
+      <Row className="login-form-margin-top justify-content-center border-color">
         Not signed up yet?
       </Row>
       <Row className="login-form-margin-top justify-content-center">
-        <Link to="/register">Sign Up Now!</Link>
+        <Link to="/register" className="link-styles ">Sign Up Now!</Link>
       </Row>
     </Container>
   );

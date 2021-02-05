@@ -48,15 +48,15 @@ const RegisterView = (props) => {
   };
 
   return (
-    <Container>
+    <Container fluid="true" className="background full-height">
       <Row className="justify-content-center margin-add-top">
-        <h1>Register</h1>
+        <h1 className="heading-colors" >Register</h1>
       </Row>
-      <Row className="justify-content-center">
+      <Row className="justify-content-center text-center">
         <Form onSubmit={handleSubmit}>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
-              <Label for="exampleEmail" className="mr-sm-2">
+              <Label for="exampleEmail" className="mr-sm-2 border-color">
                 Email:
               </Label>
               <Input
@@ -64,13 +64,14 @@ const RegisterView = (props) => {
                 name="username"
                 id="exampleEmail"
                 onChange={handleChange}
+                className="fill-boxes"
                 value={loginDetails.username}
               />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="examplePassword" className="mr-sm-2">
+              <Label for="examplePassword" className="mr-sm-2 border-color">
                 Password:
               </Label>
               <Input
@@ -78,13 +79,14 @@ const RegisterView = (props) => {
                 name="password"
                 id="examplePassword"
                 onChange={handleChange}
+                className="fill-boxes"
                 value={loginDetails.password}
               />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="exampleName" className="mr-sm-2">
+              <Label for="exampleName" className="mr-sm-2 border-color">
                 Name:
               </Label>
               <Input
@@ -92,13 +94,14 @@ const RegisterView = (props) => {
                 name="user_name"
                 id="exampleName"
                 onChange={handleChange}
+                className="fill-boxes"
                 value={loginDetails.user_name}
               />
             </FormGroup>
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="exampleNumber" className="mr-sm-2">
+              <Label for="exampleNumber" className="mr-sm-2 border-color">
                 Phone:
               </Label>
               <Input
@@ -106,12 +109,13 @@ const RegisterView = (props) => {
                 name="phone"
                 id="numberExample"
                 onChange={handleChange}
+                className="fill-boxes"
                 value={loginDetails.phone}
               />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button className="login-form-margin-top">Register</Button>
+            <Button className="login-form-margin-top button-color">Register</Button>
           </Row>
         </Form>
       </Row>

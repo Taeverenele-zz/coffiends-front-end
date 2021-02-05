@@ -48,23 +48,24 @@ function MapView() {
     <>
       {userLocation && coffee ? (
         <>
-          <Container>
-            <h2>Nearby cafes selling: {coffee}</h2>
-            <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false}>
+          <Container fluid="true" className="background justify-content-center">
+            <h2 className="text-center map-heading-colors " >Nearby cafes selling: {coffee}</h2>
+            <div className="Admin-Dashboard-Center">
+            <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false} >
               <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
               {cafesData.map((cafe, index) => (
                 <React.Fragment key={index}>
-                <Marker key={index} position={[cafe.location[0], cafe.location[1]]} >
-                  <Popup key={index}>
+                <Marker position={[cafe.location[0], cafe.location[1]]} >
+                  <Popup >
                     <h2>{cafe.cafe_name}</h2>
                     <h5>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</h5>
                     {cafe.menu.map((item) =>
                       item.coffee.name === coffee ? (
-                        <Link to="/orders/new" onClick={() => handleClick(cafe, item)} key={cafe._id} >
-                          <Button color="info" key={cafe._id} >
+                        <Link to="/orders/new" onClick={() => handleClick(cafe, item)} >
+                          <Button color="info" >
                               ${item.price.toFixed(2)} - BUY NOW
                           </Button>
                         </Link>
@@ -75,6 +76,7 @@ function MapView() {
                 </React.Fragment>
               ))}
             </MapContainer>
+            </div>
           </Container>
         </>
       ) : (<h3>Searching for nearby cafes...</h3>)}
