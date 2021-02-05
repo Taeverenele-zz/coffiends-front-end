@@ -1,4 +1,5 @@
 import { Form, FormGroup, Input, Label, Row, Col, Button, Container } from "reactstrap";
+import { Link } from "react-router-dom";
 import React, { useContext } from "react";
 import axios from "axios";
 import StateContext from "../../utils/store";
@@ -84,7 +85,10 @@ const EditUser = (props) => {
                   ></Input>
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="button-color">Submit</Button>
+                  <Button className="button-color mr-2">Submit</Button>
+                  <Link to="/">
+                    <Button className="button-color ml-2">Cancel</Button>
+                  </Link>
                 </div>
               </Form>
             </Col>
