@@ -18,7 +18,7 @@ const LoginView = (props) => {
     let response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/users/login`, {
       method: "POST",
       body: JSON.stringify(loginDetails),
-      // headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
     if (response.status === 400) {
@@ -44,6 +44,11 @@ const LoginView = (props) => {
 
   return (
     <Container fluid="true" className="full-height background" >
+      <Row className="justify-content-center margin-add-top">
+        <h5 className="subtext-heading-colors">
+          Avoid queues - order coffee to pick up from cafes near you
+        </h5>
+      </Row>
       <Row className="justify-content-center margin-add-top">
         <h1 className="heading-colors">Log In</h1>
       </Row>

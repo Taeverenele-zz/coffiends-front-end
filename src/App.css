@@ -65,6 +65,12 @@
   margin: 20px;
 }
 
+.subtext-heading-colors {
+  font: 400 3vh "Fredoka One";
+  color: #ffecd0d2 ;
+  text-shadow: 1px 1px black;
+}
+
 .edit-form-form {
   width: 50%;
 }
