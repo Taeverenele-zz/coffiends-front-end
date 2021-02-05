@@ -18,7 +18,7 @@ const LoginView = (props) => {
     let response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/users/login`, {
       method: "POST",
       body: JSON.stringify(loginDetails),
-      headers: { "Content-Type": "application/json" },
+      // headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
     if (response.status === 400) {

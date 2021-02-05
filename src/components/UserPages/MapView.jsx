@@ -55,10 +55,10 @@ function MapView() {
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-              {cafesData.map((cafe) => (
-                <React.Fragment key={cafe._id}>
-                <Marker key={cafe._id} position={[cafe.location[0], cafe.location[1]]} >
-                  <Popup key={cafe._id}>
+              {cafesData.map((cafe, index) => (
+                <React.Fragment key={index}>
+                <Marker key={index} position={[cafe.location[0], cafe.location[1]]} >
+                  <Popup key={index}>
                     <h2>{cafe.cafe_name}</h2>
                     <h5>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</h5>
                     {cafe.menu.map((item) =>
