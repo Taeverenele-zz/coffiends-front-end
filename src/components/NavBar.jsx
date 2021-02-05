@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Button, NavItem, Nav } from "reactstrap";
+import { Navbar, Button, NavItem, Nav, Container, Row, Col } from "reactstrap";
 import StateContext from "../utils/store";
 
 const NavBar = (props) => {
@@ -13,12 +13,12 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/">
-          <Button color="primary">LOG IN</Button>
+          <Button outline className="button-color" >LOG IN</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">
         <Link to="/register">
-          <Button color="info">SIGN UP</Button>
+          <Button outline className="button-color" >SIGN UP</Button>
         </Link>
       </NavItem>
     </>
@@ -27,7 +27,7 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/logout">
-          <Button color="warning" onClick={handleLogout}>
+          <Button outline onClick={handleLogout} className="button-color" size="sm" >
             LOG OUT
           </Button>
         </Link>
@@ -38,12 +38,12 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/user/edit">
-          <Button>EDIT PROFILE</Button>
+          <Button outline size="sm" className="button-color" >EDIT PROFILE</Button>
         </Link>
       </NavItem>
-      <NavItem className="mr-3">
+      <NavItem  className="mr-3">
         <Link to="/orders">
-          <Button>ORDERS</Button>
+          <Button outline size="sm" className="button-color">ORDERS</Button>
         </Link>
       </NavItem>
     </>
@@ -73,23 +73,29 @@ const NavBar = (props) => {
   );
 
   return (
-    <header>
-      <Navbar color="light" light>
-        <Link to="/">
-          <img src="Logo.png" alt="Logo" style={{ height: "50px" }} />
-        </Link>
-        <div>
-          <h1>COFFIENDS</h1>
-        </div>
+    <Container fluid="true" className="Remove-padding-margin">
+      <Navbar className="nav-color">
+        <Col sm={{size: 2}}>
+          <Link to="/">
+            <img src="newLogo.svg" alt="Logo" className="logo-styles" />
+          </Link>
+        </Col>
+        <Col  sm={{size: 3}}>
+          <div>
+            <div className="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
+          </div>
+        </Col>
         <Nav>
+          <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
           {!loggedInUser ? loggedOut : <></>}
           {loggedInUser && loggedInUser.role === "user" ? userNav : <></>}
           {loggedInUser && loggedInUser.role === "cafe" ? cafeNav : <></>}
           {loggedInUser && loggedInUser.role === "admin" ? adminNav : <></>}
           {loggedInUser ? activeSession : <></>}
+          </Col>
         </Nav>
       </Navbar>
-    </header>
+    </Container>
   );
 };
 

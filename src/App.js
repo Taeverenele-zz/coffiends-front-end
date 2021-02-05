@@ -61,8 +61,8 @@ const App = () => {
     <div className="container-fluid Remove-padding-margin ">
       <StateContext.Provider value={{ store, dispatch }}>
       <BrowserRouter>
-          <NavBar handleLogout={handleLogout} />
           <FlashMessageView />
+          <NavBar handleLogout={handleLogout} />
           <Switch>
             <>
               {!loggedInUser ? (

@@ -68,18 +68,18 @@ const NewOrderForm = (props) => {
   return (
     <>
       {!orderDetails ? (<></>) : (
-        <Container>
-          <Row className="mt-4">
-            <Col sm="12" md={{ size: 8, offset: 2 }}>
-              <Form>
+        <Container fluid="true" className="background full-height ">
+          <Row className="mt-4 justify-content-center">
+            <Col className="Admin-Dashboard-Center">
+              <Form className="text-center order-form  ">
                 <FormGroup>
-                  <h4>Ordering: {userCoffee.name} from {orderCafe.cafe_name}</h4>
+                  <h4 className="order-heading-colors">Ordering: {userCoffee.name} from {orderCafe.cafe_name}</h4>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="size">Size:</Label>
-                  <select name="size" onChange={handleSize} value={size} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
-                    <option disabled>SIZE</option>
-                    <option value="Regular">Regular</option>
+                  <Label for="size" className="border-color">Size:</Label>
+                  <select name="size" onChange={handleSize} value={size} className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                    <option disabled >SIZE</option>
+                    <option value="Regular" >Regular</option>
                     {userCoffee.name === "Espresso" ? (<></>) : (
                       <>
                         <option value="Small">Small -$0.50</option>
@@ -91,8 +91,8 @@ const NewOrderForm = (props) => {
                 <FormGroup>
                   {userCoffee.name === "Espresso" || userCoffee.name === "Long Black" ? (<></>) : (
                     <>
-                      <Label for="milk">Milk:</Label>
-                      <select name="milk" onChange={handleMilk} value={milk} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                      <Label for="milk" className="border-color">Milk:</Label>
+                      <select name="milk" onChange={handleMilk} className="fill-boxes" value={milk} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                         <option disabled>MILK</option>
                         <option value="Regular">Full Cream</option>
                         <option value="Skim Milk">Skim</option>
@@ -103,8 +103,8 @@ const NewOrderForm = (props) => {
                   )}
                 </FormGroup>
                 <FormGroup>
-                  <Label for="sugar">Sugar:</Label>
-                  <select name="sugar" onChange={handleSugar} value={sugar} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                  <Label for="sugar" className="border-color">Sugar:</Label>
+                  <select name="sugar" onChange={handleSugar} value={sugar} className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                     <option disabled>SUGARS</option>
                     <option value="0">No Sugar</option>
                     <option value="1">1</option>
@@ -114,8 +114,8 @@ const NewOrderForm = (props) => {
                   </select>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="pickup">Pickup Time:</Label>
-                  <select name="pickup" onChange={handlePickupTime} value="0" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                  <Label for="pickup" className="border-color">Pickup Time:</Label>
+                  <select name="pickup" onChange={handlePickupTime} value="0" className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                     <option disabled>PICKUP TIME</option>
                     <option value="0">ASAP</option>
                     <option value="10">10 mins</option>
