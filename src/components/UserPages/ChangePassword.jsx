@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { Form, FormGroup, Input, Label, Row, Col, Button, Container, InputGroup, InputGroupAddon, InputGroupText } from "reactstrap";
+import { Form, FormGroup, Input, Label, Row, Col, Button, Container, InputGroup, InputGroupAddon } from "reactstrap";
 import StateContext from "../../utils/store";
 
 const ChangePassword = (props) => {
@@ -91,7 +91,7 @@ const ChangePassword = (props) => {
                   </InputGroup>
                 </FormGroup>
                 <Button className="button-color">Submit</Button>
-                <Link to="/">
+                <Link to="/home">
                   <Button className="button-color ml-2">Cancel</Button>
                 </Link>
               </Form>

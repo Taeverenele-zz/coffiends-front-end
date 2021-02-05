@@ -16,7 +16,7 @@ const NewOrderForm = (props) => {
 
   useEffect(() => {
     if (!loggedInUser) {
-      props.history.push("/");
+      props.history.push("/home");
     } else {
       setOrderDetails({
         cafe: orderCafe._id,
@@ -127,7 +127,7 @@ const NewOrderForm = (props) => {
                   <StripeForm orderDetails={orderDetails} />
                 </FormGroup>
                 <FormGroup>
-                  <Link to="/"><Button color="warning">Cancel</Button></Link>
+                  <Link to="/home"><Button color="warning">Cancel</Button></Link>
                 </FormGroup>
               </Form>
             </Col>

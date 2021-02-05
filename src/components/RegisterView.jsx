@@ -43,7 +43,7 @@ const RegisterView = (props) => {
         phone: "",
       });
 
-      props.history.push("/");
+      props.history.push("/home");
     }
   };
 
