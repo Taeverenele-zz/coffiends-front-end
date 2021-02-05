@@ -43,10 +43,10 @@ const App = () => {
         };
       });
     
-    // navigator.geolocation.getCurrentPosition(
-    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
-    //   error => console.log(error.message)
-    // );
+    navigator.geolocation.getCurrentPosition(
+      position => dispatch({ type: "setUserLocation", data: [position.coords.latitude, position.coords.longitude] }),
+      error => console.log(error.message)
+    );
   }, []);
 
   const handleLogout = () => {
