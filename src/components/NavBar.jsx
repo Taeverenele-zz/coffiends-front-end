@@ -1,12 +1,12 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-import { Navbar, Button, NavItem, Nav, Container, Row, Col } from "reactstrap";
+import { Navbar, Button, NavItem, Nav, Container, Col } from "reactstrap";
 import StateContext from "../utils/store";
 
 const NavBar = (props) => {
   const { handleLogout } = props;
   
-  const { store, dispatch } = useContext(StateContext);
+  const { store } = useContext(StateContext);
   const { loggedInUser } = store;
 
   const loggedOut = (

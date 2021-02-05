@@ -25,7 +25,7 @@ function MapView() {
 
       axios.post(`${process.env.REACT_APP_BACK_END_URL}/map`, postBody)
         .then((res) => setCafesData(res.data))
-        .catch((err) => console.log(err))
+        .catch((err) => console.log(err));
       };
   }, [ userLocation, coffee ]);
 
