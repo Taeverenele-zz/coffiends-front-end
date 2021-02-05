@@ -8,29 +8,21 @@ const CafeMenuView = () => {
   const [ coffees, setCoffees ] = useState([]);
   const [ newCoffee, setNewCoffee ] = useState("");
   const [ newPrice, setNewPrice ] = useState("");
+  const [ reload, setReload ] = useState(false);
 
   const { store } = useContext(StateContext);
-  const { loggedInUser, allCoffees } = store;
+  const { loggedInUser, dispatch } = store;
 
   useEffect(() => {
     if (loggedInUser) {
-      getMenuData();
+      axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`)
+        .then((res) => {
+          setMenu(res.data.menu);
+          setCoffees(res.data.availCoffees);
+        })
+        .catch((error) => dispatch({ type: "setFlashMessage", data: error }));
     };
-  }, [ loggedInUser ]);
-
-  const getMenuData = async () => {
-    const cafeMenuArr = [];
- 
-    let response = await axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`);
-    const currentMenu = await response.data;
-    setMenu(currentMenu);
-    
-    await currentMenu.forEach(element => {cafeMenuArr.push(element.coffee._id)});
-
-    response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/coffees/available`, { menu: cafeMenuArr, coffees: allCoffees });
-    const availableCoffees = await response.data;
-    setCoffees(availableCoffees);
-  };
+  }, [ reload, loggedInUser, dispatch ]);
 
   const handleCoffeeSelect = (e) => {
     setNewCoffee(e.target.value);
@@ -40,41 +32,29 @@ const CafeMenuView = () => {
     setNewPrice(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newMenuItem = {
-      coffee: newCoffee,
-      price: newPrice,
-      cafe: loggedInUser.cafe._id
-    };
-
-    const response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/menuitems`, newMenuItem);
-    const newItem = await response.data;
-
-    const cafeMenu = await loggedInUser.cafe.menu
-    cafeMenu.push(newItem._id)
-
-    await axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { menu: cafeMenu });
-
-    setNewCoffee("");
-    setNewPrice("");
-    getMenuData();
+    axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`,
+    { type: "add", item: { coffee: newCoffee, price: newPrice }})
+      .then(() => {
+        setNewCoffee("");
+        setNewPrice("");
+        reload ? setReload(false) : setReload(true)
+      })
+      .catch((error) => console.log(error));
+    
   };
 
-  const handleDelete = async (menuitem) => {
-    await axios.delete(`${process.env.REACT_APP_BACK_END_URL}/menuitems/${menuitem._id}`);
-
-    const updatedCafeMenu = loggedInUser.cafe.menu.filter((id) => id !== menuitem._id)
-
-    await axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { menu: updatedCafeMenu });
-
-    getMenuData();
+  const handleDelete = (menuItem) => {
+    axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { type: "remove", item: menuItem })
+      .then(() => {reload ? setReload(false) : setReload(true)})
+      .catch((error) => console.log(error));
   };
 
   return (
     <>
-      {(loggedInUser && menu) ? (
+      {loggedInUser && coffees ? (
         <>
         <Container fluid="true" className="background full-height ">
           <div className="Admin-Dashboard-Center">
@@ -88,19 +68,17 @@ const CafeMenuView = () => {
                   <thead>
                     <tr>
                       <th>Coffee</th>
-                      <th>Description</th>
                       <th>Price</th>
-                      <th></th>
+                      <th>Delete</th>
                     </tr>
                   </thead>
                   <tbody>
                     {menu ? (menu.map((item) => (
-                      <tr key={item._id}>
-                        <td>{item.coffee.name}</td>
-                        <td>{item.coffee.description}</td>
-                        <td>${item.price.toFixed(2)}</td>
+                      <tr key={item.coffeeId}>
+                        <td>{item.coffeeName}</td>
+                        <td>${item.coffeePrice.toFixed(2)}</td>
                         <td>
-                          <Button color="danger" onClick={() => handleDelete(item)} >Delete</Button>
+                          <Button color="danger" onClick={() => handleDelete(item)}>Delete</Button>
                         </td>
                       </tr>
                     ))) : <></>}
@@ -111,16 +89,17 @@ const CafeMenuView = () => {
             </Row>
           </div>
           <hr />
+          {}
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
               <h4 className="cafe-name-menu text-center">Add Coffee To Menu</h4>
               <br />
                 <Form onSubmit={handleSubmit} className="edit-form-form ">
                   <FormGroup>
-                    <select className="fill-boxes" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleCoffeeSelect} value={newCoffee.name} >
-                    <option defaultValue="">D</option>
+                    <select onChange={handleCoffeeSelect} className="fill-boxes" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} >
+                    <option defaultValue=""></option>
                       {coffees.map((coffee) => 
-                        <option key={coffee._id} value={coffee._id}>{coffee.name}</option>
+                        <option key={coffee._id} value={coffee._id} coffname={coffee.name}>{coffee.name}</option>
                       )}
                     </select>
                   </FormGroup>
