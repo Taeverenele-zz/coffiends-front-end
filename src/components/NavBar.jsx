@@ -59,7 +59,7 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/menu">
-          <Button>MENU</Button>
+          <Button outline className="button-color" size="sm">MENU</Button>
         </Link>
       </NavItem>
     </>
@@ -68,12 +68,12 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/admin/cafe/new">
-          <Button>ADD CAFE</Button>
+          <Button outline className="button-color" size="sm" >ADD CAFE</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">
         <Link to="/admin/coffee/new">
-          <Button>ADD COFFEE</Button>
+          <Button outline className="button-color" size="sm">ADD COFFEE</Button>
         </Link>
       </NavItem>
     </>

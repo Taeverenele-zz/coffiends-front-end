@@ -106,7 +106,7 @@ const OrdersView = () => {
         <Row>
           <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders}  />
         </Row>
-        <Row className="justify-content-center ">
+        <Row className="justify-content-center  ">
           <h1 className="heading-colors Cafe-Header-Margin">
             Past Orders
           </h1>

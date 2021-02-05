@@ -46,21 +46,22 @@ const AdminLists = () => {
   };
 
   return (
-    <Container>
+    <Container fluid="true" className="background full-height">
       {!allCafes || !allCoffees ? (<></>) : (
         <>
           <Row className="justify-content-center margin-add-top">
-            <h1>Admin Dashboard</h1>
+            <h1 className="admin-heading-colors ">Admin Dashboard</h1>
           </Row>
           <Row>
-            <Col sm={{ size: 6 }} className="margin-add-top">
-              <h3 className="text-center">All Cafes</h3>
+            <Col sm={{ size: 6 }} className="margin-add-top Admin-Dashboard-Center ">
+              <h3 className="text-center admin-subheading-colors">All Cafes</h3>
               <Input
                 placeholder="Search"
                 value={cafeSearchTerm}
                 onChange={handleCafeSearchTermChange}
+                className="search-admin fill-boxes"
               />
-              <Table className="margin-add-top">
+              <Table className="margin-add-top table-background search-admin" >
                 <thead>
                   <tr>
                     <th>Cafe Name</th>
@@ -87,14 +88,15 @@ const AdminLists = () => {
                 </tbody>
               </Table>
             </Col>
-            <Col sm={{ size: 6 }} className="margin-add-top">
-              <h3 className="text-center">All Coffees</h3>
+            <Col sm={{ size: 6 }} className="margin-add-top Admin-Dashboard-Center ">
+              <h3 className="text-center admin-subheading-colors">All Coffees</h3>
               <Input
                 placeholder="Search"
                 value={coffeeSearchTerm}
                 onChange={handleCoffeeSearchTermChange}
+                className="search-admin fill-boxes"
               />
-              <Table className="margin-add-top">
+              <Table className="margin-add-top table-background search-admin">
                 <thead>
                   <tr>
                     <th>Coffee Name</th>

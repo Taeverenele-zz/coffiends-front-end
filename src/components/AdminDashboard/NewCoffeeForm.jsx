@@ -45,27 +45,27 @@ const NewCoffeeForm = (props) => {
   };
 
   return (
-    <div>
+    <div className="background full-height text-center">
       {!coffeeData ? (<></>) : (
         <>
           <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-              <h2>{action === "edit" ? "Edit" : "Add New"} Coffee</h2>
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center Admin-Dashboard-Center">
+              <h2 className="admin-heading-colors">{action === "edit" ? "Edit" : "Add New"} Coffee</h2>
             </Col>
           </Row>
           <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }}>
-              <Form onSubmit={handleSubmit}>
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
+              <Form onSubmit={handleSubmit} className="search-admin ">
                 <FormGroup>
-                  <Label for="name">Name:</Label>
-                  <Input name="name" value={coffeeData.name} onChange={handleInputChange} required />
+                  <Label className="admin-subheading-colors" for="name">Name:</Label>
+                  <Input className="fill-boxes" name="name" value={coffeeData.name} onChange={handleInputChange} required />
                 </FormGroup>
                 <FormGroup>
-                  <Label for="description">Description:</Label>
-                  <Input name="description" value={coffeeData.description} onChange={handleInputChange} required />
+                  <Label className="admin-subheading-colors" for="description">Description:</Label>
+                  <Input className="fill-boxes" name="description" value={coffeeData.description} onChange={handleInputChange} required />
                 </FormGroup>
-                <Button>Submit</Button>
-                <Link to="/home"><Button>Cancel</Button></Link>
+                <Button className="Admin-Button-Margin button-color">Submit</Button>
+                <Link to="/home"><Button className="Admin-Button-Margin button-color">Cancel</Button></Link>
               </Form>
             </Col>
           </Row>

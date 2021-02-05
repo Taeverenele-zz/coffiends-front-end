@@ -104,56 +104,60 @@ const NewCafeForm = (props) => {
   };
 
   return (
-    <div>
+    <div className="background full-height text-center">
       {!cafeData ? (
         <></>
       ) : (
         <>
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">
-              <h2>{action === "edit" ? "Edit" : "Add New"} Cafe</h2>
+              <h2 className="admin-heading-colors ">{action === "edit" ? "Edit" : "Add New"} Cafe</h2>
             </Col>
           </Row>
           <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }}>
-              <Form onSubmit={handleFinalSubmit}>
+            <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
+              <Form onSubmit={handleFinalSubmit} className="search-admin ">
                 <FormGroup>
-                  <Label for="cafe_name">Cafe name:</Label>
+                  <Label className="admin-subheading-colors" for="cafe_name">Cafe name:</Label>
                   <Input
                     type="text"
                     name="cafe_name"
                     value={cafeData.cafe_name || ""}
+                    className="fill-boxes"            
                     onChange={handleCafeInputChange}
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="user_name">Owner:</Label>
+                  <Label className="admin-subheading-colors" for="user_name">Owner:</Label>
                   <Input
                     type="text"
                     name="user_name"
                     value={userData.user_name || ""}
+                    className="fill-boxes"
                     onChange={handleUserInputChange}
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="username">Email:</Label>
+                  <Label className="admin-subheading-colors" for="username">Email:</Label>
                   <Input
                     type="email"
                     name="username"
                     value={userData.username || ""}
                     onChange={handleUserInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="password">Password:</Label>
+                  <Label className="admin-subheading-colors" for="password">Password:</Label>
                   <Input
                     type="password"
                     name="password"
                     value={userData.password || ""}
                     onChange={handleUserInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
@@ -168,32 +172,35 @@ const NewCafeForm = (props) => {
                   ></Input>
                 </FormGroup> */}
                 <FormGroup>
-                  <Label for="phone">Phone:</Label>
+                  <Label className="admin-subheading-colors" for="phone">Phone:</Label>
                   <Input
                     type="text"
                     name="phone"
                     value={userData.phone || ""}
                     onChange={handleUserInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="address">Address:</Label>
+                  <Label className="admin-subheading-colors" for="address">Address:</Label>
                   <Input
                     type="text"
                     name="address"
                     value={cafeData.address || ""}
                     onChange={handleCafeInputChange}
+                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="opening">Opening time:</Label>
+                  <Label className="admin-subheading-colors" for="opening">Opening time:</Label>
                   <Input
                     type="text"
                     name="operating_hours[0]"
                     required
                     value={cafeData.operating_hours[0] || ""}
+                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -205,12 +212,13 @@ const NewCafeForm = (props) => {
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="closing">Closing time:</Label>
+                  <Label className="admin-subheading-colors" for="closing">Closing time:</Label>
                   <Input
                     type="text"
                     name="operating_hours[1]"
                     required
                     value={cafeData.operating_hours[1] || ""}
+                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -222,12 +230,13 @@ const NewCafeForm = (props) => {
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="latitude">Latitude:</Label>
+                  <Label className="admin-subheading-colors" for="latitude">Latitude:</Label>
                   <Input
                     type="text"
                     name="location[0]"
                     required
                     value={cafeData.location[0] || ""}
+                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -242,12 +251,13 @@ const NewCafeForm = (props) => {
                   ></Input>
                 </FormGroup>
                 <FormGroup>
-                  <Label for="longitude">Longitude:</Label>
+                  <Label className="admin-subheading-colors" for="longitude">Longitude:</Label>
                   <Input
                     type="text"
                     name="location[1]"
                     required
                     value={cafeData.location[1] || ""}
+                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -261,9 +271,9 @@ const NewCafeForm = (props) => {
                     }
                   ></Input>
                 </FormGroup>
-                <Button>Submit</Button>
+                <Button className="Admin-Button-Margin button-color">Submit</Button>
                 <Link to="/home">
-                  <Button>Cancel</Button>
+                  <Button className="Admin-Button-Margin button-color">Cancel</Button>
                 </Link>
               </Form>
             </Col>

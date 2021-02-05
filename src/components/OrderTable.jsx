@@ -23,7 +23,7 @@ const OrderTable = (props) => {
     <>
       <Container> 
         <Row className="justify-content-center margin-add-top"></Row>
-          <Table responsive className="table-background">
+          <Table responsive className="table-background ">
             <thead>
               <tr>
                 <th>Cafe</th>
