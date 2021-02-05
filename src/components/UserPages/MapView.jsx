@@ -23,7 +23,7 @@ function MapView() {
         coffee: coffee
       };
 
-      axios.post(`${process.env.REACT_APP_BACK_END_URL}/map`, postBody)
+      axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes/map`, postBody)
         .then((res) => setCafesData(res.data))
         .catch((err) => console.log(err));
       };
@@ -33,9 +33,9 @@ function MapView() {
     dispatch({
       type: "setUserCoffee",
       data: {
-        _id: item.coffee._id,
-        name: item.coffee.name,
-        price: item.price
+        _id: item.coffeeId,
+        name: item.coffeeName,
+        price: item.coffeePrice
       }
     });
     dispatch({
@@ -58,15 +58,15 @@ function MapView() {
 
               {cafesData.map((cafe, index) => (
                 <React.Fragment key={index}>
-                <Marker position={[cafe.location[0], cafe.location[1]]} >
+                <Marker key={index} position={[cafe.location[0], cafe.location[1]]} >
                   <Popup >
                     <h2>{cafe.cafe_name}</h2>
                     <h5>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</h5>
                     {cafe.menu.map((item) =>
-                      item.coffee.name === coffee ? (
+                      item.coffeeName === coffee ? (
                         <Link to="/orders/new" onClick={() => handleClick(cafe, item)} >
                           <Button color="info" >
-                              ${item.price.toFixed(2)} - BUY NOW
+                              ${item.coffeePrice.toFixed(2)} - BUY NOW
                           </Button>
                         </Link>
                       ) : (<></>)

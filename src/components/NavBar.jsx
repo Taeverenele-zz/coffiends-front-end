@@ -1,31 +1,24 @@
 import React, { useContext } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav, Container, Col } from "reactstrap";
 import StateContext from "../utils/store";
 
 const NavBar = (props) => {
   const { handleLogout } = props;
-
-  const currentPath = window.location.pathname;
-  console.log(useParams());
   
   const { store } = useContext(StateContext);
   const { loggedInUser } = store;
 
-  const loggedOutOnLogin =(
-    <>
-      <NavItem className="mr-3">
-        <Link to="/register">
-          <Button outline className="button-color" >SIGN UP</Button>
-        </Link>
-      </NavItem>
-    </>
-  );
-  const loggedOutOnSignup =(
+  const loggedOut = (
     <>
       <NavItem className="mr-3">
         <Link to="/">
           <Button outline className="button-color" >LOG IN</Button>
+        </Link>
+      </NavItem>
+      <NavItem className="mr-3">
+        <Link to="/register">
+          <Button outline className="button-color" >SIGN UP</Button>
         </Link>
       </NavItem>
     </>
@@ -98,8 +91,7 @@ const NavBar = (props) => {
         </Col>
         <Nav>
           <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
-          {!loggedInUser && currentPath === "/" ? loggedOutOnLogin : <></>}
-          {!loggedInUser && currentPath === "/register" ? loggedOutOnSignup : <></>}
+          {!loggedInUser ? loggedOut : <></>}
           {loggedInUser && loggedInUser.role === "user" ? userNav : <></>}
           {loggedInUser && loggedInUser.role === "cafe" ? cafeNav : <></>}
           {loggedInUser && loggedInUser.role === "admin" ? adminNav : <></>}
