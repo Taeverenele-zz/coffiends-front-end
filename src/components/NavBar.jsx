@@ -13,12 +13,12 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/">
-          <Button color="primary">LOG IN</Button>
+          <Button outline className="button-color" >LOG IN</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">
         <Link to="/register">
-          <Button color="info">SIGN UP</Button>
+          <Button outline className="button-color" >SIGN UP</Button>
         </Link>
       </NavItem>
     </>
@@ -75,12 +75,16 @@ const NavBar = (props) => {
   return (
     <Container fluid="true" className="Remove-padding-margin">
       <Navbar className="nav-color">
-        <Link to="/">
-          <img src="newLogo.svg" alt="Logo" className="logo-styles" />
-        </Link>
-        <div>
-           <div className="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
-        </div>
+        <Col sm={{size: 2}}>
+          <Link to="/">
+            <img src="newLogo.svg" alt="Logo" className="logo-styles" />
+          </Link>
+        </Col>
+        <Col  sm={{size: 3}}>
+          <div>
+            <div className="header"><b>Co<span>ff</span>ien<span>d</span>s</b></div>
+          </div>
+        </Col>
         <Nav>
           <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
           {!loggedInUser ? loggedOut : <></>}
