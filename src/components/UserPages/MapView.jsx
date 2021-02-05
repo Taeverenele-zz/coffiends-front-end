@@ -48,9 +48,10 @@ function MapView() {
     <>
       {userLocation && coffee ? (
         <>
-          <Container>
-            <h2>Nearby cafes selling: {coffee}</h2>
-            <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false}>
+          <Container fluid="true" className="background justify-content-center">
+            <h2 className="text-center map-heading-colors " >Nearby cafes selling: {coffee}</h2>
+            <div className="Admin-Dashboard-Center">
+            <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false} >
               <TileLayer
                 attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -75,6 +76,7 @@ function MapView() {
                 </React.Fragment>
               ))}
             </MapContainer>
+            </div>
           </Container>
         </>
       ) : (<h3>Searching for nearby cafes...</h3>)}
