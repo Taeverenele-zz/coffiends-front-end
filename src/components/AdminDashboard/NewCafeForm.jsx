@@ -20,7 +20,7 @@ const NewCafeForm = (props) => {
 
   useEffect(() => {
     if (!loggedInUser) {
-      props.history.push("/");
+      props.history.push("/home");
     }
     if (cafeData && action === "edit") {
       axios
@@ -90,13 +90,13 @@ const NewCafeForm = (props) => {
         )
         .catch((error) => console.log(error));
 
-      props.history.push("/");
+      props.history.push("/home");
     } else {
       saveNewUser()
         .then((newCafeData) => {
           axios
             .post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
-            .then(() => props.history.push("/"))
+            .then(() => props.history.push("/home"))
             .catch((error) => console.log(error));
         })
         .catch((error) => console.log(error));
@@ -272,7 +272,7 @@ const NewCafeForm = (props) => {
                   ></Input>
                 </FormGroup>
                 <Button className="Admin-Button-Margin button-color">Submit</Button>
-                <Link to="/">
+                <Link to="/home">
                   <Button className="Admin-Button-Margin button-color">Cancel</Button>
                 </Link>
               </Form>

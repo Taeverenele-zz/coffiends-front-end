@@ -38,12 +38,17 @@ const LoginView = (props) => {
         phone: "",
       });
 
-      props.history.push("/");
+      props.history.push("/home");
     };
   };
 
   return (
     <Container fluid="true" className="full-height background" >
+      <Row className="justify-content-center margin-add-top">
+        <h5 className="subtext-heading-colors">
+          Avoid queues - order coffee to pick up from cafes near you
+        </h5>
+      </Row>
       <Row className="justify-content-center margin-add-top">
         <h1 className="heading-colors">Log In</h1>
       </Row>

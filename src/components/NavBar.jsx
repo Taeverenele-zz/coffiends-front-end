@@ -1,24 +1,31 @@
 import React, { useContext } from "react";
-import { Link } from "react-router-dom";
-import { Navbar, Button, NavItem, Nav, Container, Row, Col } from "reactstrap";
+import { Link, useParams } from "react-router-dom";
+import { Navbar, Button, NavItem, Nav, Container, Col } from "reactstrap";
 import StateContext from "../utils/store";
 
 const NavBar = (props) => {
   const { handleLogout } = props;
+
+  const currentPath = window.location.pathname;
+  console.log(useParams());
   
-  const { store, dispatch } = useContext(StateContext);
+  const { store } = useContext(StateContext);
   const { loggedInUser } = store;
 
-  const loggedOut = (
+  const loggedOutOnLogin =(
+    <>
+      <NavItem className="mr-3">
+        <Link to="/register">
+          <Button outline className="button-color" >SIGN UP</Button>
+        </Link>
+      </NavItem>
+    </>
+  );
+  const loggedOutOnSignup =(
     <>
       <NavItem className="mr-3">
         <Link to="/">
           <Button outline className="button-color" >LOG IN</Button>
-        </Link>
-      </NavItem>
-      <NavItem className="mr-3">
-        <Link to="/register">
-          <Button outline className="button-color" >SIGN UP</Button>
         </Link>
       </NavItem>
     </>
@@ -76,9 +83,13 @@ const NavBar = (props) => {
     <Container fluid="true" className="Remove-padding-margin">
       <Navbar className="nav-color">
         <Col sm={{size: 2}}>
-          <Link to="/">
-            <img src="newLogo.svg" alt="Logo" className="logo-styles" />
-          </Link>
+          {loggedInUser ? (
+            <Link to="/home">
+              <img src={`${process.env.REACT_APP_BACK_END_URL}/images/newLogo.svg`} alt="Logo" className="logo-styles" />
+            </Link>) : (
+            <Link to="/">
+              <img src={`${process.env.REACT_APP_BACK_END_URL}/images/newLogo.svg`} alt="Logo" className="logo-styles" />
+            </Link>)}
         </Col>
         <Col  sm={{size: 3}}>
           <div>
@@ -87,7 +98,8 @@ const NavBar = (props) => {
         </Col>
         <Nav>
           <Col sm={{ size: 'auto'}} className="d-flex flex-nowrap">
-          {!loggedInUser ? loggedOut : <></>}
+          {!loggedInUser && currentPath === "/" ? loggedOutOnLogin : <></>}
+          {!loggedInUser && currentPath === "/register" ? loggedOutOnSignup : <></>}
           {loggedInUser && loggedInUser.role === "user" ? userNav : <></>}
           {loggedInUser && loggedInUser.role === "cafe" ? cafeNav : <></>}
           {loggedInUser && loggedInUser.role === "admin" ? adminNav : <></>}

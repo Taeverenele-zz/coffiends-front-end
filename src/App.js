@@ -43,10 +43,10 @@ const App = () => {
         };
       });
     
-    // navigator.geolocation.getCurrentPosition(
-    //   position => setUserLocation([position.coords.latitude, position.coords.longitude]),
-    //   error => console.log(error.message)
-    // );
+    navigator.geolocation.getCurrentPosition(
+      position => dispatch({ type: "setUserLocation", data: [position.coords.latitude, position.coords.longitude] }),
+      error => console.log(error.message)
+    );
   }, []);
 
   const handleLogout = () => {
@@ -65,20 +65,20 @@ const App = () => {
           <NavBar handleLogout={handleLogout} />
           <Switch>
             <>
-              {!loggedInUser ? (
+              {/* {!loggedInUser ? ( */}
                 <Route exact path="/" component={LoginView} />
-              ) : ( <></> )}
+              {/* ) : ( <></> )} */}
 
               {loggedInUser && loggedInUser.role === "user" ? (
-                <Route exact path="/" component={HomeView} />
+                <Route exact path="/home" component={HomeView} />
               ) : ( <></> )}
 
               {loggedInUser && loggedInUser.role === "cafe" ? (
-                <Route exact path="/" component={CafeDashboardView} />
+                <Route exact path="/home" component={CafeDashboardView} />
               ) : ( <></> )}
 
               {loggedInUser && loggedInUser.role === "admin" ? (
-                <Route exact path="/" component={AdminHome} />
+                <Route exact path="/home" component={AdminHome} />
               ) : ( <></> )}
 
               <Route exact path="/register" component={RegisterView} />

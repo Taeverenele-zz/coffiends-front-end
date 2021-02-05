@@ -12,7 +12,7 @@ const NewCoffeeForm = (props) => {
 
   useEffect(() => {
     if (!loggedInUser) {
-      props.history.push("/")
+      props.history.push("/home")
     };
     if (!coffeeData || action === "new") {
       dispatch({
@@ -35,11 +35,11 @@ const NewCoffeeForm = (props) => {
 
     if (action === "edit") {
       axios.put(`${process.env.REACT_APP_BACK_END_URL}/coffees/${coffeeData._id}`, coffeeData)
-        .then(() => props.history.push("/"))
+        .then(() => props.history.push("/home"))
         .catch((error) => console.log(error));
     } else {
       axios.post(`${process.env.REACT_APP_BACK_END_URL}/coffees`, coffeeData)
-        .then(() => props.history.push("/"))
+        .then(() => props.history.push("/home"))
         .catch((error) => console.log(error));
     };
   };
@@ -65,7 +65,7 @@ const NewCoffeeForm = (props) => {
                   <Input className="fill-boxes" name="description" value={coffeeData.description} onChange={handleInputChange} required />
                 </FormGroup>
                 <Button className="Admin-Button-Margin button-color">Submit</Button>
-                <Link to="/"><Button className="Admin-Button-Margin button-color">Cancel</Button></Link>
+                <Link to="/home"><Button className="Admin-Button-Margin button-color">Cancel</Button></Link>
               </Form>
             </Col>
           </Row>

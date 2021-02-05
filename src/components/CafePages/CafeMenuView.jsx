@@ -118,7 +118,7 @@ const CafeMenuView = () => {
                 <Form onSubmit={handleSubmit} className="edit-form-form ">
                   <FormGroup>
                     <select className="fill-boxes" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} onChange={handleCoffeeSelect} value={newCoffee.name} >
-                    <option disabled>COFFEE</option>
+                    <option defaultValue="">D</option>
                       {coffees.map((coffee) => 
                         <option key={coffee._id} value={coffee._id}>{coffee.name}</option>
                       )}

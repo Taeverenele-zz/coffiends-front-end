@@ -111,7 +111,7 @@ const OrdersView = () => {
             Past Orders
           </h1>
           <div className="Cafe-Dashboard-Expand Cafe-Header-Margin ">
-            <BsFillPlusSquareFill onClick={() => getPastOrders(true)} />
+            <BsFillPlusSquareFill className="plusIcon" onClick={() => getPastOrders(true)} />
           </div>
         </Row>
         <Row id="Past-Orders" className="justify-content-center">

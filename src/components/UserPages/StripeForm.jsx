@@ -15,7 +15,7 @@ const StripeForm = (props) => {
 
   const handleClick = async (event) => {
     const stripe = await stripePromise;
-    const response = await axios.post("http://localhost:5000/checkout", orderDetails);
+    const response = await axios.post(`${process.env.REACT_APP_BACK_END_URL}/checkout`, orderDetails);
     const session = await response.data;
     // When the customer clicks on the button, redirect them to Checkout.
     const result = await stripe.redirectToCheckout({ sessionId: session.id });

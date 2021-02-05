@@ -1,4 +1,5 @@
 import { Form, FormGroup, Input, Label, Row, Col, Button, Container } from "reactstrap";
+import { Link } from "react-router-dom";
 import React, { useContext } from "react";
 import axios from "axios";
 import StateContext from "../../utils/store";
@@ -19,7 +20,7 @@ const EditUser = (props) => {
     e.preventDefault();
 
     axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
-      .then(() => props.history.push("/"))
+      .then(() => props.history.push("/home"))
       .catch((error) => console.log(error));
   };
   
@@ -84,7 +85,10 @@ const EditUser = (props) => {
                   ></Input>
                 </FormGroup>
                 <div className="text-center">
-                  <Button className="button-color">Submit</Button>
+                  <Button className="button-color mr-2">Submit</Button>
+                  <Link to="/home">
+                    <Button className="button-color ml-2">Cancel</Button>
+                  </Link>
                 </div>
               </Form>
             </Col>

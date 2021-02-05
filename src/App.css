@@ -81,6 +81,12 @@
   margin: 20px;
 }
 
+.subtext-heading-colors {
+  font: 400 3vh "Fredoka One";
+  color: #ffecd0d2 ;
+  text-shadow: 1px 1px black;
+}
+
 .edit-form-form {
   width: 50%;
 }
@@ -354,3 +360,6 @@
   80% { transform: rotate(-5deg); } 
   100% { transform: rotate(0deg); } 
 } 
+.plusIcon {
+  color:rgb(250, 165, 53)
+}
