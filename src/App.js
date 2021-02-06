@@ -28,7 +28,7 @@ const App = () => {
     orderCafe: null,
     cafeData: null,
     coffeeData: null,
-    buttonToggle: false
+    buttonToggle: "login"
   };
 
   const [ store, dispatch ] = useReducer(stateReducer, initialState);
@@ -45,8 +45,8 @@ const App = () => {
     <div className="container-fluid Remove-padding-margin ">
       <StateContext.Provider value={{ store, dispatch }}>
       <BrowserRouter>
-          <FlashMessageView />
           <NavBar />
+          <FlashMessageView />
           <Switch>
             <>
               <Route exact path="/" component={LoginView} />

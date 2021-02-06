@@ -10,9 +10,9 @@ const FlashMessageView = () => {
   }, 10000);
 
   return (
-    <section>
-      <h4 className="heading-colors">{flashMessage}</h4>
-    </section>
+    <>
+      {flashMessage}
+    </>
   );
 };
 

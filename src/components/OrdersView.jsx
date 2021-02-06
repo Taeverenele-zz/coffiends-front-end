@@ -6,112 +6,84 @@ import OrderTable from "./OrderTable";
 import StateContext from "../utils/store";
 
 const OrdersView = () => {
-  const [ orders, setOrders ] = useState([]);
-  const [ pastOrders, setPastOrders ] = useState([]);
+  const [ orders, setOrders ] = useState(null);
+  const [ pastOrders, setPastOrders ] = useState(null);
   const [ showPastOrders, setShowPastOrders ] = useState(false);
+  const [ completeOrder, setCompleteOrder ] = useState(false);
 
-  const { store } = useContext(StateContext);
+  const { store, dispatch } = useContext(StateContext);
   const { loggedInUser } = store;
 
   useEffect(() => {
     if (loggedInUser) {
-      getOrders("active");
-    }
-  }, [ loggedInUser ]);
+      let url = "";
+      switch (loggedInUser.role) {
+        case "user":
+          url = `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/orders`
+          break;
+        case "cafe":
+          url = `${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/orders`
+          break;
+        default:
+          break;
+      };
+      axios.get(url)
+        .then((res) => setOrders(res.data))
+        .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve order data" }));
+    };
+    if (completeOrder) {
+      setCompleteOrder(false);
+    };
+  }, [ loggedInUser, dispatch, completeOrder ]);
 
-  const getOrders = (type) => {
-    switch (type) {
-      case "active":
-        if (loggedInUser.role === "user") {
-          retrieveUserOrders();
-        } else if (loggedInUser.role === "cafe") {
-          retrieveCafeOrders();
-        } else {
-          retrieveAllOrders();
-        }
+  const getPastOrders = () => {
+    let url = "";
+    switch (loggedInUser.role) {
+      case "user":
+        url = `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/orders/past`
         break;
-      case "past":
-        if (loggedInUser.role === "user") {
-          retrieveUserOrders("past");
-        } else if (loggedInUser.role === "cafe") {
-          retrieveCafeOrders("past");
-        } else {
-          retrieveAllOrders("past");
-        }
+      case "cafe":
+        url = `${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/orders/past`
         break;
       default:
-        break;
-    }
+        break; 
+    };
+    axios.get(url)
+        .then((res) => setPastOrders(res.data))
+        .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve order data" }));
   };
 
-  const getPastOrders = (type) => {
-    if (!showPastOrders && type) {
-      getOrders("past");
+  const pastOrderToggle = (show) => {
+    if (!showPastOrders && show) {
+      getPastOrders();
       setShowPastOrders(true);
-    } else if (showPastOrders && !type) {
-      getOrders("past");
+    } else if (showPastOrders && !show) {
+      getPastOrders();
     } else {
       setShowPastOrders(false);
-    }
-  };
-
-  const retrieveAllOrders = (pastOrders) => {
-    let url = `${process.env.REACT_APP_BACK_END_URL}/orders`;
-    if (pastOrders) {
-      url = `${process.env.REACT_APP_BACK_END_URL}/orders/past`;
-    }
-
-    axios
-      .get(url)
-      .then((res) => {
-        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const retrieveUserOrders = async (pastOrders) => {
-    let url = `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/orders`;
-    if (pastOrders) {
-      url = `${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/orders/past`;
     };
-
-    axios
-      .get(url)
-      .then((res) => {
-        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const retrieveCafeOrders = (pastOrders) => {
-    let url = `${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/orders`;
-    if (pastOrders) {
-      url = `${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/orders/past`;
-    }
-
-    axios
-      .get(url)
-      .then((res) => {
-        pastOrders ? setPastOrders(res.data) : setOrders(res.data);
-      })
-      .catch((err) => console.log(err));
   };
 
   return (
     <>
       <Container fluid="true" className="background full-height" >
+        {orders === [] ? (
+          <Row>
+            <OrderTable orders={orders} pastOrderToggle={pastOrderToggle} setCompleteOrder={setCompleteOrder} />
+          </Row>
+        ) : (
+          <>
+          <Row className="justify-content-center">
+            <h4 className="heading-colors Cafe-Header-Margin">No active orders</h4>
+          </Row>
+          </>
+        )}
         <Row className="justify-content-center">
-          <h1 className="heading-colors margin-add-top">Current Orders</h1>
-        </Row>
-        <Row>
-          <OrderTable orders={orders} getOrders={getOrders} getPastOrders={getPastOrders} setOrders={setOrders}  />
-        </Row>
-        <Row className="justify-content-center  ">
           <h1 className="heading-colors Cafe-Header-Margin">
             Past Orders
           </h1>
           <div className="Cafe-Dashboard-Expand Cafe-Header-Margin ">
-            <BsFillPlusSquareFill className="plusIcon" onClick={() => getPastOrders(true)} />
+            <BsFillPlusSquareFill className="plusIcon" onClick={() => pastOrderToggle(true)} />
           </div>
         </Row>
         <Row id="Past-Orders" className="justify-content-center">

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, FormGroup, Label, Input, Container, Row } from "reactstrap";
 import StateContext from "../utils/store";
 
@@ -11,6 +11,10 @@ const RegisterView = (props) => {
     role: "user",
     phone: ""
   });
+
+  useEffect(() => {
+    dispatch({ type: "setButtonToggle", data: "signup" });
+  }, [ dispatch ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,13 +31,16 @@ const RegisterView = (props) => {
       credentials: "include"
     });
     const userDetails = await response.json();
+    
     if (userDetails.message) {
-      alert(userDetails.message);
+      dispatch({ type: "setFlashMessage", data: `${userDetails.message}` });
     } else if (userDetails._id) {
       await dispatch({
         type: "setLoggedInUser",
         data: userDetails
       });
+
+      dispatch({ type: "setFlashMessage", data: `Signup successful! Welcome ${userDetails.user_name}` });
       
       setLoginDetails({
         username: "",

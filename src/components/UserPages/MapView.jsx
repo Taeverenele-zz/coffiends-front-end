@@ -65,23 +65,24 @@ const MapView = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
               {cafesData.map((cafe, index) => (
-                <React.Fragment key={index}>
                 <Marker key={index} position={[cafe.location[0], cafe.location[1]]} >
-                  <Popup >
-                    <h2>{cafe.cafe_name}</h2>
-                    <h5>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</h5>
+                  <Popup key={index} className="map-marker-popup">
+                    <h3>{cafe.cafe_name}</h3>
+                    <p>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</p>
                     {cafe.menu.map((item) =>
                       item.coffeeName === coffee ? (
-                        <Link to="/orders/new" onClick={() => handleClick(cafe, item)} >
-                          <Button color="info" >
-                              ${item.coffeePrice.toFixed(2)} - BUY NOW
-                          </Button>
-                        </Link>
+                        <>
+                          <h5>{item.coffeeName} - ${item.coffeePrice.toFixed(2)}</h5>
+                          <Link key={item.coffeeId} to="/orders/new" onClick={() => handleClick(cafe, item)} >
+                            <Button color="info" >
+                                ORDER
+                            </Button>
+                          </Link>
+                        </>
                       ) : (<></>)
                     )}
                   </Popup>
                 </Marker>
-                </React.Fragment>
               ))}
             </MapContainer>
             </div>
@@ -90,6 +91,7 @@ const MapView = () => {
           <>
             <div className="Admin-Dashboard-Center">
               <h2 className="text-center map-heading-colors ">Searching for nearby Cafes</h2>
+              <p className="text-center subtext-heading-colors">Make sure location access is allowed</p>
             </div>
           </>
         )}
