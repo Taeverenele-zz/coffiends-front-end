@@ -10,11 +10,6 @@ const stateReducer = (state, action) => {
         ...state,
         loggedInUser: action.data
       };
-    case "setUserLocation":
-      return {
-        ...state,
-        userLocation: action.data
-      };
     case "getAllCafes":
       return {
         ...state,
@@ -44,6 +39,11 @@ const stateReducer = (state, action) => {
       return {
         ...state,
         coffeeData: action.data
+      };
+    case "setButtonToggle":
+      return {
+        ...state,
+        buttonToggle: action.data
       };
     default:
       return state;

@@ -87,6 +87,10 @@
   text-shadow: 1px 1px black;
 }
 
+.map-marker-popup {
+  font: 400 2vh "Fredoka One";
+}
+
 .edit-form-form {
   width: 50%;
 }

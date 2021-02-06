@@ -11,7 +11,7 @@ const HomeView = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`)
       .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
-      .catch((err) => console.log(err));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve coffee data" }));
   }, [ dispatch ])
 
 

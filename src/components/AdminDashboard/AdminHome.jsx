@@ -13,29 +13,32 @@ const AdminLists = () => {
   const { allCoffees, allCafes } = store;
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/`)
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes`)
       .then((res) => { dispatch({ type: "getAllCafes", data: res.data }) })
-      .catch((error) => console.log(error));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe data could not be retrieved" }));
     
     dispatch({ type: "setCafeData", data: null });
     
-    axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`)
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees`)
       .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
-      .catch((err) => console.log(err));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Coffee data could not be retrieved" }));
     
     dispatch({ type: "setCoffeeData", data: null });
   }, [ dispatch, reload ]);
 
-  const deleteCafe = (id) => {
-    axios.delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${id}`)
-      .then(() => { reload ? setReload(false) : setReload(true) })
-      .catch((error) => console.log(error));
+  const deleteCafe = (cafe) => {
+    axios.delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafe._id}`)
+      .then(() => { 
+        axios.delete(`${process.env.REACT_APP_BACK_END_URL}/users/${cafe.owner}`)
+        reload ? setReload(false) : setReload(true)
+      })
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not get deleted successfully" }));
   };
 
   const deleteCoffee = (id) => {
     axios.delete(`${process.env.REACT_APP_BACK_END_URL}/coffees/${id}`)
       .then(() => { reload ? setReload(false) : setReload(true) })
-      .catch((error) => console.log(error));
+      .catch((error) => dispatch({ type: "setFlashMessage", data: "Coffee did not get deleted successfully" }));
   };
 
   const handleCafeSearchTermChange = (e) => {
@@ -79,7 +82,7 @@ const AdminLists = () => {
                           <Link to="/admin/cafe/edit"><Button onClick={() => dispatch({ type: "setCafeData", data: cafe })}>Edit</Button></Link>
                         </td>
                         <td>
-                          <Button onClick={() => deleteCafe(cafe._id)}>
+                          <Button onClick={() => deleteCafe(cafe)}>
                             Delete
                           </Button>
                         </td>

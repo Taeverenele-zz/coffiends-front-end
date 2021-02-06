@@ -18,36 +18,35 @@ const NewCafeForm = (props) => {
   const { store, dispatch } = useContext(StateContext);
   const { loggedInUser, cafeData } = store;
 
+  let cafeUserId
+  cafeData ? cafeUserId = cafeData.owner : cafeUserId = null
+
   useEffect(() => {
-    if (!loggedInUser) {
-      props.history.push("/home");
-    }
-    if (cafeData && action === "edit") {
-      axios
-        .get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeData.owner}`)
-        .then((res) => {
-          setUserData(res.data);
-        })
-        .catch((error) => console.log(error));
-    } else {
-      dispatch({
-        type: "setCafeData",
-        data: {
-          cafe_name: "",
-          address: "",
-          operating_hours: [],
-          location: [],
-        },
-      });
-      setUserData({
-        username: "",
-        password: "",
-        user_name: "",
-        role: "cafe",
-        phone: "",
-      });
-    }
-  }, [action]);
+    if (loggedInUser) {
+      if (cafeUserId && action === "edit") {
+        axios.get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeUserId}`)
+          .then((res) => setUserData(res.data))
+          .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve cafe data" }));
+      } else {
+        dispatch({
+          type: "setCafeData",
+          data: {
+            cafe_name: "",
+            address: "",
+            operating_hours: [],
+            location: [],
+          },
+        });
+        setUserData({
+          username: "",
+          password: "",
+          user_name: "",
+          role: "cafe",
+          phone: "",
+        });
+      };
+    };
+  }, [ action, loggedInUser, dispatch, cafeUserId ]);
 
   const handleCafeInputChange = (e) => {
     const { name, value } = e.target;
@@ -63,51 +62,40 @@ const NewCafeForm = (props) => {
   };
 
   const saveNewUser = () => {
-    return axios
-      .post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
+    return axios.post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
       .then((res) => {
         const cafeId = res.data._id;
         const newCafeData = { ...cafeData, owner: cafeId };
         return newCafeData;
       })
-      .catch((error) => console.log(error));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "User did not save successfully" }));
   };
 
   const handleFinalSubmit = (e) => {
     e.preventDefault();
 
     if (action === "edit") {
-      axios
-        .patch(
-          `${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`,
-          userData
-        )
-        .catch((error) => console.log(error));
-      axios
-        .put(
-          `${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`,
-          cafeData
-        )
-        .catch((error) => console.log(error));
+      axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`, userData)
+        .catch(() => dispatch({ type: "setFlashMessage", data: "User did not update successfully" }));
+      
+      axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
+        .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
 
       props.history.push("/home");
     } else {
       saveNewUser()
         .then((newCafeData) => {
-          axios
-            .post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
+          axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
             .then(() => props.history.push("/home"))
-            .catch((error) => console.log(error));
+            .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
         })
-        .catch((error) => console.log(error));
+        .catch(() => dispatch({ type: "setFlashMessage", data: "User did not save successfully" }));
     }
   };
 
   return (
     <div className="background full-height text-center">
-      {!cafeData ? (
-        <></>
-      ) : (
+      {!cafeData ? (<></>) : (
         <>
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="text-center">

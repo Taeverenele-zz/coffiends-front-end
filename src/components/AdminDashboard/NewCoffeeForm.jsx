@@ -11,16 +11,13 @@ const NewCoffeeForm = (props) => {
   const { loggedInUser, coffeeData } = store;
 
   useEffect(() => {
-    if (!loggedInUser) {
-      props.history.push("/home")
-    };
-    if (!coffeeData || action === "new") {
+    if (loggedInUser && action === "new") {
       dispatch({
         type: "setCoffeeData",
         data: { name: "", description: "" }
       });
     };
-  }, [action]);
+  }, [ action, dispatch, loggedInUser ]);
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -36,11 +33,11 @@ const NewCoffeeForm = (props) => {
     if (action === "edit") {
       axios.put(`${process.env.REACT_APP_BACK_END_URL}/coffees/${coffeeData._id}`, coffeeData)
         .then(() => props.history.push("/home"))
-        .catch((error) => console.log(error));
+        .catch(() => dispatch({ type: "setFlashMessage", data: "Coffee did not save successfully" }));
     } else {
       axios.post(`${process.env.REACT_APP_BACK_END_URL}/coffees`, coffeeData)
         .then(() => props.history.push("/home"))
-        .catch((error) => console.log(error));
+        .catch(() => dispatch({ type: "setFlashMessage", data: "Coffee did not save successfully" }));
     };
   };
 
