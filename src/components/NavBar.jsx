@@ -45,14 +45,14 @@ const NavBar = () => {
   );
   const userNav = (
     <>
-      <NavItem className="mr-3">
-        <Link to="/user/edit">
-          <Button outline size="sm" className="button-color" >EDIT PROFILE</Button>
-        </Link>
-      </NavItem>
       <NavItem  className="mr-3">
         <Link to="/orders">
           <Button outline size="sm" className="button-color">ORDERS</Button>
+        </Link>
+      </NavItem>
+      <NavItem className="mr-3">
+        <Link to="/user/edit">
+          <Button outline size="sm" className="button-color" >EDIT PROFILE</Button>
         </Link>
       </NavItem>
     </>
@@ -70,7 +70,7 @@ const NavBar = () => {
     <>
       <NavItem className="mr-3">
         <Link to="/admin/cafe/new">
-          <Button outline className="button-color" size="sm" >ADD CAFE</Button>
+          <Button outline className="button-color" size="sm">ADD CAFE</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">

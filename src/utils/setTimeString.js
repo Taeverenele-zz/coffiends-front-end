@@ -1,4 +1,4 @@
-const setTimeString = (future) => {
+const setTimeString = (future, noColon) => {
   let time = new Date().getTime();
   let date
 
@@ -14,7 +14,7 @@ const setTimeString = (future) => {
     min = "0" + min;
   };
 
-  return `${hr}:${min}`
+  return noColon ? `${hr}${min}` : `${hr}:${min}`
 };
 
 export default setTimeString;

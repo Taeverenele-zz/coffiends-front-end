@@ -6,7 +6,7 @@ import StateContext from "../utils/store";
 const OrderTable = (props) => {
   const { orders, pastOrderToggle, setCompleteOrder } = props;
 
-  const { store } = useContext(StateContext);
+  const { store, dispatch } = useContext(StateContext);
   const { loggedInUser } = store;
 
   const setOrderToCompleted = (id) => {
@@ -15,7 +15,7 @@ const OrderTable = (props) => {
         pastOrderToggle(false);
         setCompleteOrder(true);
       })
-      .catch((err) => console.log(err));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Order was not completed successfully" }));
   };
 
   return (

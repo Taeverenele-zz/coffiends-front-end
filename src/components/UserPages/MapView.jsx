@@ -20,22 +20,26 @@ const MapView = () => {
 
     function fetchData(position) {
       const geoLocationCoordinates = [ position.coords.latitude, position.coords.longitude ];
-      
       setUserLocation(geoLocationCoordinates);
   
       if (geoLocationCoordinates && coffee) {
         const postBody = {
           location: geoLocationCoordinates,
-          time: setTimeString(),
+          time: setTimeString(false, true),
           coffee: coffee
         };
   
         axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes/map`, postBody)
-          .then((res) => setCafesData(res.data))
-          .catch((err) => console.log(err));
+          .then((res) => {
+            setCafesData(res.data);
+            if (res.data === []) {
+              dispatch({ type: "setFlashMessage", data: "Sorry, there are no cafes near you selling that coffee that are currently open" });
+            };
+          })
+          .catch(() => dispatch({ type: "setFlashMessage", data: "Unable to find any cafes" }));
       };
     };
-  }, [ coffee ]);
+  }, [ coffee, dispatch ]);
 
   function handleClick(cafe, item) {
     dispatch({

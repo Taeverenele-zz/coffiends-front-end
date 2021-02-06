@@ -30,21 +30,20 @@ const ChangePassword = (props) => {
     const response = await axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/change_password`, formData );
     if (response.status === 200) {
       dispatch({ type: "setFlashMessage", data: "Password changed successfully" });
-      console.log(store.flashMessage)
       props.history.push("/user/edit")
-    } else if (response.status === 409) {
-      alert("Something went wrong, try again");
+    } else {
+      dispatch({ type: "setFlashMessage", data: "Error - password was not updated" });
     };
   };
 
   const togglePasswordView = (inputName) => {
-    const inputs = document.querySelectorAll('.input')
+    const inputs = document.querySelectorAll('.input');
     inputs.forEach(input => {
       if(input.name === inputName) {
         input.type = input.type === 'text' ? 'password' : 'text';
-      } 
-    })
-  }
+      };
+    });
+  };
 
   return (
     <Container fluid="true" className="background full-height">

@@ -14,7 +14,7 @@ const CafeMenuView = () => {
   const { loggedInUser, dispatch } = store;
 
   useEffect(() => {
-    if (loggedInUser) {
+    if (loggedInUser && loggedInUser.role === "cafe") {
       axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`)
         .then((res) => {
           setMenu(res.data.menu);
@@ -42,79 +42,84 @@ const CafeMenuView = () => {
         setNewPrice("");
         reload ? setReload(false) : setReload(true)
       })
-      .catch((error) => console.log(error));
-    
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Menu did not save successfully" }));
   };
 
   const handleDelete = (menuItem) => {
     axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${loggedInUser.cafe._id}/menu`, { type: "remove", item: menuItem })
       .then(() => {reload ? setReload(false) : setReload(true)})
-      .catch((error) => console.log(error));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Menu item did not delete successfully" }));
   };
 
   return (
     <>
-      {loggedInUser && coffees ? (
-        <>
-        <Container fluid="true" className="background full-height ">
-          <div className="Admin-Dashboard-Center">
-            <h2 className="cafe-name-menu">{loggedInUser.cafe.cafe_name}</h2>
-          </div>
-          <div>
-            <Row>
-              <Col>
-                <div className="Admin-Dashboard-Center">
-                <Table responsive className=" table-background" style={{width: "60%"}}  >
-                  <thead>
-                    <tr>
-                      <th>Coffee</th>
-                      <th>Price</th>
-                      <th>Delete</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {menu ? (menu.map((item) => (
-                      <tr key={item.coffeeId}>
-                        <td>{item.coffeeName}</td>
-                        <td>${item.coffeePrice.toFixed(2)}</td>
-                        <td>
-                          <Button color="danger" onClick={() => handleDelete(item)}>Delete</Button>
-                        </td>
+      <Container fluid="true" className="background full-height ">
+        {loggedInUser && coffees ? (
+          <>
+            <div className="Admin-Dashboard-Center">
+              <h2 className="cafe-name-menu">{loggedInUser.cafe.cafe_name}</h2>
+            </div>
+            <div>
+              <Row>
+                <Col>
+                  <div className="Admin-Dashboard-Center">
+                  <Table responsive className=" table-background" style={{width: "60%"}}  >
+                    <thead>
+                      <tr>
+                        <th>Coffee</th>
+                        <th>Price</th>
+                        <th>Delete</th>
                       </tr>
-                    ))) : <></>}
-                  </tbody>
-                </Table>
-                </div>
-              </Col>
-            </Row>
-          </div>
-          <hr />
-          {}
-          <Row className="mt-4">
-            <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
-              <h4 className="cafe-name-menu text-center">Add Coffee To Menu</h4>
-              <br />
-                <Form onSubmit={handleSubmit} className="edit-form-form ">
-                  <FormGroup>
-                    <select onChange={handleCoffeeSelect} className="fill-boxes" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} >
-                    <option defaultValue=""></option>
-                      {coffees.map((coffee) => 
-                        <option key={coffee._id} value={coffee._id} coffname={coffee.name}>{coffee.name}</option>
-                      )}
-                    </select>
-                  </FormGroup>
-                  <FormGroup>
-                    <Input className="fill-boxes" style={{color: "white"}} type="Number" placeholder="Price (eg 3.5)" onChange={handlePrice} value={newPrice} />
-                  </FormGroup>
-                  <FormGroup>
-                    <Button color="primary" >Add</Button>
-                  </FormGroup>
-                </Form>
-              </Col>
-            </Row>
-          </Container>
-        </>
-      ) : <h3>fetching data...</h3>}
+                    </thead>
+                    <tbody>
+                      {menu ? (menu.map((item) => (
+                        <tr key={item.coffeeId}>
+                          <td>{item.coffeeName}</td>
+                          <td>${item.coffeePrice.toFixed(2)}</td>
+                          <td>
+                            <Button color="danger" onClick={() => handleDelete(item)}>Delete</Button>
+                          </td>
+                        </tr>
+                      ))) : <></>}
+                    </tbody>
+                  </Table>
+                  </div>
+                </Col>
+              </Row>
+            </div>
+            <hr />
+            {}
+            <Row className="mt-4">
+              <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
+                <h4 className="cafe-name-menu text-center">Add Coffee To Menu</h4>
+                <br />
+                  <Form onSubmit={handleSubmit} className="edit-form-form ">
+                    <FormGroup>
+                      <select required onChange={handleCoffeeSelect} className="fill-boxes" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} >
+                      <option defaultValue=""></option>
+                        {coffees.map((coffee) => 
+                          <option key={coffee._id} value={coffee._id} coffname={coffee.name}>{coffee.name}</option>
+                        )}
+                      </select>
+                    </FormGroup>
+                    <FormGroup>
+                      <Input required className="fill-boxes" style={{color: "white"}} type="Number" placeholder="Price (eg 3.5)" onChange={handlePrice} value={newPrice} />
+                    </FormGroup>
+                    <FormGroup>
+                      <Button color="primary" >Add</Button>
+                    </FormGroup>
+                  </Form>
+                </Col>
+              </Row>
+          </>
+        ) : (
+          <>
+            <div className="Admin-Dashboard-Center">
+              <h2 className="text-center map-heading-colors ">Fetching menu data</h2>
+            </div>
+          </>
+        )}
+      </Container>
     </>
   );
 };

@@ -67,16 +67,16 @@ const OrdersView = () => {
   return (
     <>
       <Container fluid="true" className="background full-height" >
-        {orders === [] ? (
-          <Row>
-            <OrderTable orders={orders} pastOrderToggle={pastOrderToggle} setCompleteOrder={setCompleteOrder} />
-          </Row>
-        ) : (
+        {(orders === [] || !orders) ? (
           <>
           <Row className="justify-content-center">
             <h4 className="heading-colors Cafe-Header-Margin">No active orders</h4>
           </Row>
           </>
+        ) : (
+          <Row>
+            <OrderTable orders={orders} pastOrderToggle={pastOrderToggle} setCompleteOrder={setCompleteOrder} />
+          </Row>
         )}
         <Row className="justify-content-center">
           <h1 className="heading-colors Cafe-Header-Margin">

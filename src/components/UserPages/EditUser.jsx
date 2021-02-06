@@ -21,7 +21,7 @@ const EditUser = (props) => {
 
     axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
       .then(() => props.history.push("/home"))
-      .catch((error) => console.log(error));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "User details did not save successfully" }));
   };
   
   return (
