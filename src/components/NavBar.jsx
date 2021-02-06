@@ -3,24 +3,39 @@ import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav, Container, Col } from "reactstrap";
 import StateContext from "../utils/store";
 
-const NavBar = (props) => {
-  const { handleLogout } = props;
-  
-  const { store } = useContext(StateContext);
-  const { loggedInUser } = store;
+const NavBar = () => {
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser, buttonToggle } = store;
+
+  const handleLogout = () => {
+    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, { credentials: "include" })
+      .then(() => dispatch({ type: "setLoggedInUser", data: null }))
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Unable to logout" }));
+  };
+
+  const handleButtonShow = () => {
+    if (buttonToggle) {
+      dispatch({ type: "setButtonToggle", data: false });
+    } else {
+      dispatch({ type: "setButtonToggle", data: true });
+    };
+  };
 
   const loggedOut = (
     <>
-      <NavItem className="mr-3">
-        <Link to="/">
-          <Button outline className="button-color" >LOG IN</Button>
-        </Link>
-      </NavItem>
-      <NavItem className="mr-3">
-        <Link to="/register">
-          <Button outline className="button-color" >SIGN UP</Button>
-        </Link>
-      </NavItem>
+      {!buttonToggle ? (
+        <NavItem className="mr-3">
+          <Link to="/">
+            <Button onClick={handleButtonShow} outline className="button-color" >LOG IN</Button>
+          </Link>
+        </NavItem>
+      ) : (
+        <NavItem className="mr-3">
+          <Link to="/register">
+            <Button onClick={handleButtonShow} outline className="button-color" >SIGN UP</Button>
+          </Link>
+        </NavItem>
+      )}
     </>
   );
   const activeSession = (

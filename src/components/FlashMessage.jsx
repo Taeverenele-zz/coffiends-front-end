@@ -7,11 +7,11 @@ const FlashMessageView = () => {
 
   setTimeout(() => {
     dispatch({ type: "setFlashMessage", data: null });
-  }, 15000);
+  }, 10000);
 
   return (
     <section>
-      <h4>{flashMessage}</h4>
+      <h4 className="heading-colors">{flashMessage}</h4>
     </section>
   );
 };

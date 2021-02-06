@@ -7,27 +7,35 @@ import StateContext from "../../utils/store";
 import setTimeString from "../../utils/setTimeString";
 import "../../App.css";
 
-function MapView() {
+const MapView = () => {
   const { coffee } = useParams();
   
+  const [ userLocation, setUserLocation ] = useState(null);
   const [ cafesData, setCafesData ] = useState([]);
 
-  const { store, dispatch } = useContext(StateContext);
-  const { userLocation } = store;
-
+  const { dispatch } = useContext(StateContext);
+  
   useEffect(() => {
-    if (userLocation && coffee) {
-      const postBody = {
-        location: userLocation,
-        time: setTimeString(),
-        coffee: coffee
-      };
+    navigator.geolocation.getCurrentPosition(fetchData);
 
-      axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes/map`, postBody)
-        .then((res) => setCafesData(res.data))
-        .catch((err) => console.log(err));
+    function fetchData(position) {
+      const geoLocationCoordinates = [ position.coords.latitude, position.coords.longitude ];
+      
+      setUserLocation(geoLocationCoordinates);
+  
+      if (geoLocationCoordinates && coffee) {
+        const postBody = {
+          location: geoLocationCoordinates,
+          time: setTimeString(),
+          coffee: coffee
+        };
+  
+        axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes/map`, postBody)
+          .then((res) => setCafesData(res.data))
+          .catch((err) => console.log(err));
       };
-  }, [ userLocation, coffee ]);
+    };
+  }, [ coffee ]);
 
   function handleClick(cafe, item) {
     dispatch({
@@ -42,13 +50,13 @@ function MapView() {
       type: "setOrderCafe",
       data: cafe
     });
-  }
+  };
 
   return (
     <>
-      {userLocation && coffee ? (
-        <>
-          <Container fluid="true" className="background justify-content-center">
+      <Container fluid="true" className="background justify-content-center">
+        {userLocation && coffee ? (
+          <>
             <h2 className="text-center map-heading-colors " >Nearby cafes selling: {coffee}</h2>
             <div className="Admin-Dashboard-Center">
             <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false} >
@@ -77,11 +85,17 @@ function MapView() {
               ))}
             </MapContainer>
             </div>
-          </Container>
-        </>
-      ) : (<h3>Searching for nearby cafes...</h3>)}
+          </> 
+        ) : (
+          <>
+            <div className="Admin-Dashboard-Center">
+              <h2 className="text-center map-heading-colors ">Searching for nearby Cafes</h2>
+            </div>
+          </>
+        )}
+      </Container>
     </>
   );
-}
+};
 
 export default MapView;
