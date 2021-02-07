@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer } from "react";
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom";
-import stateReducer from "./utils/stateReducer"
+import stateReducer from "./utils/stateReducer";
 import StateContext from "./utils/store";
 import AdminHome from "./components/AdminDashboard/AdminHome";
 import CafeDashboardView from "./components/CafePages/CafeDashboardView";
@@ -23,13 +23,13 @@ const App = () => {
   const initialState = {
     flashMessage: null,
     loggedInUser: null,
-    userLocation: [ -27.468298, 153.0247838 ],
     allCafes: null,
     allCoffees: null,
     userCoffee: null,
     orderCafe: null,
     cafeData: null,
-    coffeeData: null
+    coffeeData: null,
+    buttonToggle: "login"
   };
 
   const [ store, dispatch ] = useReducer(stateReducer, initialState);
@@ -38,61 +38,43 @@ const App = () => {
   useEffect(() => {
     fetch(`${process.env.REACT_APP_BACK_END_URL}/users/check`, { credentials: "include" })
       .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          dispatch({ type: "setLoggedInUser", data: data });
-        };
-      });
-    
-    navigator.geolocation.getCurrentPosition(
-      position => dispatch({ type: "setUserLocation", data: [position.coords.latitude, position.coords.longitude] }),
-      error => console.log(error.message)
-    );
+      .then((retrievedUser) => dispatch({ type: "setLoggedInUser", data: retrievedUser }))
+      .catch((error) => dispatch({ type: "setFlashMessage", data: `${error.message}` }));
   }, []);
-
-  const handleLogout = () => {
-    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, { credentials: "include" })
-      .then(() => {
-          dispatch({ type: "setLoggedInUser", data: null });
-      })
-      .catch((err) => console.log(err));
-  };
 
   return (
     <div className="container-fluid Remove-padding-margin ">
       <StateContext.Provider value={{ store, dispatch }}>
       <BrowserRouter>
+          <NavBar />
           <FlashMessageView />
-          <NavBar handleLogout={handleLogout} />
           <Switch>
             <>
-              {!loggedInUser ? (
-                <Route exact path="/" component={LoginView} />
-              ) : ( <></> )}
+              <Route exact path="/" component={LoginView} />
+              
+              <Route exact path="/register" component={RegisterView} />
 
               {loggedInUser && loggedInUser.role === "user" ? (
-                <Route exact path="/" component={HomeView} />
+                <Route exact path="/home" component={HomeView} />
               ) : ( <></> )}
 
               {loggedInUser && loggedInUser.role === "cafe" ? (
-                <Route exact path="/" component={CafeDashboardView} />
+                <Route exact path="/home" component={CafeDashboardView} />
               ) : ( <></> )}
 
               {loggedInUser && loggedInUser.role === "admin" ? (
-                <Route exact path="/" component={AdminHome} />
+                <Route exact path="/home" component={AdminHome} />
               ) : ( <></> )}
-
-              <Route exact path="/register" component={RegisterView} />
 
               <Route exact path="/map/:coffee" component={MapView} />
 
               <Route exact path="/orders/new" component={NewOrderForm} />
 
+              <Route exact path="/orders" component={OrdersView} />
+
               <Route exact path="/user/edit" component={EditUser} />
 
               <Route exact path="/user/change_password" component={ChangePassword} />
-
-              <Route exact path="/orders" component={OrdersView} />
 
               <Route exact path="/menu" component={CafeMenuView} />
 
@@ -101,7 +83,8 @@ const App = () => {
               <Route exact path="/admin/coffee/:action" component={NewCoffeeForm} />
 
               <Route exact path="/logout">
-                <Redirect to="/" /></Route>
+                <Redirect to="/" />
+              </Route>
             </>
           </Switch>
         </BrowserRouter>

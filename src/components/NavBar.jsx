@@ -3,24 +3,33 @@ import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav, Container, Col } from "reactstrap";
 import StateContext from "../utils/store";
 
-const NavBar = (props) => {
-  const { handleLogout } = props;
-  
-  const { store } = useContext(StateContext);
-  const { loggedInUser } = store;
+const NavBar = () => {
+  const { store, dispatch } = useContext(StateContext);
+  const { loggedInUser, buttonToggle } = store;
+
+  const handleLogout = () => {
+    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, { credentials: "include" })
+      .then(() => dispatch({ type: "setLoggedInUser", data: null }))
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Unable to logout" }));
+    
+    dispatch({ type: "setButtonToggle", data: "login" });
+  };
 
   const loggedOut = (
     <>
-      <NavItem className="mr-3">
-        <Link to="/">
-          <Button outline className="button-color" >LOG IN</Button>
-        </Link>
-      </NavItem>
-      <NavItem className="mr-3">
-        <Link to="/register">
-          <Button outline className="button-color" >SIGN UP</Button>
-        </Link>
-      </NavItem>
+      {buttonToggle === "signup" ? (
+        <NavItem className="mr-3">
+          <Link to="/">
+            <Button outline className="button-color" >LOG IN</Button>
+          </Link>
+        </NavItem>
+      ) : (
+        <NavItem className="mr-3">
+          <Link to="/register">
+            <Button outline className="button-color" >SIGN UP</Button>
+          </Link>
+        </NavItem>
+      )}
     </>
   );
   const activeSession = (
@@ -36,14 +45,14 @@ const NavBar = (props) => {
   );
   const userNav = (
     <>
-      <NavItem className="mr-3">
-        <Link to="/user/edit">
-          <Button outline size="sm" className="button-color" >EDIT PROFILE</Button>
-        </Link>
-      </NavItem>
       <NavItem  className="mr-3">
         <Link to="/orders">
           <Button outline size="sm" className="button-color">ORDERS</Button>
+        </Link>
+      </NavItem>
+      <NavItem className="mr-3">
+        <Link to="/user/edit">
+          <Button outline size="sm" className="button-color" >EDIT PROFILE</Button>
         </Link>
       </NavItem>
     </>
@@ -52,7 +61,7 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/menu">
-          <Button>MENU</Button>
+          <Button outline className="button-color" size="sm">MENU</Button>
         </Link>
       </NavItem>
     </>
@@ -61,12 +70,12 @@ const NavBar = (props) => {
     <>
       <NavItem className="mr-3">
         <Link to="/admin/cafe/new">
-          <Button>ADD CAFE</Button>
+          <Button outline className="button-color" size="sm">ADD CAFE</Button>
         </Link>
       </NavItem>
       <NavItem className="mr-3">
         <Link to="/admin/coffee/new">
-          <Button>ADD COFFEE</Button>
+          <Button outline className="button-color" size="sm">ADD COFFEE</Button>
         </Link>
       </NavItem>
     </>
@@ -76,9 +85,13 @@ const NavBar = (props) => {
     <Container fluid="true" className="Remove-padding-margin">
       <Navbar className="nav-color">
         <Col sm={{size: 2}}>
-          <Link to="/">
-            <img src="newLogo.svg" alt="Logo" className="logo-styles" />
-          </Link>
+          {loggedInUser ? (
+            <Link to="/home">
+              <img src={`${process.env.REACT_APP_BACK_END_URL}/images/newLogo.svg`} alt="Logo" className="logo-styles" />
+            </Link>) : (
+            <Link to="/">
+              <img src={`${process.env.REACT_APP_BACK_END_URL}/images/newLogo.svg`} alt="Logo" className="logo-styles" />
+            </Link>)}
         </Col>
         <Col  sm={{size: 3}}>
           <div>

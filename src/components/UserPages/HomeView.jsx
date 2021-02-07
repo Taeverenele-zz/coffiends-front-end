@@ -11,7 +11,7 @@ const HomeView = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`)
       .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
-      .catch((err) => console.log(err));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve coffee data" }));
   }, [ dispatch ])
 
 
@@ -27,7 +27,7 @@ const HomeView = () => {
                   <CardDeck key={index} style={{ margin: "30px" }} className="flip-card">
                     <Card key={coffee._id} className="flip-card-inner card-rm-background" style={{height: "200px", width: "200px"}}>
                       <div className="flip-card-front">
-                        <CardImg top width="100%" src="coffee.svg" alt="Card image cap" style={{marginBottom: "45px"}} />
+                        <CardImg top width="100%" src={`${process.env.REACT_APP_BACK_END_URL}/images/coffee.svg`} alt="Card image cap" style={{marginBottom: "45px"}} />
                         <CardTitle tag="h5" className="card-text-color">{coffee.name}</CardTitle>
                       </div>
                         <CardBody className="flip-card-back">

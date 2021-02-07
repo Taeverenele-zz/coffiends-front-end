@@ -10,8 +10,8 @@ const CafeDashboardView = () => {
   return (
     loggedInUser && loggedInUser.cafe ?
     (<>
-      <Container>
-        <h2>{loggedInUser.cafe.cafe_name}</h2>
+    <Container fluid="true" className="Remove-padding-margin nav-color ">
+        <h2 className=" text-center cafe-name ">{loggedInUser.cafe.cafe_name}</h2>
         <OrdersView />
       </Container>
     </>) : (

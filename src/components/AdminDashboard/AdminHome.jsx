@@ -13,29 +13,32 @@ const AdminLists = () => {
   const { allCoffees, allCafes } = store;
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes/`)
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes`)
       .then((res) => { dispatch({ type: "getAllCafes", data: res.data }) })
-      .catch((error) => console.log(error));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe data could not be retrieved" }));
     
     dispatch({ type: "setCafeData", data: null });
     
-    axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees/`)
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees`)
       .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
-      .catch((err) => console.log(err));
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Coffee data could not be retrieved" }));
     
     dispatch({ type: "setCoffeeData", data: null });
   }, [ dispatch, reload ]);
 
-  const deleteCafe = (id) => {
-    axios.delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${id}`)
-      .then(() => { reload ? setReload(false) : setReload(true) })
-      .catch((error) => console.log(error));
+  const deleteCafe = (cafe) => {
+    axios.delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafe._id}`)
+      .then(() => { 
+        axios.delete(`${process.env.REACT_APP_BACK_END_URL}/users/${cafe.owner}`)
+        reload ? setReload(false) : setReload(true)
+      })
+      .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not get deleted successfully" }));
   };
 
   const deleteCoffee = (id) => {
     axios.delete(`${process.env.REACT_APP_BACK_END_URL}/coffees/${id}`)
       .then(() => { reload ? setReload(false) : setReload(true) })
-      .catch((error) => console.log(error));
+      .catch((error) => dispatch({ type: "setFlashMessage", data: "Coffee did not get deleted successfully" }));
   };
 
   const handleCafeSearchTermChange = (e) => {
@@ -46,21 +49,22 @@ const AdminLists = () => {
   };
 
   return (
-    <Container>
+    <Container fluid="true" className="background full-height">
       {!allCafes || !allCoffees ? (<></>) : (
         <>
           <Row className="justify-content-center margin-add-top">
-            <h1>Admin Dashboard</h1>
+            <h1 className="admin-heading-colors ">Admin Dashboard</h1>
           </Row>
           <Row>
-            <Col sm={{ size: 6 }} className="margin-add-top">
-              <h3 className="text-center">All Cafes</h3>
+            <Col sm={{ size: 6 }} className="margin-add-top Admin-Dashboard-Center ">
+              <h3 className="text-center admin-subheading-colors">All Cafes</h3>
               <Input
                 placeholder="Search"
                 value={cafeSearchTerm}
                 onChange={handleCafeSearchTermChange}
+                className="search-admin fill-boxes"
               />
-              <Table className="margin-add-top">
+              <Table className="margin-add-top table-background search-admin" >
                 <thead>
                   <tr>
                     <th>Cafe Name</th>
@@ -78,7 +82,7 @@ const AdminLists = () => {
                           <Link to="/admin/cafe/edit"><Button onClick={() => dispatch({ type: "setCafeData", data: cafe })}>Edit</Button></Link>
                         </td>
                         <td>
-                          <Button onClick={() => deleteCafe(cafe._id)}>
+                          <Button onClick={() => deleteCafe(cafe)}>
                             Delete
                           </Button>
                         </td>
@@ -87,14 +91,15 @@ const AdminLists = () => {
                 </tbody>
               </Table>
             </Col>
-            <Col sm={{ size: 6 }} className="margin-add-top">
-              <h3 className="text-center">All Coffees</h3>
+            <Col sm={{ size: 6 }} className="margin-add-top Admin-Dashboard-Center ">
+              <h3 className="text-center admin-subheading-colors">All Coffees</h3>
               <Input
                 placeholder="Search"
                 value={coffeeSearchTerm}
                 onChange={handleCoffeeSearchTermChange}
+                className="search-admin fill-boxes"
               />
-              <Table className="margin-add-top">
+              <Table className="margin-add-top table-background search-admin">
                 <thead>
                   <tr>
                     <th>Coffee Name</th>

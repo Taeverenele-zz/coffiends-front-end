@@ -7,48 +7,60 @@ import StateContext from "../../utils/store";
 import setTimeString from "../../utils/setTimeString";
 import "../../App.css";
 
-function MapView() {
+const MapView = () => {
   const { coffee } = useParams();
   
+  const [ userLocation, setUserLocation ] = useState(null);
   const [ cafesData, setCafesData ] = useState([]);
 
-  const { store, dispatch } = useContext(StateContext);
-  const { userLocation } = store;
-
+  const { dispatch } = useContext(StateContext);
+  
   useEffect(() => {
-    if (userLocation && coffee) {
-      const postBody = {
-        location: userLocation,
-        time: setTimeString(),
-        coffee: coffee
-      };
+    navigator.geolocation.getCurrentPosition(fetchData);
 
-      axios.post(`${process.env.REACT_APP_BACK_END_URL}/map`, postBody)
-        .then((res) => setCafesData(res.data))
-        .catch((err) => console.log(err));
+    function fetchData(position) {
+      const geoLocationCoordinates = [ position.coords.latitude, position.coords.longitude ];
+      setUserLocation(geoLocationCoordinates);
+  
+      if (geoLocationCoordinates && coffee) {
+        const postBody = {
+          location: geoLocationCoordinates,
+          time: setTimeString(false, true),
+          coffee: coffee
+        };
+  
+        axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes/map`, postBody)
+          .then((res) => {
+            setCafesData(res.data);
+            if (res.data === []) {
+              dispatch({ type: "setFlashMessage", data: "Sorry, there are no cafes near you selling that coffee that are currently open" });
+            };
+          })
+          .catch(() => dispatch({ type: "setFlashMessage", data: "Unable to find any cafes" }));
       };
-  }, [ userLocation, coffee ]);
+    };
+  }, [ coffee, dispatch ]);
 
   function handleClick(cafe, item) {
     dispatch({
       type: "setUserCoffee",
       data: {
-        _id: item.coffee._id,
-        name: item.coffee.name,
-        price: item.price
+        _id: item.coffeeId,
+        name: item.coffeeName,
+        price: item.coffeePrice
       }
     });
     dispatch({
       type: "setOrderCafe",
       data: cafe
     });
-  }
+  };
 
   return (
     <>
-      {userLocation && coffee ? (
-        <>
-          <Container fluid="true" className="background justify-content-center">
+      <Container fluid="true" className="background justify-content-center">
+        {userLocation && coffee ? (
+          <>
             <h2 className="text-center map-heading-colors " >Nearby cafes selling: {coffee}</h2>
             <div className="Admin-Dashboard-Center">
             <MapContainer center={userLocation} zoom={17} scrollWheelZoom={false} >
@@ -57,31 +69,39 @@ function MapView() {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
               {cafesData.map((cafe, index) => (
-                <React.Fragment key={index}>
-                <Marker position={[cafe.location[0], cafe.location[1]]} >
-                  <Popup >
-                    <h2>{cafe.cafe_name}</h2>
-                    <h5>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</h5>
+                <Marker key={index} position={[cafe.location[0], cafe.location[1]]} >
+                  <Popup key={index} className="map-marker-popup">
+                    <h3>{cafe.cafe_name}</h3>
+                    <p>Open: {cafe.operating_hours[0]} - {cafe.operating_hours[1]}</p>
                     {cafe.menu.map((item) =>
-                      item.coffee.name === coffee ? (
-                        <Link to="/orders/new" onClick={() => handleClick(cafe, item)} >
-                          <Button color="info" >
-                              ${item.price.toFixed(2)} - BUY NOW
-                          </Button>
-                        </Link>
+                      item.coffeeName === coffee ? (
+                        <>
+                          <h5>{item.coffeeName} - ${item.coffeePrice.toFixed(2)}</h5>
+                          <Link key={item.coffeeId} to="/orders/new" onClick={() => handleClick(cafe, item)} >
+                            <Button color="info" >
+                                ORDER
+                            </Button>
+                          </Link>
+                        </>
                       ) : (<></>)
                     )}
                   </Popup>
                 </Marker>
-                </React.Fragment>
               ))}
             </MapContainer>
             </div>
-          </Container>
-        </>
-      ) : (<h3>Searching for nearby cafes...</h3>)}
+          </> 
+        ) : (
+          <>
+            <div className="Admin-Dashboard-Center">
+              <h2 className="text-center map-heading-colors ">Searching for nearby Cafes</h2>
+              <p className="text-center subtext-heading-colors">Make sure location access is allowed</p>
+            </div>
+          </>
+        )}
+      </Container>
     </>
   );
-}
+};
 
 export default MapView;

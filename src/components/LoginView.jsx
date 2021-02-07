@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Button, Form, FormGroup, Label, Input, Container, Row } from "reactstrap";
 import StateContext from "../utils/store";
@@ -6,6 +6,10 @@ import StateContext from "../utils/store";
 const LoginView = (props) => {
   const [ loginDetails, setLoginDetails ] = useState({ username: "", password: "" });
   const { dispatch } = useContext(StateContext);
+
+  useEffect(() => {
+    dispatch({ type: "setButtonToggle", data: "login" });
+  }, [ dispatch ]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,14 +25,12 @@ const LoginView = (props) => {
       headers: { "Content-Type": "application/json" },
       credentials: "include",
     });
-    if (response.status === 400) {
-      alert("Invalid login details");
+    if (response.status >= 400) {
+      dispatch({ type: "setFlashMessage", data: "Login invalid" });
     } else {
       const userDetails = await response.json();
-      await dispatch({
-        type: "setLoggedInUser",
-        data: userDetails
-      });
+      await dispatch({ type: "setLoggedInUser", data: userDetails });
+      dispatch({ type: "setFlashMessage", data: `Welcome back, ${userDetails.user_name}` });
 
       setLoginDetails({
         username: "",
@@ -38,7 +40,7 @@ const LoginView = (props) => {
         phone: "",
       });
 
-      props.history.push("/");
+      props.history.push("/home");
     };
   };
 
