@@ -66,6 +66,7 @@ const RegisterView = (props) => {
                 onChange={handleChange}
                 className="fill-boxes"
                 value={loginDetails.username}
+                required
               />
             </FormGroup>
           </Row>
@@ -81,6 +82,7 @@ const RegisterView = (props) => {
                 onChange={handleChange}
                 className="fill-boxes"
                 value={loginDetails.password}
+                required
               />
             </FormGroup>
           </Row>
@@ -96,6 +98,7 @@ const RegisterView = (props) => {
                 onChange={handleChange}
                 className="fill-boxes"
                 value={loginDetails.user_name}
+                required
               />
             </FormGroup>
           </Row>
@@ -111,6 +114,7 @@ const RegisterView = (props) => {
                 onChange={handleChange}
                 className="fill-boxes"
                 value={loginDetails.phone}
+                required
               />
             </FormGroup>
           </Row>

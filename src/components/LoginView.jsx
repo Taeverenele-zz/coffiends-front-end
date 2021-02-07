@@ -65,8 +65,8 @@ const LoginView = (props) => {
                 id="exampleEmail"
                 onChange={handleChange}
                 className="fill-boxes"
-
                 value={loginDetails.username}
+                required
               />
             </FormGroup>
           </Row>
@@ -82,6 +82,7 @@ const LoginView = (props) => {
                 onChange={handleChange}
                 className="fill-boxes"
                 value={loginDetails.password}
+                required
               />
             </FormGroup>
           </Row>

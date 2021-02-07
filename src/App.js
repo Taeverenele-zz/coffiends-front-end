@@ -18,6 +18,7 @@ import NewOrderForm from "./components/UserPages/NewOrderForm";
 import OrdersView from "./components/OrdersView";
 import RegisterView from "./components/RegisterView";
 
+
 const App = () => {
   const initialState = {
     flashMessage: null,
