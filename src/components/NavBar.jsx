@@ -1,6 +1,8 @@
 import React, { useContext } from "react";
+import axios from 'axios';
 import { Link } from "react-router-dom";
 import { Navbar, Button, NavItem, Nav, Container, Col } from "reactstrap";
+
 import StateContext from "../utils/store";
 
 const NavBar = () => {
@@ -8,7 +10,7 @@ const NavBar = () => {
   const { loggedInUser, buttonToggle } = store;
 
   const handleLogout = () => {
-    fetch(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, { credentials: "include" })
+    axios.get(`${process.env.REACT_APP_BACK_END_URL}/users/logout`, { credentials: "include" })
       .then(() => dispatch({ type: "setLoggedInUser", data: null }))
       .catch(() => dispatch({ type: "setFlashMessage", data: "Unable to logout" }));
     
