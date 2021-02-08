@@ -1,10 +1,8 @@
-// __tests__/fetch.test.js
 import React from "react";
 import { BrowserRouter as Router } from 'react-router-dom';
 import { render, fireEvent, screen } from '@testing-library/react'
 import { rest } from 'msw'
 import { setupServer } from 'msw/node'
-
 import NavBar from './NavBar'
 import StateContext from '../utils/store';
 

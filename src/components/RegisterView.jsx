@@ -126,7 +126,7 @@ const RegisterView = (props) => {
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button className="login-form-margin-top button-color">Register</Button>
+            <Button data-testid="register-btn" className="login-form-margin-top button-color">Register</Button>
           </Row>
         </Form>
       </Row>
