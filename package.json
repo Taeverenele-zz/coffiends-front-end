@@ -49,9 +49,7 @@
     ]
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "cypress": "^6.4.0"
-=======
+    "cypress": "^6.4.0",
     "@babel/plugin-transform-runtime": "^7.12.15",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.12.13",
@@ -59,6 +57,5 @@
     "jest": "26.6.0",
     "msw": "^0.26.1",
     "react-test-renderer": "^17.0.1"
->>>>>>> upstream/main
   }
 }
