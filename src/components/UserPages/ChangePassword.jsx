@@ -65,7 +65,7 @@ const ChangePassword = (props) => {
                       name="password"
                       value={formData.password}
                       onChange={handleInputChange}
-                      className="fill-boxes input"
+                      className="input"
                       required
                     />
                     <InputGroupAddon addonType="append">
@@ -81,7 +81,7 @@ const ChangePassword = (props) => {
                       name="new_password"
                       value={formData.new_password}
                       onChange={handleInputChange}
-                      className="fill-boxes input"
+                      className="input"
                       required
                     />
                     <InputGroupAddon addonType="append">

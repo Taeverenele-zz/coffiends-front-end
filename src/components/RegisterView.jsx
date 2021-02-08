@@ -63,15 +63,13 @@ const RegisterView = (props) => {
         <Form onSubmit={handleSubmit}>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin ">
-              <Label for="exampleEmail" className="mr-sm-2 border-color">
+              <Label for="username" className="mr-sm-2 border-color">
                 Email:
               </Label>
               <Input
                 type="email"
                 name="username"
-                id="exampleEmail"
                 onChange={handleChange}
-                className="fill-boxes"
                 value={loginDetails.username}
                 required
               />
@@ -79,15 +77,13 @@ const RegisterView = (props) => {
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="examplePassword" className="mr-sm-2 border-color">
+              <Label for="password" className="mr-sm-2 border-color">
                 Password:
               </Label>
               <Input
                 type="password"
                 name="password"
-                id="examplePassword"
                 onChange={handleChange}
-                className="fill-boxes"
                 value={loginDetails.password}
                 required
               />
@@ -95,15 +91,13 @@ const RegisterView = (props) => {
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="exampleName" className="mr-sm-2 border-color">
+              <Label for="user_name" className="mr-sm-2 border-color">
                 Name:
               </Label>
               <Input
                 type="name"
                 name="user_name"
-                id="exampleName"
                 onChange={handleChange}
-                className="fill-boxes"
                 value={loginDetails.user_name}
                 required
               />
@@ -111,15 +105,13 @@ const RegisterView = (props) => {
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin">
-              <Label for="exampleNumber" className="mr-sm-2 border-color">
+              <Label for="phone" className="mr-sm-2 border-color">
                 Phone:
               </Label>
               <Input
                 type="mobileNumber"
                 name="phone"
-                id="numberExample"
                 onChange={handleChange}
-                className="fill-boxes"
                 value={loginDetails.phone}
                 required
               />

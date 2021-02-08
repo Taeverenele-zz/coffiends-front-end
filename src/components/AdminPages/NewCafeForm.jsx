@@ -18,15 +18,19 @@ const NewCafeForm = (props) => {
   const { store, dispatch } = useContext(StateContext);
   const { loggedInUser, cafeData } = store;
 
+  // cafeData is true if we are editing
   let cafeUserId
   cafeData ? cafeUserId = cafeData.owner : cafeUserId = null
 
   useEffect(() => {
+    // check for logged in user
     if (loggedInUser) {
+      // check if we are editing
       if (cafeUserId && action === "edit") {
         axios.get(`${process.env.REACT_APP_BACK_END_URL}/users/${cafeUserId}`)
           .then((res) => setUserData(res.data))
           .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve cafe data" }));
+      // if not editing set CafeData and setUserData
       } else {
         dispatch({
           type: "setCafeData",
@@ -48,6 +52,7 @@ const NewCafeForm = (props) => {
     };
   }, [ action, loggedInUser, dispatch, cafeUserId ]);
 
+  // Fields that are linked to cafe, change cafeData
   const handleCafeInputChange = (e) => {
     const { name, value } = e.target;
     dispatch({
@@ -56,11 +61,13 @@ const NewCafeForm = (props) => {
     });
   };
 
+  // Fields that are linked to user, change userData
   const handleUserInputChange = (e) => {
     const { name, value } = e.target;
     setUserData({ ...userData, [name]: value });
   };
 
+  // you have to save a new user before you can create a new cafe, to be able to link user as a cafe owner
   const saveNewUser = () => {
     return axios.post(`${process.env.REACT_APP_BACK_END_URL}/users/register`, userData)
       .then((res) => {
@@ -71,17 +78,18 @@ const NewCafeForm = (props) => {
       .catch(() => dispatch({ type: "setFlashMessage", data: "User did not save successfully" }));
   };
 
-  const handleFinalSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
+    // if editing a cafe we send the edited used data and cafe data
     if (action === "edit") {
       axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`, userData)
         .catch(() => dispatch({ type: "setFlashMessage", data: "User did not update successfully" }));
       
       axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
         .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
-
+      // and redirect back to admin/home
       props.history.push("/home");
+    // if not editing (creating a new user and cafe), we save the new user first and then saving the cafe
     } else {
       saveNewUser()
         .then((newCafeData) => {
@@ -104,14 +112,13 @@ const NewCafeForm = (props) => {
           </Row>
           <Row className="mt-4">
             <Col sm="12" md={{ size: 6, offset: 3 }} className="Admin-Dashboard-Center">
-              <Form onSubmit={handleFinalSubmit} className="search-admin ">
+              <Form onSubmit={handleSubmit} className="search-admin ">
                 <FormGroup>
                   <Label className="admin-subheading-colors" for="cafe_name">Cafe name:</Label>
                   <Input
                     type="text"
                     name="cafe_name"
-                    value={cafeData.cafe_name || ""}
-                    className="fill-boxes"            
+                    value={cafeData.cafe_name || ""}            
                     onChange={handleCafeInputChange}
                     required
                   ></Input>
@@ -122,7 +129,6 @@ const NewCafeForm = (props) => {
                     type="text"
                     name="user_name"
                     value={userData.user_name || ""}
-                    className="fill-boxes"
                     onChange={handleUserInputChange}
                     required
                   ></Input>
@@ -134,7 +140,6 @@ const NewCafeForm = (props) => {
                     name="username"
                     value={userData.username || ""}
                     onChange={handleUserInputChange}
-                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
@@ -145,20 +150,9 @@ const NewCafeForm = (props) => {
                     name="password"
                     value={userData.password || ""}
                     onChange={handleUserInputChange}
-                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
-                {/* <FormGroup>
-                  <Label for="role">Role:</Label>
-                  <Input
-                    type="text"
-                    name="role"
-                    value={userData.role}
-                    onChange={handleUserInputChange}
-                    required
-                  ></Input>
-                </FormGroup> */}
                 <FormGroup>
                   <Label className="admin-subheading-colors" for="phone">Phone:</Label>
                   <Input
@@ -166,7 +160,6 @@ const NewCafeForm = (props) => {
                     name="phone"
                     value={userData.phone || ""}
                     onChange={handleUserInputChange}
-                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
@@ -177,7 +170,6 @@ const NewCafeForm = (props) => {
                     name="address"
                     value={cafeData.address || ""}
                     onChange={handleCafeInputChange}
-                    className="fill-boxes"
                     required
                   ></Input>
                 </FormGroup>
@@ -188,7 +180,6 @@ const NewCafeForm = (props) => {
                     name="operating_hours[0]"
                     required
                     value={cafeData.operating_hours[0] || ""}
-                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -206,7 +197,6 @@ const NewCafeForm = (props) => {
                     name="operating_hours[1]"
                     required
                     value={cafeData.operating_hours[1] || ""}
-                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -224,7 +214,6 @@ const NewCafeForm = (props) => {
                     name="location[0]"
                     required
                     value={cafeData.location[0] || ""}
-                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {
@@ -245,7 +234,6 @@ const NewCafeForm = (props) => {
                     name="location[1]"
                     required
                     value={cafeData.location[1] || ""}
-                    className="fill-boxes"
                     onChange={(e) =>
                       handleCafeInputChange({
                         target: {

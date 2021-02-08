@@ -13,19 +13,24 @@ const AdminLists = () => {
   const { allCoffees, allCafes } = store;
 
   useEffect(() => {
+    // Get all cafes from database
     axios.get(`${process.env.REACT_APP_BACK_END_URL}/cafes`)
       .then((res) => { dispatch({ type: "getAllCafes", data: res.data }) })
       .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe data could not be retrieved" }));
     
+    // Initiate a single cafe object for editing purposes
     dispatch({ type: "setCafeData", data: null });
     
+    //Get all coffees database
     axios.get(`${process.env.REACT_APP_BACK_END_URL}/coffees`)
       .then((res) => { dispatch({ type: "getAllCoffees", data: res.data }) })
       .catch(() => dispatch({ type: "setFlashMessage", data: "Coffee data could not be retrieved" }));
     
+    // Initiate a single coffee object for editing purposes
     dispatch({ type: "setCoffeeData", data: null });
   }, [ dispatch, reload ]);
 
+  // delete a cafe from database and reload the list of cafes when delete button is clicked
   const deleteCafe = (cafe) => {
     axios.delete(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafe._id}`)
       .then(() => { 
@@ -35,15 +40,18 @@ const AdminLists = () => {
       .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not get deleted successfully" }));
   };
 
+    // delete a coffee from database and reload the list of coffees when delete button is clicked
   const deleteCoffee = (id) => {
     axios.delete(`${process.env.REACT_APP_BACK_END_URL}/coffees/${id}`)
       .then(() => { reload ? setReload(false) : setReload(true) })
       .catch((error) => dispatch({ type: "setFlashMessage", data: "Coffee did not get deleted successfully" }));
   };
 
+  // Sets cafeSearchTerm to be used in cafe filter function
   const handleCafeSearchTermChange = (e) => {
     setCafeSearchTerm(e.target.value);
   };
+    // Sets coffeeSearchTerm to be used in coffee filter function
   const handleCoffeeSearchTermChange = (e) => {
     setCoffeeSearchTerm(e.target.value);
   };
@@ -62,7 +70,7 @@ const AdminLists = () => {
                 placeholder="Search"
                 value={cafeSearchTerm}
                 onChange={handleCafeSearchTermChange}
-                className="search-admin fill-boxes"
+                className="search-admin"
               />
               <Table className="margin-add-top table-background search-admin" >
                 <thead>
@@ -74,12 +82,19 @@ const AdminLists = () => {
                 </thead>
                 <tbody>
                   {allCafes
-                    .filter((cafe) => cafe.cafe_name.trim().toLowerCase().includes(cafeSearchTerm.trim().toLowerCase()))
+                    .filter((cafe) => cafe.cafe_name
+                    .trim()
+                    .toLowerCase()
+                    .includes(cafeSearchTerm.trim().toLowerCase()))
                     .map((cafe) => (
                       <tr key={cafe._id}>
                         <td style={{ width: "70%" }}>{cafe.cafe_name}</td>
                         <td>
-                          <Link to="/admin/cafe/edit"><Button onClick={() => dispatch({ type: "setCafeData", data: cafe })}>Edit</Button></Link>
+                          <Link to="/admin/cafe/edit">
+                            <Button onClick={() => dispatch({ type: "setCafeData", data: cafe })}>
+                              Edit
+                            </Button>
+                          </Link>
                         </td>
                         <td>
                           <Button onClick={() => deleteCafe(cafe)}>
@@ -97,7 +112,7 @@ const AdminLists = () => {
                 placeholder="Search"
                 value={coffeeSearchTerm}
                 onChange={handleCoffeeSearchTermChange}
-                className="search-admin fill-boxes"
+                className="search-admin"
               />
               <Table className="margin-add-top table-background search-admin">
                 <thead>
@@ -109,12 +124,19 @@ const AdminLists = () => {
                 </thead>
                 <tbody>
                   {allCoffees
-                    .filter((coffee) => coffee.name.trim().toLowerCase().includes(coffeeSearchTerm.trim().toLowerCase()))
+                    .filter((coffee) => coffee.name
+                    .trim()
+                    .toLowerCase()
+                    .includes(coffeeSearchTerm.trim().toLowerCase()))
                     .map((coffee) => (
                       <tr key={coffee._id}>
                         <td style={{ width: "70%" }}>{coffee.name}</td>
                         <td>
-                          <Link to="/admin/coffee/edit"><Button onClick={() => dispatch({ type: "setCoffeeData", data: coffee })}>Edit</Button></Link>
+                          <Link to="/admin/coffee/edit">
+                            <Button onClick={() => dispatch({ type: "setCoffeeData", data: coffee })}>
+                              Edit
+                            </Button>
+                          </Link>
                         </td>
                         <td>
                           <Button onClick={() => deleteCoffee(coffee._id)}>

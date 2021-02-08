@@ -54,7 +54,6 @@ const EditUser = (props) => {
                       name="user_name"
                       value={loggedInUser.user_name}
                       onChange={handleInputChange}
-                      className="fill-boxes"
                       required
                     ></Input>
                   </FormGroup>
@@ -67,7 +66,6 @@ const EditUser = (props) => {
                       name="username"
                       value={loggedInUser.username}
                       onChange={handleInputChange}
-                      className="fill-boxes"
                       required
                     ></Input>
                   </FormGroup>
@@ -80,7 +78,6 @@ const EditUser = (props) => {
                       name="phone"
                       value={loggedInUser.phone}
                       onChange={handleInputChange}
-                      className="fill-boxes"
                       required
                     ></Input>
                   </FormGroup>

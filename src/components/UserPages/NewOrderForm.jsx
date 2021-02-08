@@ -69,7 +69,7 @@ const NewOrderForm = () => {
                 </FormGroup>
                 <FormGroup>
                   <Label for="size" className="border-color">Size:</Label>
-                  <select name="size" onChange={handleSize} className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                  <select name="size" onChange={handleSize} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                     <option disabled >SIZE</option>
                     <option value="Regular" >Regular</option>
                     {userCoffee.name === "Espresso" ? (<></>) : (
@@ -84,7 +84,7 @@ const NewOrderForm = () => {
                   {userCoffee.name === "Espresso" || userCoffee.name === "Long Black" ? (<></>) : (
                     <>
                       <Label for="milk" className="border-color">Milk:</Label>
-                      <select name="milk" onChange={handleMilk} className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                      <select name="milk" onChange={handleMilk} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                         <option disabled>MILK</option>
                         <option value="Regular">Full Cream</option>
                         <option value="Skim Milk">Skim</option>
@@ -96,7 +96,7 @@ const NewOrderForm = () => {
                 </FormGroup>
                 <FormGroup>
                   <Label for="sugar" className="border-color">Sugar:</Label>
-                  <select name="sugar" onChange={handleSugar} className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                  <select name="sugar" onChange={handleSugar} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                     <option disabled>SUGARS</option>
                     <option value="0">No Sugar</option>
                     <option value="1">1</option>
@@ -107,7 +107,7 @@ const NewOrderForm = () => {
                 </FormGroup>
                 <FormGroup>
                   <Label for="pickup" className="border-color">Pickup Time:</Label>
-                  <select name="pickup" onChange={handlePickupTime} className="fill-boxes" style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
+                  <select name="pickup" onChange={handlePickupTime} style={{ height: "40px", width: "100%", padding: "5px", border: "1px solid #ced4da", borderRadius: ".25rem" }} >
                     <option disabled>PICKUP TIME</option>
                     <option value="0">ASAP</option>
                     <option value="10">10 mins</option>

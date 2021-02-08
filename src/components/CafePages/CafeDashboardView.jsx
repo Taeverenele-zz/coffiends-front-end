@@ -6,11 +6,11 @@ import OrdersView from "..//OrdersView";
 const CafeDashboardView = () => {
   const { store } = useContext(StateContext);
   const { loggedInUser } = store;
-
+  // check if there is a logged in user and if the user has a role 'cafe', only then render the 'OrdersView'
   return (
     loggedInUser && loggedInUser.cafe ?
     (<>
-    <Container fluid="true" className="Remove-padding-margin nav-color ">
+      <Container fluid="true" className="Remove-padding-margin nav-color ">
         <h2 className=" text-center cafe-name ">{loggedInUser.cafe.cafe_name}</h2>
         <OrdersView />
       </Container>
