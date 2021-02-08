@@ -47,8 +47,10 @@ const LoginView = (props) => {
   return (
     <Container fluid="true" className="full-height background" >
       <Row className="justify-content-center margin-add-top">
-        <h5 className="subtext-heading-colors">
-          Avoid queues - order coffee to pick up from cafes near you
+        <h5 className="subtext-heading-colors text-center">
+          Avoid queues! <br />
+          <hr />
+          Order coffee to pick up from a cafe near you
         </h5>
       </Row>
       <Row className="justify-content-center margin-add-top">
@@ -66,9 +68,8 @@ const LoginView = (props) => {
                 name="username"
                 id="exampleEmail"
                 onChange={handleChange}
-                className="fill-boxes"
-
                 value={loginDetails.username}
+                required
               />
             </FormGroup>
           </Row>
@@ -82,8 +83,8 @@ const LoginView = (props) => {
                 name="password"
                 id="examplePassword"
                 onChange={handleChange}
-                className="fill-boxes"
                 value={loginDetails.password}
+                required
               />
             </FormGroup>
           </Row>

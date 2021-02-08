@@ -99,7 +99,8 @@
   width: 30%;
 }
 
-.fill-boxes {
+input, 
+select {
   background-color: rgba(245, 148, 21, 0.575) !important;
   color: white !important;
 }

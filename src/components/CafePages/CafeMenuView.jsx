@@ -64,7 +64,7 @@ const CafeMenuView = () => {
                 <Col>
                   <div className="Admin-Dashboard-Center">
                   <Table responsive className=" table-background" style={{width: "60%"}}  >
-                    <thead>
+                    <thead className="text-center">
                       <tr>
                         <th>Coffee</th>
                         <th>Price</th>
@@ -73,11 +73,11 @@ const CafeMenuView = () => {
                     </thead>
                     <tbody>
                       {menu ? (menu.map((item) => (
-                        <tr key={item.coffeeId}>
+                        <tr key={item.coffeeId} className="text-center">
                           <td>{item.coffeeName}</td>
                           <td>${item.coffeePrice.toFixed(2)}</td>
                           <td>
-                            <Button color="danger" onClick={() => handleDelete(item)}>Delete</Button>
+                            <Button className="login-form-margin-top button-color" onClick={() => handleDelete(item)}>Delete</Button>
                           </td>
                         </tr>
                       ))) : <></>}
@@ -95,7 +95,10 @@ const CafeMenuView = () => {
                 <br />
                   <Form onSubmit={handleSubmit} className="edit-form-form ">
                     <FormGroup>
-                      <select required onChange={handleCoffeeSelect} className="fill-boxes" style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} >
+                      <select 
+                      required 
+                      onChange={handleCoffeeSelect} 
+                      style={{height: '40px', width: '100%', padding: '5px', border: '1px solid #ced4da', borderRadius: '.25rem'}} >
                       <option defaultValue=""></option>
                         {coffees.map((coffee) => 
                           <option key={coffee._id} value={coffee._id} coffname={coffee.name}>{coffee.name}</option>
@@ -103,10 +106,16 @@ const CafeMenuView = () => {
                       </select>
                     </FormGroup>
                     <FormGroup>
-                      <Input required className="fill-boxes" style={{color: "white"}} type="Number" placeholder="Price (eg 3.5)" onChange={handlePrice} value={newPrice} />
+                      <Input 
+                      required 
+                      style={{color: "white"}} 
+                      type="Number" 
+                      placeholder="Price (eg 3.5)" 
+                      onChange={handlePrice} 
+                      value={newPrice} />
                     </FormGroup>
                     <FormGroup>
-                      <Button color="primary" >Add</Button>
+                      <Button className="login-form-margin-top button-color" >Add</Button>
                     </FormGroup>
                   </Form>
                 </Col>
