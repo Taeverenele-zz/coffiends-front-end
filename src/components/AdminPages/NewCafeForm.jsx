@@ -78,7 +78,11 @@ const NewCafeForm = (props) => {
       .then((res) => {
         const cafeId = res.data._id;
         const newCafeData = { ...cafeData, owner: cafeId };
-        return newCafeData;
+        if (res.data._id) {
+          return newCafeData;
+        } else {
+          return false;
+        };
       })
       .catch(() => dispatch({ type: "setFlashMessage", data: "User did not save successfully" }));
   };
