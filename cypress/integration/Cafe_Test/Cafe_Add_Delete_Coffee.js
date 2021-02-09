@@ -1,0 +1,16 @@
+describe('Test Cafe User can delete coffee', () => {
+    it('Visits the Coffiends', () => {
+      cy.visit('https://coffiends.herokuapp.com/')
+      cy.get('input[name=username]').type('cafe@coffiends.com')
+      cy.get('input[name=password]').type('password{enter}')
+      cy.wait(2000)
+      cy.get('.btn').eq(0).click()
+      cy.wait(2000)
+      cy.get('select').select('Flat White')
+      cy.get('input[type=number]').type('2')
+      cy.get('.btn').contains("Add").click()
+      cy.wait(2000)
+      cy.get('.btn').eq(2).click()
+      cy.wait(2000)
+    })
+  })

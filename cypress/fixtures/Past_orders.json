@@ -1,0 +1,15 @@
+{
+    "active": false,
+  
+    "cafe": {
+      "cafe_name": "The Testing Cafe"
+    },
+  
+    "user": {
+      "user_name": "Sarah"
+    },
+    "coffee": "Flat White",
+    "size": "Large",
+    "sugar": "8",
+    "pickup_time": "09:30"
+  }

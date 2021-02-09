@@ -14,11 +14,10 @@ const HomeView = () => {
       .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve coffee data" }));
   }, [ dispatch ])
 
-
-
   return (
     <>
       {!allCoffees ? (<></>) : (
+        
         <div className="background full-height">
             <div>
             <Container fluid="true" className="card-margin-add">
@@ -36,7 +35,7 @@ const HomeView = () => {
                         </CardSubtitle>
                         <Link to={`/map/${coffee.name}`} onClick={() => dispatch({ type: "setUserCoffee", data: { id: coffee._id, name: coffee.name, price: 0 }})} >
                           <div className="text-center" style={{marginTop: "10px"}}>
-                           <Button  size="sm">SEARCH</Button>
+                           <Button  size="sm" >SEARCH</Button>
                           </div>
                         </Link>
                       </CardBody>

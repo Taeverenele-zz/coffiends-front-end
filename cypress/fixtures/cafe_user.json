@@ -1,0 +1,15 @@
+{"cafe": {
+    "cafe_name": "Brew Cafe & Wine Bar",
+    "address": "Lower, Burnett Ln, Brisbane City",
+    "operating_hours": ["0600", "1500"],
+    "location": [-27.4692878, 153.0253295],
+    "owner": "cafe01",
+    "menu": [],
+    "_id": "1"
+    },
+    "phone": "0400000000",
+    "role": "cafe",
+    "user_name": "cafe01",
+    "username": "cafe01@coffiends.com",
+    "_id": 1
+}
