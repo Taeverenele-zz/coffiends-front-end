@@ -28,11 +28,11 @@ const ChangePassword = (props) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}/change_password`, formData );
-    if (response.status === 200) {
-      dispatch({ type: "setFlashMessage", data: "Password changed successfully" });
-      props.history.push("/user/edit")
+    if (response.data === "Password or username is incorrect") {
+    dispatch({ type: "setFlashMessage", data: "Current password is incorrect" });
     } else {
-      dispatch({ type: "setFlashMessage", data: "Error - password was not updated" });
+      dispatch({ type: "setFlashMessage", data: "Password changed successfully!" });
+      props.history.push("/user/edit")
     };
   };
 

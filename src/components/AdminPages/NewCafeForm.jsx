@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { Col, Form, FormGroup, Input, Label, Row, Button } from "reactstrap";
 import StateContext from "../../utils/store";
+import validatePhone from "../../utils/validatePhone";
 
 const NewCafeForm = (props) => {
   const { action } = useParams();
@@ -21,6 +22,10 @@ const NewCafeForm = (props) => {
   // cafeData is true if we are editing
   let cafeUserId
   cafeData ? cafeUserId = cafeData.owner : cafeUserId = null
+
+  if (action === "edit" && !cafeData) {
+    props.history.push("/home");
+  };
 
   useEffect(() => {
     // check for logged in user
@@ -80,25 +85,30 @@ const NewCafeForm = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if editing a cafe we send the edited used data and cafe data
-    if (action === "edit") {
-      axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`, userData)
-        .catch(() => dispatch({ type: "setFlashMessage", data: "User did not update successfully" }));
-      
-      axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
-        .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
-      // and redirect back to admin/home
-      props.history.push("/home");
-    // if not editing (creating a new user and cafe), we save the new user first and then saving the cafe
+
+    if (validatePhone(userData.phone)) {
+      // if editing a cafe we send the edited used data and cafe data
+      if (action === "edit") {
+        axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${userData._id}`, userData)
+          .catch(() => dispatch({ type: "setFlashMessage", data: "User did not update successfully" }));
+        
+        axios.put(`${process.env.REACT_APP_BACK_END_URL}/cafes/${cafeData._id}`, cafeData)
+          .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
+        // and redirect back to admin/home
+        props.history.push("/home");
+      // if not editing (creating a new user and cafe), we save the new user first and then saving the cafe
+      } else {
+        saveNewUser()
+          .then((newCafeData) => {
+            axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
+              .then(() => props.history.push("/home"))
+              .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
+          })
+          .catch(() => dispatch({ type: "setFlashMessage", data: "User did not save successfully" }));
+      };
     } else {
-      saveNewUser()
-        .then((newCafeData) => {
-          axios.post(`${process.env.REACT_APP_BACK_END_URL}/cafes`, newCafeData)
-            .then(() => props.history.push("/home"))
-            .catch(() => dispatch({ type: "setFlashMessage", data: "Cafe did not save successfully" }));
-        })
-        .catch(() => dispatch({ type: "setFlashMessage", data: "User did not save successfully" }));
-    }
+      dispatch({ type: "setFlashMessage", data: "Phone number format invalid"})
+    };
   };
 
   return (
@@ -162,6 +172,8 @@ const NewCafeForm = (props) => {
                   <Input
                     type="text"
                     name="phone"
+                    minLength="8"
+                    maxLength="12"
                     value={userData.phone || ""}
                     onChange={handleUserInputChange}
                     required
@@ -182,6 +194,7 @@ const NewCafeForm = (props) => {
                   <Input
                     type="text"
                     name="operating_hours[0]"
+                    placeholder="e.g. 0730"
                     required
                     value={cafeData.operating_hours[0] || ""}
                     onChange={(e) =>
@@ -200,6 +213,7 @@ const NewCafeForm = (props) => {
                     type="text"
                     name="operating_hours[1]"
                     required
+                    placeholder="e.g. 1845"
                     value={cafeData.operating_hours[1] || ""}
                     onChange={(e) =>
                       handleCafeInputChange({
