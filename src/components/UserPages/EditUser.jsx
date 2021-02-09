@@ -20,7 +20,10 @@ const EditUser = (props) => {
     e.preventDefault();
 
     axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
-      .then(() => props.history.push("/home"))
+      .then(() => {
+        dispatch({ type: "setFlashMessage", data: "User details updated" })
+        props.history.push("/home")
+      })
       .catch(() => dispatch({ type: "setFlashMessage", data: "User details did not save successfully" }));
   };
   
