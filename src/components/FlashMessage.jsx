@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import StateContext from "../utils/store";
+import { Alert } from 'reactstrap';
 
 const FlashMessageView = () => {
   const { store, dispatch } = useContext(StateContext);
@@ -7,12 +8,12 @@ const FlashMessageView = () => {
 
   setTimeout(() => {
     dispatch({ type: "setFlashMessage", data: null });
-  }, 10000);
+  }, 5000);
 
   return (
-    <>
+    <Alert color="dark" style={{marginBottom: "0px"}}>
       {flashMessage}
-    </>
+    </Alert>
   );
 };
 

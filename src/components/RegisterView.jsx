@@ -32,8 +32,8 @@ const RegisterView = (props) => {
     });
     const userDetails = await response.json();
     
-    if (userDetails.message) {
-      dispatch({ type: "setFlashMessage", data: `${userDetails.message}` });
+    if (userDetails._message === "User validation failed") {
+      dispatch({ type: "setFlashMessage", data: `All fields need to be filled` });
     } else if (userDetails._id) {
       await dispatch({
         type: "setLoggedInUser",
@@ -99,7 +99,7 @@ const RegisterView = (props) => {
                 name="user_name"
                 onChange={handleChange}
                 value={loginDetails.user_name}
-                required
+                // required
               />
             </FormGroup>
           </Row>
@@ -113,12 +113,12 @@ const RegisterView = (props) => {
                 name="phone"
                 onChange={handleChange}
                 value={loginDetails.phone}
-                required
+                // required
               />
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button data-testid="register-btn" className="login-form-margin-top button-color">Register</Button>
+            <Button className="login-form-margin-top button-color">Register</Button>
           </Row>
         </Form>
       </Row>

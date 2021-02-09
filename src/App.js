@@ -47,7 +47,8 @@ const App = () => {
       <StateContext.Provider value={{ store, dispatch }}>
       <BrowserRouter>
           <NavBar />
-          <FlashMessageView />
+          {store.flashMessage ? <FlashMessageView /> : <></>}
+          
           <Switch>
             <>
               <Route exact path="/" component={LoginView} />
