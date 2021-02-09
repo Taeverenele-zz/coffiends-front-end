@@ -111,6 +111,7 @@ const CafeMenuView = () => {
                       style={{color: "white"}} 
                       type="number"
                       min="0"
+                      step="0.01"
                       placeholder="Price (eg 3.5)" 
                       onChange={handlePrice} 
                       value={newPrice} />
