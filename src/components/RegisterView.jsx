@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Form, FormGroup, Label, Input, Container, Row } from "reactstrap";
 import StateContext from "../utils/store";
+import validatePhone from "../utils/validatePhone";
 
 const RegisterView = (props) => {
   const { dispatch } = useContext(StateContext);
@@ -23,35 +24,40 @@ const RegisterView = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    let response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/users/register`, {
-      method: "POST",
-      body: JSON.stringify(loginDetails),
-      headers: { "Content-Type": "application/json" },
-      credentials: "include"
-    });
-    const userDetails = await response.json();
-    
-    if (userDetails.message) {
-      dispatch({ type: "setFlashMessage", data: `${userDetails.message}` });
-    } else if (userDetails._id) {
-      await dispatch({
-        type: "setLoggedInUser",
-        data: userDetails
+    if (validatePhone(loginDetails.phone)) {
+      let response = await fetch(`${process.env.REACT_APP_BACK_END_URL}/users/register`, {
+        method: "POST",
+        body: JSON.stringify(loginDetails),
+        headers: { "Content-Type": "application/json" },
+        credentials: "include"
       });
-
-      dispatch({ type: "setFlashMessage", data: `Signup successful! Welcome ${userDetails.user_name}` });
+      const userDetails = await response.json();
       
-      setLoginDetails({
-        username: "",
-        password: "",
-        user_name: "",
-        role: "user",
-        phone: "",
-      });
+      if (userDetails._message === "User validation failed") {
+        dispatch({ type: "setFlashMessage", data: `All fields need to be filled` });
+      } else if (userDetails._id) {
+        await dispatch({
+          type: "setLoggedInUser",
+          data: userDetails
+        });
+  
+        dispatch({ type: "setFlashMessage", data: `Signup successful! Welcome ${userDetails.user_name}` });
+        
+        setLoginDetails({
+          username: "",
+          password: "",
+          user_name: "",
+          role: "user",
+          phone: "",
+        });
+  
+        props.history.push("/home");
+      }  
+    } else {
+      dispatch({ type: "setFlashMessage", data: "Phone number format invalid"})
+    };
 
-      props.history.push("/home");
-    }
+    
   };
 
   return (
@@ -109,8 +115,10 @@ const RegisterView = (props) => {
                 Phone:
               </Label>
               <Input
-                type="mobileNumber"
+                type="text"
                 name="phone"
+                minLength="8"
+                maxLength="12"
                 onChange={handleChange}
                 value={loginDetails.phone}
                 required
@@ -118,7 +126,7 @@ const RegisterView = (props) => {
             </FormGroup>
           </Row>
           <Row className="justify-content-center">
-            <Button data-testid="register-btn" className="login-form-margin-top button-color">Register</Button>
+            <Button className="login-form-margin-top button-color">Register</Button>
           </Row>
         </Form>
       </Row>

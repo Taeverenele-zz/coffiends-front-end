@@ -60,13 +60,12 @@ const LoginView = (props) => {
         <Form onSubmit={handleSubmit}>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin text-center ">
-              <Label for="exampleEmail" className="mr-sm-2 border-color">
+              <Label for="username" className="mr-sm-2 border-color">
                 Email:
               </Label>
               <Input
                 type="email"
                 name="username"
-                id="exampleEmail"
                 onChange={handleChange}
                 value={loginDetails.username}
                 required
@@ -75,13 +74,12 @@ const LoginView = (props) => {
           </Row>
           <Row>
             <FormGroup className="mb-2 mr-sm-2 mb-sm-0 login-form-margin text-center">
-              <Label for="examplePassword" className="mr-sm-2 border-color">
+              <Label for="password" className="mr-sm-2 border-color">
                 Password:
               </Label>
               <Input
                 type="password"
                 name="password"
-                id="examplePassword"
                 onChange={handleChange}
                 value={loginDetails.password}
                 required

@@ -5,14 +5,14 @@ import { Container, Row, Col, Button, Form, FormGroup, Label } from "reactstrap"
 import StateContext from "../../utils/store";
 import setTimeString from "../../utils/setTimeString";
 
-const NewOrderForm = () => {
+const NewOrderForm = (props) => {
   const [ orderDetails, setOrderDetails ] = useState(null);
 
   const { store } = useContext(StateContext);
   const { loggedInUser, userCoffee, orderCafe } = store
 
   useEffect(() => {
-    if (loggedInUser) {
+    if (userCoffee && loggedInUser) {
       setOrderDetails({
         cafe: orderCafe._id,
         user: loggedInUser._id,
@@ -24,8 +24,10 @@ const NewOrderForm = () => {
         total: userCoffee.price,
         email: loggedInUser.username,
       });
+    } else {
+      props.history.push("/home")
     };
-  }, [ loggedInUser, orderCafe, userCoffee ]);
+  }, [ loggedInUser, orderCafe, userCoffee, props ]);
 
   const handleSize = (e) => {
     if (e.target.value === "Large") {

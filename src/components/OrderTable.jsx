@@ -24,31 +24,28 @@ const OrderTable = (props) => {
         <Row className="justify-content-center margin-add-top"></Row>
           <Table responsive className="table-background ">
             <thead>
-              <tr>
-                <th>Cafe</th>
-                <th>User</th>
+              <tr className="text-center">
+                {loggedInUser.role === "user" ? <th>Cafe</th> : <></>}
+                {loggedInUser.role === "cafe" ? <th>User</th> : <></>}
                 <th>Coffee</th>
                 <th>Size</th>
                 <th>Milk</th>
                 <th>Sugar</th>
                 <th>Pickup Time</th>
-                {/* <th>Total</th> */}
-                <th>COMPLETE</th>
+                {loggedInUser.role === 'cafe' ? <th>COMPLETE</th> : <></>}
               </tr>
             </thead>
          
             <tbody>
               {orders ? (orders.map((order) => (
-                <tr key={order._id}>
-                  <th>{order.cafe.cafe_name}</th>
-                  <td>{order.user.user_name}</td>
-                  {/* <td>{new Date(order.order_date).toLocaleString("en-Au", {timeZone: "Australia/Brisbane"})}</td> */}
+                <tr className="text-center" key={order._id}>
+                  {loggedInUser.role === "user" ? <th>{order.cafe.cafe_name}</th> : <></>}
+                  {loggedInUser.role === "cafe" ? <td>{order.user.user_name}</td> : <></>}
                   <td>{order.coffee}</td>
                   <td>{order.size}</td>
                   <td>{order.milk}</td>
                   <td>{order.sugar}</td>
                   <td>{order.pickup_time}</td>
-                  {/* <td>${order.total.toFixed(2)}</td> */}
                   {(loggedInUser && order.active && loggedInUser.role === "cafe") ? (
                     <td>
                       <Button onClick={() => setOrderToCompleted(order._id)}>Complete</Button>
