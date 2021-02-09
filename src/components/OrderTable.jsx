@@ -36,6 +36,7 @@ const OrderTable = (props) => {
                 <th>COMPLETE</th>
               </tr>
             </thead>
+         
             <tbody>
               {orders ? (orders.map((order) => (
                 <tr key={order._id}>

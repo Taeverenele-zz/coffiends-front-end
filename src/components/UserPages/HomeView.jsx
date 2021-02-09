@@ -19,6 +19,7 @@ const HomeView = () => {
   return (
     <>
       {!allCoffees ? (<></>) : (
+        
         <div className="background full-height">
             <div>
             <Container fluid="true" className="card-margin-add">

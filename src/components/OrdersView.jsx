@@ -29,7 +29,6 @@ const OrdersView = () => {
       };
       axios.get(url)
         .then((res) => {
-          console.log(res.data)
           setOrders(res.data)})
         .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve order data" }));
     };

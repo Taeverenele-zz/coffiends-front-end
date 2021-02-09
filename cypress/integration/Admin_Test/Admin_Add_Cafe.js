@@ -1,0 +1,21 @@
+describe('Test Admin User Can add cafe', () => {
+    it('Visits the Coffiends', () => {
+      cy.visit('https://coffiends.herokuapp.com/')
+      cy.get('input[name=username]').type('admin@coffiends.com')
+      cy.get('input[name=password]').type('password{enter}')
+      cy.wait(2000)
+      cy.get('.btn').contains("ADD CAFE").click()
+      cy.get('input[name="cafe_name"]').type('Bob J coffee Mart')
+      cy.get('input[name="user_name"]').type('Bob')
+      cy.get('input[name="username"]').type('Bob@jtmart.com')
+      cy.get('input[name="password"]').type('Bob@jtmart.com')
+      cy.get('input[name="phone"]').type('0455123456')
+      cy.get('input[name="address"]').type('123 fake st')
+      cy.get('input[name="operating_hours[0]"]').type('0600')
+      cy.get('input[name="operating_hours[1]"]').type('1600')
+      cy.get('input[name="location[0]"]').type('-27.4692598')
+      cy.get('input[name="location[1]"]').type('153.022886')
+      cy.get('.btn').contains("Submit").click()
+
+    })
+  })
