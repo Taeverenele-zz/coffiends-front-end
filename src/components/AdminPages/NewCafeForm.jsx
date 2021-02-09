@@ -143,16 +143,20 @@ const NewCafeForm = (props) => {
                     required
                   ></Input>
                 </FormGroup>
-                <FormGroup>
-                  <Label className="admin-subheading-colors" for="password">Password:</Label>
-                  <Input
-                    type="password"
-                    name="password"
-                    value={userData.password || ""}
-                    onChange={handleUserInputChange}
-                    required
-                  ></Input>
-                </FormGroup>
+                {!cafeUserId ? (
+                  <>
+                    <FormGroup>
+                      <Label className="admin-subheading-colors" for="password">Password:</Label>
+                      <Input
+                        type="password"
+                        name="password"
+                        value={userData.password || ""}
+                        onChange={handleUserInputChange}
+                        required
+                      ></Input>
+                    </FormGroup>
+                  </>
+                ) : (<></>)}
                 <FormGroup>
                   <Label className="admin-subheading-colors" for="phone">Phone:</Label>
                   <Input
@@ -210,7 +214,7 @@ const NewCafeForm = (props) => {
                 <FormGroup>
                   <Label className="admin-subheading-colors" for="latitude">Latitude:</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="location[0]"
                     required
                     value={cafeData.location[0] || ""}
@@ -230,7 +234,7 @@ const NewCafeForm = (props) => {
                 <FormGroup>
                   <Label className="admin-subheading-colors" for="longitude">Longitude:</Label>
                   <Input
-                    type="text"
+                    type="number"
                     name="location[1]"
                     required
                     value={cafeData.location[1] || ""}

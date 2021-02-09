@@ -8,7 +8,7 @@ const FlashMessageView = () => {
 
   setTimeout(() => {
     dispatch({ type: "setFlashMessage", data: null });
-  }, 5000);
+  }, 3000);
 
   return (
     <Alert color="dark" style={{marginBottom: "0px"}}>

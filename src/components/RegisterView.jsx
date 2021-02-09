@@ -99,7 +99,7 @@ const RegisterView = (props) => {
                 name="user_name"
                 onChange={handleChange}
                 value={loginDetails.user_name}
-                // required
+                required
               />
             </FormGroup>
           </Row>
@@ -113,7 +113,7 @@ const RegisterView = (props) => {
                 name="phone"
                 onChange={handleChange}
                 value={loginDetails.phone}
-                // required
+                required
               />
             </FormGroup>
           </Row>
