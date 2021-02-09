@@ -35,6 +35,7 @@ const OrderTable = (props) => {
                 {loggedInUser.role === 'cafe' ? <th>COMPLETE</th> : <></>}
               </tr>
             </thead>
+         
             <tbody>
               {orders ? (orders.map((order) => (
                 <tr className="text-center" key={order._id}>
