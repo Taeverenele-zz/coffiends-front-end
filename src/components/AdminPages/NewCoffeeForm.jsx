@@ -10,6 +10,10 @@ const NewCoffeeForm = (props) => {
   const { store, dispatch } = useContext(StateContext);
   const { loggedInUser, coffeeData } = store;
 
+  if (action === "edit" && !coffeeData) {
+    props.history.push("/home");
+  };
+
   useEffect(() => {
     // if creating a new cafe, initial values are empty
     if (loggedInUser && action === "new") {
