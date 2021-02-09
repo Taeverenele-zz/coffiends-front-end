@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import React, { useContext } from "react";
 import axios from "axios";
 import StateContext from "../../utils/store";
+import validatePhone from "../../utils/validatePhone";
 
 const EditUser = (props) => {
   const { store, dispatch } = useContext(StateContext);
@@ -19,9 +20,13 @@ const EditUser = (props) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
-      .then(() => props.history.push("/home"))
-      .catch(() => dispatch({ type: "setFlashMessage", data: "User details did not save successfully" }));
+    if (validatePhone(loggedInUser.phone)) {
+      axios.patch(`${process.env.REACT_APP_BACK_END_URL}/users/${loggedInUser._id}`, loggedInUser)
+        .then(() => props.history.push("/home"))
+        .catch(() => dispatch({ type: "setFlashMessage", data: "User details did not save successfully" }));
+    } else {
+      dispatch({ type: "setFlashMessage", data: "Phone number format invalid"});
+    };
   };
   
   return (
@@ -74,8 +79,10 @@ const EditUser = (props) => {
                     <Label for="phone" className="border-color">Phone:</Label>
                   </div>
                     <Input
-                      type="phone"
+                      type="text"
                       name="phone"
+                      minLength="8"
+                      maxLength="12"
                       value={loggedInUser.phone}
                       onChange={handleInputChange}
                       required

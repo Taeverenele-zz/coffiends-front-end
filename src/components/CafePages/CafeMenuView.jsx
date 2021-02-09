@@ -109,7 +109,8 @@ const CafeMenuView = () => {
                       <Input 
                       required 
                       style={{color: "white"}} 
-                      type="Number" 
+                      type="number"
+                      min="0"
                       placeholder="Price (eg 3.5)" 
                       onChange={handlePrice} 
                       value={newPrice} />
