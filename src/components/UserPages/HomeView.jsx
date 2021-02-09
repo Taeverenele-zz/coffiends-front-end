@@ -14,8 +14,6 @@ const HomeView = () => {
       .catch(() => dispatch({ type: "setFlashMessage", data: "Could not retrieve coffee data" }));
   }, [ dispatch ])
 
-
-
   return (
     <>
       {!allCoffees ? (<></>) : (
